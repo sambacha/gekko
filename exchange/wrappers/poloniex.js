@@ -65,10 +65,11 @@ const includes = (str, list) => {
 Trader.prototype.outbidPrice = function(price, isUp) {
   let newPrice;
 
-  const tickSize = 0.00000001;
+//  const tickSize = 0.00000001;
+  const tickSize = 0.001;
 
   if(isUp) {
-    newPrice = price + 0.00000001;
+    newPrice = price + tickSize;
   } else {
     newPrice = price - tickSize;
   }
