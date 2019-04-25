@@ -73,7 +73,7 @@ Trader.prototype.outbidPrice = function(price, isUp) {
   } else {
     newPrice = price - tickSize;
   }
-
+  console.log('NEW outbidPrice ', this.roundPrice(newPrice));
   return this.roundPrice(newPrice);
 }
 
