@@ -104,36 +104,44 @@ class StickyOrder extends BaseOrder {
     if(this.side === 'buy') {
 
       if(!this.noLimit && ticker.bid >= this.limit) {
+        console.log('if(!this.noLimit && ticker.bid >= this.limit) ', this.limit);
         return r(this.limit);
       }
 
       if(!this.outbid) {
-        return r(ticker.bid);
+        console.log('if(!this.outbid) buy +0.001 ', ticker.bid);
+        return r(ticker.bid + 0.001);
       }
 
       const outbidPrice = this.outbidPrice(ticker.bid, true);
 
       if(outbidPrice <= this.limit && outbidPrice < ticker.ask) {
+        console.log('if(outbidPrice <= this.limit && outbidPrice < ticker.ask)1 ', outbidPrice);
         return r(outbidPrice);
       } else {
+        console.log('if(outbidPrice <= this.limit && outbidPrice < ticker.ask)2 ', this.limit);
         return r(this.limit);
       }
 
     } else if(this.side === 'sell') {
 
       if(!this.noLimit && ticker.ask <= this.limit) {
+        console.log('if(!this.noLimit && ticker.ask <= this.limit)  ', this.limit);
         return r(this.limit);
       }
 
-      if(!this.outbid) {
-        return r(ticker.ask);
+      if(!this.outbid) {   //сначала этот
+        console.log('if(!this.outbid) { sell  -0.001 ', ticker.ask);
+        return r(ticker.ask - 0.001);
       }
 
       const outbidPrice = this.outbidPrice(ticker.ask, false);
 
       if(outbidPrice >= this.limit && outbidPrice > ticker.bid) {
+        console.log('if(outbidPrice >= this.limit && outbidPrice > ticker.bid)1  ', ticker.ask);
         return r(outbidPrice);
       } else {
+        console.log('if(outbidPrice >= this.limit && outbidPrice > ticker.bid)2  ', ticker.ask);
         return r(this.limit);
       }
     }

@@ -289,6 +289,7 @@ Trader.prototype.getTicker = function(callback) {
     });
   };
 
+  console.log('Trader.prototype.getTicker');
 
   const fetch = next => this.poloniex.getTicker(this.processResponse(next));
   retry(null, fetch, handle);
@@ -307,10 +308,12 @@ Trader.prototype.getFee = function(callback) {
 }
 
 Trader.prototype.roundAmount = function(amount) {
+  console.log('Trader.prototype.roundAmount');
   return _.floor(amount, 8);
 }
 
 Trader.prototype.roundPrice = function(price) {
+  console.log('Trader.prototype.roundPrice');
   return +price;
 }
 
@@ -325,9 +328,10 @@ Trader.prototype.createOrder = function(side, amount, price, callback) {
       console.log('createOrder', {side, amount, price});
       return callback(err);
     }
-
     callback(undefined, result.orderNumber);
   }
+
+  console.log('Trader.prototype.createOrder');
 
   const fetch = next => {
     this.poloniex[side](this.currency, this.asset, price, amount, this.processResponse(next, 'order', side))
@@ -336,10 +340,12 @@ Trader.prototype.createOrder = function(side, amount, price, callback) {
 }
 
 Trader.prototype.buy = function(amount, price, callback) {
+  console.log('Trader.prototype.buy');
   this.createOrder('buy', amount, price, callback);
 }
 
 Trader.prototype.sell = function(amount, price, callback) {
+  console.log('Trader.prototype.sell');
   this.createOrder('sell', amount, price, callback);
 }
 
@@ -400,6 +406,8 @@ Trader.prototype.getOrder = function(order, callback) {
     callback(err, {price, amount, date, fees, feePercent});
   };
 
+  console.log('Trader.prototype.getOrder');
+
   const fetch = next => this.poloniex.returnOrderTrades(order, this.processResponse(next, 'getOrder', order));
   retry(null, fetch, handle);
 }
@@ -423,6 +431,8 @@ Trader.prototype.cancelOrder = function(order, callback) {
 
     callback(undefined, false, data);
   };
+  
+  console.log('Trader.prototype.cancelOrder');
   
   const fetch = next => this.poloniex.cancelOrder(this.currency, this.asset, order, this.processResponse(next, 'cancelOrder', order));
   retry(null, fetch, handle);
