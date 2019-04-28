@@ -15,7 +15,7 @@ PAPERTRADER=false
 REALTRADER=true
 PTREAL=REAL
 
-test_name=StochRSI_$X1-$Y1-REAL
+test_name=StochRSI_$X1-$Y1-$PTREAL
 
 
 ###########################################################################################
