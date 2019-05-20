@@ -45,7 +45,7 @@ method.update = function(candle) {
 
 	this.lowestRSI = _.min(this.RSIhistory);
 	this.highestRSI = _.max(this.RSIhistory);
-	this.stochRSI = ((this.rsi - this.lowestRSI) / (this.highestRSI - this.lowestRSI)) * 100;
+	this.stochRSIinv = ((this.rsi - this.lowestRSI) / (this.highestRSI - this.lowestRSI)) * 100;
 }
 
 // for debugging purposes log the last
@@ -57,11 +57,11 @@ method.log = function() {
   log.debug('\t', 'rsi:', this.rsi.toFixed(digits));
 	log.debug("StochRSI min:\t\t" + this.lowestRSI.toFixed(digits));
 	log.debug("StochRSI max:\t\t" + this.highestRSI.toFixed(digits));
-	log.debug("StochRSI Value:\t\t" + this.stochRSI.toFixed(2));
+	log.debug("StochRSI Value:\t\t" + this.stochRSIinv.toFixed(2));
 }
 
 method.check = function() {
-	if(this.stochRSI > this.settings.thresholds.high) {
+	if(this.stochRSIinv > this.settings.thresholds.high) {
 		// new trend detected
 		if(this.trend.direction !== 'high')
 			this.trend = {
@@ -84,7 +84,7 @@ method.check = function() {
 		} else
 			this.advice();
 
-	} else if(this.stochRSI < this.settings.thresholds.low) {
+	} else if(this.stochRSIinv < this.settings.thresholds.low) {
 
 		// new trend detected
 		if(this.trend.direction !== 'low')
