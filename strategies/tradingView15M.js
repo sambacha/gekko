@@ -20,6 +20,8 @@ var signal_sell_pos;
 var signal_sell;
 var signal_sell_int = 0;
 
+var signal_total = 28;
+
 var signal_neutral_pos;
 var signal_neutral;
 var signal_neutral_int = 0;
@@ -149,24 +151,26 @@ strat.check = function() {
   log.debug('strat.check');
 
   // Only continue if we have a new update.
+  if(signal_buy_int + signal_sell_int == signal_total){  
   if(signal_buy_int < signal_sell_int) {
 
-//  if(this.currentTrend === 'long') {
-
-    // If it was long, set it to short
-    log.debug('advice short');
-    this.currentTrend = 'short';
-    this.advice('short');
-
-  }
-   if(signal_buy_int > signal_sell_int) {
-
-    // If it was short, set it to long
-    log.debug('advice long');
-    this.currentTrend = 'long';
-    this.advice('long');
-
-  }
+    //  if(this.currentTrend === 'long') {
+    
+        // If it was long, set it to short
+        log.debug('advice short');
+        this.currentTrend = 'short';
+        this.advice('short');
+    
+      }
+       if(signal_buy_int > signal_sell_int) {
+    
+        // If it was short, set it to long
+        log.debug('advice long');
+        this.currentTrend = 'long';
+        this.advice('long');
+    
+      }
+  } else log.debug('bad data');
 }
 
 module.exports = strat;
