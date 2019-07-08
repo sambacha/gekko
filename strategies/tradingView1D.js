@@ -151,7 +151,7 @@ strat.check = function() {
   log.debug('strat.check');
 
   // Only continue if we have a new update.
-  if(signal_buy_int + signal_sell_int == signal_total){  
+  if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total){  
   if(signal_buy_int < signal_sell_int) {
 
     //  if(this.currentTrend === 'long') {
