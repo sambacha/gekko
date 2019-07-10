@@ -139,7 +139,7 @@ config.mailer = {
 
   password: 'tt12345TT',       // Your Gmail Password - if not supplied Gekko will prompt on startup.
 
-  tag: '[tradingView1M] ',      // Prefix all email subject lines with this
+  tag: '[tradingView1M_diff15] ',      // Prefix all email subject lines with this
 
             //       ADVANCED MAIL SETTINGS
             // you can leave those as is if you
@@ -268,7 +268,7 @@ config.ifttt = {
 }
 
 config.candleWriter = {
-  enabled: true
+  enabled: false
 }
 
 config.adviceWriter = {
