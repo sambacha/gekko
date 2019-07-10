@@ -31,7 +31,7 @@ var signal_neutral_int_last = 0;
 var signal_buy_pos;
 var signal_buy;
 var signal_buy_int = 0;
-var signal_buy_last = 0;
+var signal_buy_int_last = 0;
 
 
 // Prepare everything our method needs
