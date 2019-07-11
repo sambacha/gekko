@@ -156,27 +156,24 @@ strat.check = function() {
   // Only continue if we have a new update.
   if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total){  
 
-  var sumB = (signal_buy_int - signal_buy_int_last)+(signal_sell_int_last - signal_sell_int)
-  var sumS = (signal_buy_int_last - signal_buy_int)+(signal_sell_int - signal_sell_int_last)
+    var sumB = (signal_buy_int - signal_buy_int_last)+(signal_sell_int_last - signal_sell_int)
+    var sumS = (signal_buy_int_last - signal_buy_int)+(signal_sell_int - signal_sell_int_last)
 
-  log.debug('sumB '+sumB);
-  log.debug('sumS '+sumS);
+    log.debug('sumB '+sumB);
+    log.debug('sumS '+sumS);
 
-  signal_buy_int_last = signal_buy_int
-  signal_sell_int_last - signal_sell_int
+    signal_buy_int_last = signal_buy_int
+    signal_sell_int_last - signal_sell_int
   
-  if(sumS >=15 ) 
-
+    if(sumS >=15 ) 
       if(this.currentTrend === 'long') {
-    
         // If it was long, set it to short
         log.debug('advice short');
         this.currentTrend = 'short';
         this.advice('short');
-    
       }
-       if(sumB >= 15) 
-       if(this.currentTrend === 'short')
+    if(sumB >= 15) 
+      if(this.currentTrend === 'short'){
         // If it was short, set it to long
         log.debug('advice long');
         this.currentTrend = 'long';
