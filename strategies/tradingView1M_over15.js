@@ -152,18 +152,17 @@ strat.check = function() {
 
   // Only continue if we have a new update.
   if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total){  
-  if(signal_sell_int >=15 ) {
-
-    //  if(this.currentTrend === 'long') {
-    
-        // If it was long, set it to short
+  
+    if(signal_sell_int >=15 ) 
+      if(this.currentTrend === 'long') {
+     // If it was long, set it to short
         log.debug('advice short');
         this.currentTrend = 'short';
         this.advice('short');
     
       }
-       if(signal_buy_int >= 15) {
-    
+    if(signal_buy_int >= 15) 
+      if(this.currentTrend === 'short'){
         // If it was short, set it to long
         log.debug('advice long');
         this.currentTrend = 'long';
