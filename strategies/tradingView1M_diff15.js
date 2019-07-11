@@ -15,6 +15,7 @@ path = require('path');
 
 // Let's create our own strat
 var strat = {};
+var fileName_last;
 
 var signal_sell_pos;
 var signal_sell;
@@ -33,6 +34,8 @@ var signal_buy;
 var signal_buy_int = 0;
 var signal_buy_int_last = 0;
 
+var sumB;
+var sumS;
 
 // Prepare everything our method needs
 strat.init = function() {
@@ -87,6 +90,7 @@ strat.update = function(candle) {
 */
   //log.debug(fileContent);
  
+  
   let fileContent = fs.readFileSync(fileName, "utf8");
 
         signal_sell_pos = fileContent.indexOf("1M_SUM_SELL");
@@ -104,8 +108,25 @@ strat.update = function(candle) {
         signal_buy_int = Number.parseInt(signal_buy);
         log.debug("1M_SUM_BUY "+signal_buy_pos+" "+signal_buy_int);
 
-  // There is a 10% chance it is smaller than 0.1
- // this.toUpdate = this.randomNumber < 0.1;
+        if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total){ 
+          if (fileName != fileName_last) {
+        //    log.debug('signal_buy_int '+signal_buy_int);
+        //    log.debug('signal_buy_int_last '+signal_buy_int_last);
+        //    log.debug('signal_sell_int '+signal_sell_int);
+        //    log.debug('signal_sell_int_last '+signal_sell_int_last);
+
+            sumB = (signal_buy_int - signal_buy_int_last)+(signal_sell_int_last - signal_sell_int)
+            sumS = (signal_buy_int_last - signal_buy_int)+(signal_sell_int - signal_sell_int_last)
+
+            log.debug('sumB '+sumB);
+            log.debug('sumS '+sumS);
+        
+            signal_buy_int_last = signal_buy_int;
+            signal_sell_int_last = signal_sell_int;
+            fileName_last = fileName;
+          }
+
+        } else log.debug('bad data');
 
 }
 
@@ -154,17 +175,7 @@ strat.check = function() {
   log.debug('strat.check');
 
   // Only continue if we have a new update.
-  if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total){  
 
-    var sumB = (signal_buy_int - signal_buy_int_last)+(signal_sell_int_last - signal_sell_int)
-    var sumS = (signal_buy_int_last - signal_buy_int)+(signal_sell_int - signal_sell_int_last)
-
-    log.debug('sumB '+sumB);
-    log.debug('sumS '+sumS);
-
-    signal_buy_int_last = signal_buy_int
-    signal_sell_int_last - signal_sell_int
-  
     if(sumS >=15 ) 
       if(this.currentTrend === 'long') {
         // If it was long, set it to short
@@ -180,7 +191,7 @@ strat.check = function() {
         this.advice('long');
     
       }
-  } else log.debug('bad data');
+ 
 }
 
 module.exports = strat;
