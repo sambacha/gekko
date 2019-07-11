@@ -45,7 +45,7 @@ strat.init = function() {
 
 // What happens on every new candle?
 strat.update = function(candle) {
-  log.debug('strat.update');
+  log.debug('strat.update 1M_diff15');
 
   // Get a random number between 0 and 1.
  // this.randomNumber = Math.random();
@@ -159,12 +159,15 @@ strat.check = function() {
   var sumB = (signal_buy_int - signal_buy_int_last)+(signal_sell_int_last - signal_sell_int)
   var sumS = (signal_buy_int_last - signal_buy_int)+(signal_sell_int - signal_sell_int_last)
 
+  log.debug('sumB '+sumB);
+  log.debug('sumS '+sumS);
+
   signal_buy_int_last = signal_buy_int
   signal_sell_int_last - signal_sell_int
   
-  if(sumS >=15 ) {
+  if(sumS >=15 ) 
 
-    //  if(this.currentTrend === 'long') {
+      if(this.currentTrend === 'long') {
     
         // If it was long, set it to short
         log.debug('advice short');
@@ -172,8 +175,8 @@ strat.check = function() {
         this.advice('short');
     
       }
-       if(sumB >= 15) {
-    
+       if(sumB >= 15) 
+       if(this.currentTrend === 'short')
         // If it was short, set it to long
         log.debug('advice long');
         this.currentTrend = 'long';
