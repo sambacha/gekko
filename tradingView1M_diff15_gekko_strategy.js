@@ -34,7 +34,7 @@ config.tradingAdvisor = {
   enabled: true,
   method: 'tradingView1M_diff15',
   candleSize: 1,
-  historySize: 10,
+  historySize: 1,
 }
 
 config.tradingView = {
