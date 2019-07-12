@@ -32,9 +32,9 @@ config.watch = {
 
 config.tradingAdvisor = {
   enabled: true,
-  method: 'tradingView1M_diff15',
+  method: 'tradingView1M_over20',
   candleSize: 1,
-  historySize: 0,
+  historySize: 1,
 }
 
 config.tradingView = {
@@ -139,7 +139,7 @@ config.mailer = {
 
   password: 'tt12345TT',       // Your Gmail Password - if not supplied Gekko will prompt on startup.
 
-  tag: '[tV1M_diff15] ',      // Prefix all email subject lines with this
+  tag: '[tradingView1M_over20] ',      // Prefix all email subject lines with this
 
             //       ADVANCED MAIL SETTINGS
             // you can leave those as is if you
