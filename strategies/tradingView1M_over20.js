@@ -42,7 +42,7 @@ strat.init = function() {
 
 // What happens on every new candle?
 strat.update = function(candle) {
-  log.debug('strat.update');
+  log.debug('strat.update 1M_over20');
 
   // Get a random number between 0 and 1.
  // this.randomNumber = Math.random();
