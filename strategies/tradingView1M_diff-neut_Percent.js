@@ -195,14 +195,18 @@ strat.check = function() {
     if(sumS-signal_neutral_int >=11 ) 
       if (signal_price_int > (price_trade_last + price_trade_last*profit_delta))
         if(this.currentTrend === 'long') {
+          
+          price_trade_last = signal_price_int;
           // If it was long, set it to short
           log.debug('advice short');
           this.currentTrend = 'short';
           this.advice('short');
         }
-    if(sumB-signal_neutral_int >= 11) 
+    if(sumB-signal_neutral_int >=11) 
       if (signal_price_int < (price_trade_last - price_trade_last*profit_delta))
         if(this.currentTrend === 'short'){
+
+            price_trade_last = signal_price_int;
             // If it was short, set it to long
             log.debug('advice long');
             this.currentTrend = 'long';
