@@ -42,7 +42,7 @@ var signal_buy_int_last = 0;
 var sumB;
 var sumS;
 
-var price_trade_last;
+var price_trade_last = 0;
 var profit_delta = 0.01;
 
 // Prepare everything our method needs
@@ -192,19 +192,24 @@ strat.check = function() {
   // Only continue if we have a new update.
   if (signal_price_int >0){
 
-    if(sumS-signal_neutral_int >=11 ) 
-      if (signal_price_int > (price_trade_last + price_trade_last*profit_delta))
-        if(this.currentTrend === 'long') {
+   // log.debug("sumS-signal_neutral_int "+(sumS-signal_neutral_int));
+
+    if(this.currentTrend === 'long') 
+      if(sumS-signal_neutral_int >=5 ) 
+        if (signal_price_int > (price_trade_last + price_trade_last*profit_delta)) {
           
           price_trade_last = signal_price_int;
           // If it was long, set it to short
           log.debug('advice short');
           this.currentTrend = 'short';
           this.advice('short');
-        }
-    if(sumB-signal_neutral_int >=11) 
-      if (signal_price_int < (price_trade_last - price_trade_last*profit_delta))
-        if(this.currentTrend === 'short'){
+        } else log.debug("wait price > "+(price_trade_last + price_trade_last*profit_delta));
+
+
+
+    if(this.currentTrend === 'short')
+      if(sumB-signal_neutral_int >=5) 
+        if (signal_price_int < (price_trade_last - price_trade_last*profit_delta)){
 
             price_trade_last = signal_price_int;
             // If it was short, set it to long
@@ -212,7 +217,7 @@ strat.check = function() {
             this.currentTrend = 'long';
             this.advice('long');
         
-          }
+          } else log.debug("wait price < "+(price_trade_last - price_trade_last*profit_delta));
   }
 }
 
