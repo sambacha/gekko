@@ -42,7 +42,7 @@ var signal_buy_int_last = 0;
 var sumB;
 var sumS;
 
-var trade_price_last;
+var price_trade_last;
 var profit_delta = 0.01;
 
 // Prepare everything our method needs
