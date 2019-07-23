@@ -195,7 +195,7 @@ strat.check = function() {
    // log.debug("sumS-signal_neutral_int "+(sumS-signal_neutral_int));
 
     if(this.currentTrend === 'long') 
-      if(sumS-signal_neutral_int >=5 ) 
+      if(sumS-signal_neutral_int >=11 ) 
         if (signal_price_int > (price_trade_last + price_trade_last*profit_delta)) {
           
           price_trade_last = signal_price_int;
@@ -208,7 +208,7 @@ strat.check = function() {
 
 
     if(this.currentTrend === 'short')
-      if(sumB-signal_neutral_int >=5) 
+      if(sumB-signal_neutral_int >=11) 
         if (signal_price_int < (price_trade_last - price_trade_last*profit_delta)){
 
             price_trade_last = signal_price_int;
