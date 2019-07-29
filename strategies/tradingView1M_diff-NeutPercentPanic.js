@@ -208,6 +208,7 @@ strat.check = function() {
           this.advice('short');
         } else log.debug("wait price > "+(price_trade_last + price_trade_last*profit_delta));
       if (signal_sell_int >= price_panic_sell) {
+        price_trade_last = signal_price_int;
         log.debug('PANIC advice short');
         this.currentTrend = 'short';
         this.advice('short');
@@ -227,6 +228,7 @@ strat.check = function() {
         
           } else log.debug("wait price < "+(price_trade_last - price_trade_last*profit_delta));
       if (signal_buy_int >= price_panic_buy) {
+        price_trade_last = signal_price_int;
         log.debug('PANIC advice long');
         this.currentTrend = 'long';
         this.advice('long');
