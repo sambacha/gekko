@@ -48,6 +48,7 @@ var profit_delta = 0.01;
 var price_panic_buy = 20;
 var price_panic_sell = 20;
 
+var bad_data = true;
 // Prepare everything our method needs
 strat.init = function() {
   log.debug('strat.init');
@@ -60,7 +61,8 @@ strat.init = function() {
 // What happens on every new candle?
 strat.update = function(candle) {
   log.debug('strat.update tradingView1M_diff-neutPercentPanic');
-
+ 
+  bad_data = true;
   // Get a random number between 0 and 1.
  // this.randomNumber = Math.random();
 
@@ -142,9 +144,12 @@ strat.update = function(candle) {
               signal_buy_int_last = signal_buy_int;
               signal_sell_int_last = signal_sell_int;
               fileName_last = fileName;
+              bad_data = false;
             }
 
-        } else log.debug('bad data');
+        } 
+        
+   
 
 }
 
@@ -191,9 +196,10 @@ strat.log = function() {
 // update or not.
 strat.check = function() {
   log.debug('strat.check');
-
+  if (bad_data) log.debug('bad data') 
+    else {
   // Only continue if we have a new update.
-  if (signal_price_int >0){
+//  if (signal_price_int >0){
 
    // log.debug("sumS-signal_neutral_int "+(sumS-signal_neutral_int));
 
