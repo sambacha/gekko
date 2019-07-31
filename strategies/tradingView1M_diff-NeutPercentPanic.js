@@ -88,9 +88,14 @@ strat.update = function(candle) {
   var SMinutes = Minutes-1+"";
   if (SMinutes.length==1) SMinutes = "0"+SMinutes;
 */
-  
+
+/* //win
   var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
   log.debug("Синхронное чтение файла "+getLatestFile("C:/YandexDisk/tradingview/out"));
+*/
+  //nix
+  var fileName = './../../tradingView/out/'+ getLatestFile("./../../tradingView/out/");
+  log.debug("Синхронное чтение файла "+getLatestFile("./../../tradingView/out/"));
 
   /*
   fs.access(fileName, function(error){
