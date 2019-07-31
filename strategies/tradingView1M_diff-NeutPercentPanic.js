@@ -94,8 +94,8 @@ strat.update = function(candle) {
   log.debug("Синхронное чтение файла "+getLatestFile("C:/YandexDisk/tradingview/out"));
 */
   //nix
-  var fileName = './../../tradingView/out/'+ getLatestFile("./../../tradingView/out/");
-  log.debug("Синхронное чтение файла "+getLatestFile("./../../tradingView/out/"));
+  var fileName = '../../../tradingView/out/'+ getLatestFile("../../../tradingView/out/");
+  log.debug("Синхронное чтение файла "+getLatestFile("../../../tradingView/out/"));
 
   /*
   fs.access(fileName, function(error){
