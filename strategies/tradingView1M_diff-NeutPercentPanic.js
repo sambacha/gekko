@@ -63,34 +63,11 @@ strat.update = function(candle) {
   log.debug('strat.update tradingView1M_diff-neutPercentPanic');
  
   bad_data = true;
-  // Get a random number between 0 and 1.
- // this.randomNumber = Math.random();
 
-  /*
-  Data = new Date();
-  Year = Data.getFullYear();
-  Month = Data.getMonth();
-  Day = Data.getDate();
-  Hour = Data.getHours();
-  Minutes = Data.getMinutes();
-  Seconds = Data.getSeconds();
-
-
-  var SMonth = Month+1+"";
-  if (SMonth.length==1) SMonth = "0"+SMonth;
-
-  var SDay = Day+"";
-  if (SDay.length==1) SDay = "0"+SDay;
-
-  var SHour = Hour+"";
-  if (SHour.length==1) SHour = "0"+SHour;
-
-  var SMinutes = Minutes-1+"";
-  if (SMinutes.length==1) SMinutes = "0"+SMinutes;
-*/
 
 var pathName = '../../../tradingView/out';
 
+/*async
 fs.access('../../../tradingView/out', function(error){
   if (error) {
     pathName = '../tradingView/out'
@@ -99,8 +76,21 @@ fs.access('../../../tradingView/out', function(error){
     log.debug("Файл найден");
 }
 });
+*/
 
-  log.debug(" pathName "+ pathName);
+
+try {
+    fs.statSync('../../../tradingView/out');
+    console.log('directory exists');
+}
+catch (err) {
+  if (err.code === 'ENOENT') {
+    pathName = '../tradingView/out'
+    console.log('directory does not exist');
+  }
+}
+
+  log.debug("pathName "+ pathName);
 
 /* //win
   var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
