@@ -118,17 +118,17 @@ strat.update = function(candle) {
         log.debug("PRICE "+signal_price_pos+" "+signal_price_int);
 
         signal_sell_pos = fileContent.indexOf("1M_SUM_SELL");
-        signal_sell = fileContent.substring(signal_sell_pos+13, signal_sell_pos+15); 
+        signal_sell = fileContent.substring(signal_sell_pos+12, signal_sell_pos+14); 
         signal_sell_int = Number.parseInt(signal_sell);
         log.debug("1M_SUM_SELL "+signal_sell_pos+" "+signal_sell_int);
 
         signal_neutral_pos = fileContent.indexOf("1M_SUM_NEUTRAL");
-        signal_neutral = fileContent.substring(signal_neutral_pos+16, signal_neutral_pos+18); 
+        signal_neutral = fileContent.substring(signal_neutral_pos+15, signal_neutral_pos+17); 
         signal_neutral_int = Number.parseInt(signal_neutral);
         log.debug("1M_SUM_NEUTRAL "+signal_neutral_pos+" "+signal_neutral_int);
 
         signal_buy_pos = fileContent.indexOf("1M_SUM_BUY");
-        signal_buy = fileContent.substring(signal_buy_pos+12, signal_buy_pos+14); 
+        signal_buy = fileContent.substring(signal_buy_pos+11, signal_buy_pos+13); 
         signal_buy_int = Number.parseInt(signal_buy);
         log.debug("1M_SUM_BUY "+signal_buy_pos+" "+signal_buy_int);
 
