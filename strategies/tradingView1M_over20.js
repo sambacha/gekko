@@ -15,22 +15,40 @@ path = require('path');
 
 // Let's create our own strat
 var strat = {};
+var fileName_last;
+
+var signal_price_pos;
+var signal_price;
+var signal_price_int = 0;
+//var signal_price_int_last = 0;
 
 var signal_sell_pos;
 var signal_sell;
 var signal_sell_int = 0;
+var signal_sell_int_last = 0;
 
 var signal_total = 28;
 
 var signal_neutral_pos;
 var signal_neutral;
 var signal_neutral_int = 0;
+var signal_neutral_int_last = 0;
 
 var signal_buy_pos;
 var signal_buy;
 var signal_buy_int = 0;
+var signal_buy_int_last = 0;
 
+var sumB;
+var sumS;
 
+var price_trade_last = 0;
+var profit_delta = 0.01;
+
+var price_panic_buy = 20;
+var price_panic_sell = 20;
+
+var bad_data = true;
 // Prepare everything our method needs
 strat.init = function() {
   log.debug('strat.init');
@@ -44,65 +62,93 @@ strat.init = function() {
 strat.update = function(candle) {
   log.debug('strat.update 1M_over20');
 
-  // Get a random number between 0 and 1.
- // this.randomNumber = Math.random();
-
-  Data = new Date();
-  Year = Data.getFullYear();
-  Month = Data.getMonth();
-  Day = Data.getDate();
-  Hour = Data.getHours();
-  Minutes = Data.getMinutes();
-  Seconds = Data.getSeconds();
+  bad_data = true;
 
 
-  var SMonth = Month+1+"";
-  if (SMonth.length==1) SMonth = "0"+SMonth;
+var pathName = '../../../tradingView/out';
 
-  var SDay = Day+"";
-  if (SDay.length==1) SDay = "0"+SDay;
-
-  var SHour = Hour+"";
-  if (SHour.length==1) SHour = "0"+SHour;
-
-  var SMinutes = Minutes-1+"";
-  if (SMinutes.length==1) SMinutes = "0"+SMinutes;
-
-  
-  var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
-  log.debug("Синхронное чтение файла "+getLatestFile("C:/YandexDisk/tradingview/out"));
-
-  /*
-  fs.access(fileName, function(error){
-    if (error) {
-        console.log("Файл не найден");
-    } else {
-        console.log("Файл найден");
-       
+/*async
+fs.access('../../../tradingView/out', function(error){
+  if (error) {
+    pathName = '../tradingView/out'
+    log.debug("Файл не найден");
+  } else {
+    log.debug("Файл найден");
 }
 });
 */
+
+
+try {
+    fs.statSync('../../../tradingView/out');
+    //console.log('directory exists');
+}
+catch (err) {
+  if (err.code === 'ENOENT') {
+    pathName = '../tradingView/out'
+   // console.log('directory does not exist');
+  }
+}
+
+ // log.debug("pathName "+ pathName);
+
+/* //win
+  var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
+  log.debug("Синхронное чтение файла "+getLatestFile("C:/YandexDisk/tradingview/out"));
+*/
+  //nix
+  var fileName = pathName+'/'+ getLatestFile(pathName+"/");
+  log.debug(fileName);
+
+  
   //log.debug(fileContent);
  
+  
   let fileContent = fs.readFileSync(fileName, "utf8");
 
+        signal_price_pos = fileContent.indexOf("PRICE");
+        signal_price = fileContent.substring(signal_price_pos+6, signal_price_pos+14); 
+        signal_price_int = Number.parseInt(signal_price);
+        log.debug("PRICE "+signal_price_pos+" "+signal_price_int);
+
         signal_sell_pos = fileContent.indexOf("1M_SUM_SELL");
-        signal_sell = fileContent.substring(signal_sell_pos+13, signal_sell_pos+15); 
+        signal_sell = fileContent.substring(signal_sell_pos+12, signal_sell_pos+14); 
         signal_sell_int = Number.parseInt(signal_sell);
         log.debug("1M_SUM_SELL "+signal_sell_pos+" "+signal_sell_int);
 
         signal_neutral_pos = fileContent.indexOf("1M_SUM_NEUTRAL");
-        signal_neutral = fileContent.substring(signal_neutral_pos+16, signal_neutral_pos+18); 
+        signal_neutral = fileContent.substring(signal_neutral_pos+15, signal_neutral_pos+17); 
         signal_neutral_int = Number.parseInt(signal_neutral);
         log.debug("1M_SUM_NEUTRAL "+signal_neutral_pos+" "+signal_neutral_int);
 
         signal_buy_pos = fileContent.indexOf("1M_SUM_BUY");
-        signal_buy = fileContent.substring(signal_buy_pos+12, signal_buy_pos+14); 
+        signal_buy = fileContent.substring(signal_buy_pos+11, signal_buy_pos+13); 
         signal_buy_int = Number.parseInt(signal_buy);
         log.debug("1M_SUM_BUY "+signal_buy_pos+" "+signal_buy_int);
 
-  // There is a 10% chance it is smaller than 0.1
- // this.toUpdate = this.randomNumber < 0.1;
+        if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total)
+          if (signal_price_int >0){ 
+            if (fileName != fileName_last) {
+          //    log.debug('signal_buy_int '+signal_buy_int);
+          //    log.debug('signal_buy_int_last '+signal_buy_int_last);
+          //    log.debug('signal_sell_int '+signal_sell_int);
+          //    log.debug('signal_sell_int_last '+signal_sell_int_last);
+
+            //  sumB = (signal_buy_int - signal_buy_int_last)+(signal_sell_int_last - signal_sell_int)
+            //  sumS = (signal_buy_int_last - signal_buy_int)+(signal_sell_int - signal_sell_int_last)
+
+            //  log.debug('sumB '+sumB);
+            //  log.debug('sumS '+sumS);
+          
+              signal_buy_int_last = signal_buy_int;
+              signal_sell_int_last = signal_sell_int;
+              fileName_last = fileName;
+              bad_data = false;
+            }
+
+        } 
+        
+   
 
 }
 
@@ -147,29 +193,28 @@ strat.log = function() {
 // Based on the newly calculated
 // information, check if we should
 // update or not.
-strat.check = function() {
+strat.check = function () {
   log.debug('strat.check');
-
-  // Only continue if we have a new update.
-  if(signal_buy_int + signal_sell_int + signal_neutral_int == signal_total){  
-  
-    if(signal_sell_int >=20 ) 
-      if(this.currentTrend === 'long') {
-     // If it was long, set it to short
+  if (bad_data) log.debug('bad data')
+  else {
+    // Only continue if we have a new update.
+    if (signal_sell_int >= 20)
+      if (this.currentTrend === 'long') {
+        // If it was long, set it to short
         log.debug('advice short');
         this.currentTrend = 'short';
         this.advice('short');
-    
+
       }
-    if(signal_buy_int >= 20) 
-      if(this.currentTrend === 'short'){
+    if (signal_buy_int >= 20)
+      if (this.currentTrend === 'short') {
         // If it was short, set it to long
         log.debug('advice long');
         this.currentTrend = 'long';
         this.advice('long');
-    
+
       }
-  } else log.debug('bad data');
+  }
 }
 
 module.exports = strat;

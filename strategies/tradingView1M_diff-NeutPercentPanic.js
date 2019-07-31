@@ -81,16 +81,16 @@ fs.access('../../../tradingView/out', function(error){
 
 try {
     fs.statSync('../../../tradingView/out');
-    console.log('directory exists');
+    //console.log('directory exists');
 }
 catch (err) {
   if (err.code === 'ENOENT') {
     pathName = '../tradingView/out'
-    console.log('directory does not exist');
+   // console.log('directory does not exist');
   }
 }
 
-  log.debug("pathName "+ pathName);
+ // log.debug("pathName "+ pathName);
 
 /* //win
   var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
