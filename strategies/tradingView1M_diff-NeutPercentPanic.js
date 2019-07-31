@@ -89,24 +89,28 @@ strat.update = function(candle) {
   if (SMinutes.length==1) SMinutes = "0"+SMinutes;
 */
 
+var pathName = '../../../tradingView/out';
+
+fs.access('../../../tradingView/out', function(error){
+  if (error) {
+    pathName = '../tradingView/out'
+    log.debug("Файл не найден");
+  } else {
+    log.debug("Файл найден");
+}
+});
+
+  log.debug(" pathName "+ pathName);
+
 /* //win
   var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
   log.debug("Синхронное чтение файла "+getLatestFile("C:/YandexDisk/tradingview/out"));
 */
   //nix
-  var fileName = '../../../tradingView/out/'+ getLatestFile("../../../tradingView/out/");
-  log.debug("Синхронное чтение файла "+getLatestFile("../../../tradingView/out/"));
+  var fileName = pathName+'/'+ getLatestFile(pathName+"/");
+  log.debug(fileName);
 
-  /*
-  fs.access(fileName, function(error){
-    if (error) {
-        console.log("Файл не найден");
-    } else {
-        console.log("Файл найден");
-       
-}
-});
-*/
+  
   //log.debug(fileContent);
  
   
