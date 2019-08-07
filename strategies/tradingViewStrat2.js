@@ -122,22 +122,22 @@ catch (err) {
         signal_price_pos = fileContent.indexOf("PRICE");
         signal_price = fileContent.substring(signal_price_pos+6, signal_price_pos+14); 
         signal_price_int = Number.parseInt(signal_price);
-        log.debug("PRICE "+signal_price_pos+" "+signal_price_int);
+        log.debug("PRICE "+signal_price_int);
 
         signal_sell_pos = fileContent.indexOf("1H_SUM_SELL");
         signal_sell = fileContent.substring(signal_sell_pos+12, signal_sell_pos+14); 
         H1_SUM_SELL = Number.parseInt(signal_sell);
-        log.debug("H1_SUM_SELL "+signal_sell_pos+" "+signal_sell_int);
+        log.debug("H1_SUM_SELL "+H1_SUM_SELL);
 
         signal_neutral_pos = fileContent.indexOf("1H_SUM_NEUTRAL");
         signal_neutral = fileContent.substring(signal_neutral_pos+15, signal_neutral_pos+17); 
         H1_SUM_NEUTRAL = Number.parseInt(signal_neutral);
-        log.debug("H1_SUM_NEUTRAL "+signal_neutral_pos+" "+signal_neutral_int);
+        log.debug("H1_SUM_NEUTRAL "+H1_SUM_NEUTRAL);
 
         signal_buy_pos = fileContent.indexOf("1H_SUM_BUY");
         signal_buy = fileContent.substring(signal_buy_pos+11, signal_buy_pos+13); 
         H1_SUM_BUY = Number.parseInt(signal_buy);
-        log.debug("H1_SUM_BUY "+signal_buy_pos+" "+signal_buy_int);
+        log.debug("H1_SUM_BUY "+H1_SUM_BUY);
 
         if(H1_SUM_BUY + H1_SUM_NEUTRAL + H1_SUM_SELL == signal_total)
           if (signal_price_int >0){ 
