@@ -216,6 +216,7 @@ strat.check = function() {
     if(this.currentTrend === 'long') {
       if (H1_SUM_BUY > PERSISTENCE_CANDLE_HIGH && persistenceBuy_cnt > PERSISTENCE_BUY ) {
             sellAttempt = true;
+            log.debug('sellAttempt') 
             startAttemptPrice = PRICE;
       }
     }
@@ -223,6 +224,7 @@ strat.check = function() {
     if(this.currentTrend === 'short'){
       if (H1_SUM_SELL > PERSISTENCE_CANDLE_HIGH && persistenceSell_cnt > PERSISTENCE_SELL ) {
         buyAttempt = true;
+        log.debug('buyAttempt') 
         startAttemptPrice = $PRICE;
       }  
     }
