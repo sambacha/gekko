@@ -125,11 +125,9 @@ catch (err) {
   
   //nix
   try {
-  var fileName = pathName+'/'+ getLatestFile(pathName+"/");
+    fileName = pathName+'/'+ getLatestFile(pathName+"/");
     fileOk = true; 
   }
-fileOk = true; 
-}
   catch (err) {
     if (err.code === 'ENOENT') {
      // pathName = '../tradingView/out'
