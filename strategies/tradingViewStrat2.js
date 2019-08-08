@@ -76,7 +76,8 @@ strat.update = function(candle) {
   log.debug('strat.update tradingViewStrat2');
  
   bad_data = true;
-
+var fileOk = false;
+var fileName;
 
 var pathName = '../../../tradingView/out';
 
@@ -105,18 +106,43 @@ catch (err) {
 
  // log.debug("pathName "+ pathName);
 
-/* //win
-  var fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
+
+
+   //win
+  /*
+   try {
+  fileName = 'C:/YandexDisk/tradingview/out/'+ getLatestFile("C:/YandexDisk/tradingview/out");
   log.debug("Синхронное чтение файла "+getLatestFile("C:/YandexDisk/tradingview/out"));
+  fileOk = true; 
+}
+  catch (err) {
+    if (err.code === 'ENOENT') {
+     // pathName = '../tradingView/out'
+     
+    }
+  }
 */
+  
   //nix
+  try {
   var fileName = pathName+'/'+ getLatestFile(pathName+"/");
-  log.debug(fileName);
+    fileOk = true; 
+  }
+fileOk = true; 
+}
+  catch (err) {
+    if (err.code === 'ENOENT') {
+     // pathName = '../tradingView/out'
+     
+    }
+  }
+    log.debug(fileName);
 
   
   //log.debug(fileContent);
  
-  
+  if (fileOk){
+
   let fileContent = fs.readFileSync(fileName, "utf8");
 
         signal_price_pos = fileContent.indexOf("PRICE");
@@ -163,7 +189,7 @@ catch (err) {
 
         } 
         
-   
+      } 
 
 }
 
