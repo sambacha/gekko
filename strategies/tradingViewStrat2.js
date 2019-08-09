@@ -241,7 +241,7 @@ strat.check = function() {
       if (H1_SUM_BUY > PERSISTENCE_CANDLE_HIGH && persistenceBuy_cnt > PERSISTENCE_BUY ) {
             sellAttempt = true;
             log.debug('sellAttempt') 
-            startAttemptPrice = PRICE;
+            startAttemptPrice = signal_price_int;
       }
     }
 
@@ -249,32 +249,32 @@ strat.check = function() {
       if (H1_SUM_SELL > PERSISTENCE_CANDLE_HIGH && persistenceSell_cnt > PERSISTENCE_SELL ) {
         buyAttempt = true;
         log.debug('buyAttempt') 
-        startAttemptPrice = $PRICE;
+        startAttemptPrice = $signal_price_int;
       }  
     }
 
     if (sellAttempt) {
-      if (startAttemptPrice > PRICE) {
+      if (startAttemptPrice > signal_price_int) {
         sellAttempt = false;
         log.info('advice short '+signal_price_int);
         this.currentTrend = 'short';
         this.advice('short');
       }
       else {
-      startAttemptPrice = PRICE;
+      startAttemptPrice = signal_price_int;
       }
     }
     
 
   if (buyAttempt) {
-    if (startAttemptPrice < PRICE) {
+    if (startAttemptPrice < signal_price_int) {
       buyAttempt = false;
       log.info('advice long '+signal_price_int);
       this.currentTrend = 'long';
       this.advice('long');
     }
     else {
-      startAttemptPrice = PRICE;
+      startAttemptPrice = signal_price_int;
     }
   }
 
