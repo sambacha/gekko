@@ -249,7 +249,7 @@ strat.check = function() {
       if (H1_SUM_SELL > PERSISTENCE_CANDLE_HIGH && persistenceSell_cnt > PERSISTENCE_SELL ) {
         buyAttempt = true;
         log.debug('buyAttempt') 
-        startAttemptPrice = $signal_price_int;
+        startAttemptPrice = signal_price_int;
       }  
     }
 
