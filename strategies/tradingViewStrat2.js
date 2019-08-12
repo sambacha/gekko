@@ -48,9 +48,9 @@ var profit_delta = 0.01;
 //var price_panic_buy = 20;
 //var price_panic_sell = 20;
 
-var PERSISTENCE_SELL = 20;
-var PERSISTENCE_BUY = 20;
-var PERSISTENCE_CANDLE_HIGH = 10;//;13  // минимальное значение для подсче
+var PERSISTENCE_SELL = 29;
+var PERSISTENCE_BUY = 29;
+var PERSISTENCE_CANDLE_HIGH = 13;//   минимальное значение для подсче
 
 var persistenceSell_cnt, persistenceBuy_cnt;
 
