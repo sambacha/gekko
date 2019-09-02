@@ -22,7 +22,7 @@ var Heart = function() {
 util.makeEventEmitter(Heart);
 
 Heart.prototype.pump = function() {
-  log.debug('scheduling ticks');
+  log.debug('scheduling ticks '+TICKRATE);
   this.scheduleTicks();
 }
 

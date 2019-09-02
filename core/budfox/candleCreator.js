@@ -63,25 +63,34 @@ util.makeEventEmitter(CandleCreator);
 CandleCreator.prototype.write = function(batch) {
   var trades = batch.data;
 
-  if(_.isEmpty(trades))
+  //console.log("CandleCreator.prototype.write");
+  
+  if(_.isEmpty(trades)) {
+    //console.log("(_.isEmpty(trades)");
     return;
-
+}
+  
   trades = this.filter(trades);
   this.fillBuckets(trades);
   var candles = this.calculateCandles();
 
   candles = this.addEmptyCandles(candles);
 
-  if(_.isEmpty(candles))
+  if(_.isEmpty(candles)) {
+    //console.log("_.isEmpty(candles)");
     return;  
+  }
 
   // the last candle is not complete
   this.threshold = candles.pop().start;
+  //console.log("CandleCreator this.emit('candles");
 
   this.emit('candles', candles);
 }
 
 CandleCreator.prototype.filter = function(trades) {
+  //console.log("CandleCreator.prototype.filter");
+
   // make sure we only include trades more recent
   // than the previous emitted candle
   return _.filter(trades, function(trade) {
@@ -92,6 +101,7 @@ CandleCreator.prototype.filter = function(trades) {
 // put each trade in a per minute bucket
 CandleCreator.prototype.fillBuckets = function(trades) {
   _.each(trades, function(trade) {
+    //console.log("CandleCreator.prototype.fillBuckets");
     var minute = trade.date.format('YYYY-MM-DD HH:mm');
 
     if(!(minute in this.buckets))
@@ -105,6 +115,7 @@ CandleCreator.prototype.fillBuckets = function(trades) {
 
 // convert each bucket into a candle
 CandleCreator.prototype.calculateCandles = function() {
+  //console.log("CandleCreator.prototype.calculateCandles");
   var minutes = _.size(this.buckets);
 
   // catch error from high volume getTrades
@@ -127,6 +138,7 @@ CandleCreator.prototype.calculateCandles = function() {
 }
 
 CandleCreator.prototype.calculateCandle = function(trades) {
+  //console.log("CandleCreator.prototype.calculateCandle");
   var first = _.first(trades);
 
   var f = parseFloat;
@@ -161,15 +173,40 @@ CandleCreator.prototype.calculateCandle = function(trades) {
 // - trades, volume are 0
 CandleCreator.prototype.addEmptyCandles = function(candles) {
   var amount = _.size(candles);
-  if(!amount)
+  if(!amount){
+  //  console.log("CandleCreator.prototype.addEmptyCandles");
     return candles;
+  }
 
-  // iterator
+ // console.log("CandleCreator amount:");
+ // console.log(amount);
+  
+  var lastPrice = candles[0].close;
   var start = _.first(candles).start.clone();
   var end = _.last(candles).start;
+
+  candles.splice(2, 0, {
+    start: start.clone(),
+    open: lastPrice,
+    high: lastPrice,
+    low: lastPrice,
+    close: lastPrice,
+    vwp: lastPrice,
+    volume: 1,
+    trades: 1 
+  });
+
+  //console.log("CandleCreator amount:");
+ // console.log(amount);
+
+  // iterator
+   start = _.first(candles).start.clone();
+   end = _.last(candles).start;
   var i, j = -1;
 
   var minutes = _.map(candles, function(candle) {
+   // console.log("CandleCreator return +candle.start");
+    //console.log(+candle.start);
     return +candle.start;
   });
 
@@ -180,6 +217,8 @@ CandleCreator.prototype.addEmptyCandles = function(candles) {
 
     if(_.contains(minutes, i))
       continue; // we have a candle for this minute
+
+     // console.log("we have a candle for this minute");
 
     var lastPrice = candles[j].close;
 
@@ -194,6 +233,7 @@ CandleCreator.prototype.addEmptyCandles = function(candles) {
       trades: 0
     });
   }
+
   return candles;
 }
 

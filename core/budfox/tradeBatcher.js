@@ -35,6 +35,8 @@ var moment = require('moment');
 var util = require('../util');
 var log = require('../log');
 
+var filterBatch_good;
+
 var TradeBatcher = function(tid) {
   if(!_.isString(tid))
     throw new Error('tid is not a string');
@@ -54,17 +56,55 @@ TradeBatcher.prototype.write = function(batch) {
   if(_.isEmpty(batch))
     return log.debug('Trade fetch came back empty.');
 
-  var filterBatch = this.filter(batch);
+    var filterBatch = this.filter(batch);
+    var amount = _.size(filterBatch);
+    
 
-  var amount = _.size(filterBatch);
-  if(!amount)
-//    return log.debug('No new trades.');
-    return ;
+    if(!amount){
+    log.debug('fake trades.');
+
+    filterBatch = filterBatch_good;
+      } else {
+      delta = 0;
+    }
+
+  amount = _.size(filterBatch);
+
+
+    if(!amount){
+    log.debug('No new trades.');
+    return;
+  }
+  
+  
+   filterBatch_good = filterBatch;
 
   var momentBatch = this.convertDates(filterBatch);
 
+  var temp = new Date();
+
   var last = _.last(momentBatch);
   var first = _.first(momentBatch);
+
+//  console.log("batch:");
+//  console.log(batch);
+  
+  //console.log("filterBatch:");
+  //console.log(filterBatch);
+  
+  
+  //console.log("first.date:");
+  //console.log(first.date);
+  //console.log("last.date:");
+  //console.log(last.date);
+  //console.log("first:");
+  //console.log(first);
+  //console.log("last:");
+  //console.log(last);
+  
+ // console.log(" data:");
+ // console.log(momentBatch);
+  
 
   log.debug(
     'Processing', amount, 'new trades.',
@@ -75,6 +115,7 @@ TradeBatcher.prototype.write = function(batch) {
     'UTC.',
     '(' + first.date.from(last.date, true) + ')'
   );
+
 
   this.emit('new batch', {
     amount: amount,
@@ -104,7 +145,7 @@ TradeBatcher.prototype.filter = function(batch) {
   // see @link
   // https://github.com/askmike/gekko/issues/486
   batch = _.filter(batch, function(trade) {
-    return trade.amount > 0;
+    return trade.amount;// > 0;
   });
 
   // weed out known trades
