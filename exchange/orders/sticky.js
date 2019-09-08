@@ -110,7 +110,8 @@ class StickyOrder extends BaseOrder {
 
       if(!this.outbid) {
         console.log('if(!this.outbid) buy +0.001 ', ticker.bid);
-        return r(ticker.bid + 0.001);
+//        return r(ticker.bid + 0.001);
+        return r(ticker.bid);
       }
 
       const outbidPrice = this.outbidPrice(ticker.bid, true);
@@ -132,7 +133,8 @@ class StickyOrder extends BaseOrder {
 
       if(!this.outbid) {   //сначала этот
         console.log('if(!this.outbid) { sell  -0.001 ', ticker.ask);
-        return r(ticker.ask - 0.001);
+//        return r(ticker.ask - 0.001);
+        return r(ticker.ask);
       }
 
       const outbidPrice = this.outbidPrice(ticker.ask, false);
