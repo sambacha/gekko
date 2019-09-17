@@ -46,7 +46,7 @@ var historyBDiff;
 //var historyBDiff_last;
 var historyBMin;
 
-var historyS = [$historyDeep+1];
+var historyS = [historyDeep+1];
 var historySDiff;
 //var historySDiff_last;
 var historySMin;
@@ -85,7 +85,7 @@ strat.init = function() {
 
 // What happens on every new candle?
 strat.update = function(candle) {
-  log.debug('strat.update tradingViewStrat22');
+  log.debug('strat.update tradingViewStrat224_200');
  
   bad_data = true;
 var fileOk = false;
@@ -193,17 +193,17 @@ catch (err) {
             for (let step = 1; step < historyDeep; step++) {
               if (historyB[step] > 0) Then
                 if (historyB[step] < historyBMin )  historyBMin = historyB[step]
-              if (historyS[$step] > 0) Then
-                if ($historyS[$step] < $historySMin ) $historySMin = $historyS[$step]
+              if (historyS[step] > 0) Then
+                if (historyS[step] < historySMin ) historySMin = historyS[step]
             }
             
             historyBDiff = H1_SUM_BUY - historyBMin
             historySDiff = H1_SUM_SELL - historySMin
             
             if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
-                $persistenceBuy_cnt = $persistenceBuy_cnt +1
+                persistenceBuy_cnt = persistenceBuy_cnt +1
             } else { 
-                $persistenceBuy_cnt = 0;
+                persistenceBuy_cnt = 0;
             }
             
             if (historySDiff > PERSISTENCE_CANDLE_HIGH  ) {
