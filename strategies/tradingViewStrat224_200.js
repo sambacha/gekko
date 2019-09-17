@@ -191,9 +191,9 @@ catch (err) {
               historySMin = 100;
             
             for (let step = 1; step < historyDeep; step++) {
-              if (historyB[step] > 0) Then
+              if (historyB[step] > 0) 
                 if (historyB[step] < historyBMin )  historyBMin = historyB[step]
-              if (historyS[step] > 0) Then
+              if (historyS[step] > 0) 
                 if (historyS[step] < historySMin ) historySMin = historyS[step]
             }
             
