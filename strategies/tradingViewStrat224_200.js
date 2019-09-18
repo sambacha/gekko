@@ -200,6 +200,9 @@ catch (err) {
             historyBDiff = H1_SUM_BUY - historyBMin;
             historySDiff = H1_SUM_SELL - historySMin;
 
+            if(this.currentTrend === 'long') log.debug('is long');
+            if(this.currentTrend === 'short') log.debug('is short');
+
             log.debug('historyBDiff '+historyBDiff);
             log.debug('historySDiff '+historySDiff);
             
