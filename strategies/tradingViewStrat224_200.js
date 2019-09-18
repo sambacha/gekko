@@ -190,15 +190,18 @@ catch (err) {
               historyBMin = 100;
               historySMin = 100;
             
-            for (let step = 1; step < historyDeep; step++) {
-              if (historyB[step] > 0) 
-                if (historyB[step] < historyBMin )  historyBMin = historyB[step]
-              if (historyS[step] > 0) 
-                if (historyS[step] < historySMin ) historySMin = historyS[step]
+            for (let step = 1; step <= historyDeep; step++) {
+              if (historyB[step] > 0); 
+                if (historyB[step] < historyBMin )  historyBMin = historyB[step];
+              if (historyS[step] > 0) ;
+                if (historyS[step] < historySMin ) historySMin = historyS[step];
             }
             
-            historyBDiff = H1_SUM_BUY - historyBMin
-            historySDiff = H1_SUM_SELL - historySMin
+            historyBDiff = H1_SUM_BUY - historyBMin;
+            historySDiff = H1_SUM_SELL - historySMin;
+
+            log.debug('historyBDiff '+historyBDiff);
+            log.debug('historySDiff '+historySDiff);
             
             if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
                 persistenceBuy_cnt = persistenceBuy_cnt +1
