@@ -62,7 +62,7 @@ var profit_delta = 0.01;
 
 var PERSISTENCE_SELL = 30;
 var PERSISTENCE_BUY = 30;
-var PERSISTENCE_CANDLE_HIGH = 13;//   минимальное значение для подсче
+var PERSISTENCE_CANDLE_HIGH = 12;//   минимальное значение для подсчета PERSISTENCE
 
 var persistenceSell_cnt, persistenceBuy_cnt;
 
@@ -203,8 +203,7 @@ catch (err) {
             if(this.currentTrend === 'long') log.debug('is long');
             if(this.currentTrend === 'short') log.debug('is short');
 
-            log.debug('historyBDiff '+historyBDiff);
-            log.debug('historySDiff '+historySDiff);
+            log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff);
             
             if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
                 persistenceBuy_cnt = persistenceBuy_cnt +1
@@ -227,8 +226,7 @@ catch (err) {
                 persistenceSell_cnt = persistenceSell_cnt +1;
               else persistenceSell_cnt = 0;
   */        
-              log.debug('persistenceBuy_cnt '+persistenceBuy_cnt);
-              log.debug('persistenceSell_cnt '+persistenceSell_cnt);
+              log.debug('persistenceBuy_cnt '+persistenceBuy_cnt+'  persistenceSell_cnt '+persistenceSell_cnt);
 
               H1_SUM_BUY_LAST = H1_SUM_BUY;
               H1_SUM_SELL_LAST = H1_SUM_SELL;
