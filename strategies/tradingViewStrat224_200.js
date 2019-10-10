@@ -286,21 +286,21 @@ strat.check = function() {
   if (bad_data) log.debug('bad data') 
     else {
 
-    if(this.currentTrend === 'long') {
+//    if(this.currentTrend === 'long') {
       if ( persistenceBuy_cnt > PERSISTENCE_BUY ) {
             sellIntent = true;
             log.debug('sellIntent') 
             startIntentPrice = signal_price_int;
       }
-    }
+//    }
 
-    if(this.currentTrend === 'short'){
+//    if(this.currentTrend === 'short'){
       if (persistenceSell_cnt > PERSISTENCE_SELL ) {
         buyIntent = true;
         log.debug('buyIntent') 
         startIntentPrice = signal_price_int;
       }  
-    }
+//    }
 
     if (sellIntent) {
       if (persistenceBuy_cnt == 0) {
