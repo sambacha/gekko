@@ -42,14 +42,14 @@ var signal_buy_int_last = 0;
 var historyDeep =200;
 
 var historyB= [historyDeep+1];
-var historyBDiff;
-var historyBDiff_last;
-var historyBMin;
+var historyBDiff=0;
+var historyBDiff_last=0;
+var historyBMin=0;
 
 var historyS = [historyDeep+1];
-var historySDiff;
-var historySDiff_last;
-var historySMin;
+var historySDiff=0;
+var historySDiff_last=0;
+var historySMin=0;
 
 //var sumB;
 //var sumS;
@@ -204,7 +204,9 @@ catch (err) {
             historyBDiff = H1_SUM_BUY - historyBMin;
             historySDiff = H1_SUM_SELL - historySMin;
 
-            historyBDiff = (historyBDiff_last+historyBDiff )/2
+            log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff);
+
+            historyBDiff = (historyBDiff_last+historyBDiff)/2
             historySDiff = (historySDiff_last+historySDiff)/2
 
             if(this.currentTrend === 'long') log.debug('is long');
