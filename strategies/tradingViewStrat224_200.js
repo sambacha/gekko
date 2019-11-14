@@ -39,7 +39,7 @@ var signal_buy;
 var signal_buy_int = 0;
 var signal_buy_int_last = 0;
 
-var historyDeep =200;
+var historyDeep =201;
 
 var historyB= [historyDeep+1];
 var historyBDiff;
