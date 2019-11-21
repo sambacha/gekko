@@ -60,12 +60,12 @@ var profit_delta = 0.01;
 //var price_panic_buy = 20;
 //var price_panic_sell = 20;
 
-var PERSISTENCE_SELL = 25;
-var PERSISTENCE_BUY = 25;
+var PERSISTENCE_SELL = 30;
+var PERSISTENCE_BUY = 30;
 var PERSISTENCE_CANDLE_HIGH = 9;//   минимальное значение для подсчета PERSISTENCE
 
-var ATTEMPT_SELL_LIMIT = 4;
-var ATTEMPT_BUY_LIMIT = 4;
+var ATTEMPT_SELL_LIMIT = 3;
+var ATTEMPT_BUY_LIMIT = 2;
 var attemptSellCnt, attemptBuyCnt;
 
 var persistenceSell_cnt, persistenceBuy_cnt;
@@ -89,7 +89,7 @@ strat.init = function() {
 
 // What happens on every new candle?
 strat.update = function(candle) {
-  log.debug('strat.update tradingViewStrat224.200.11');
+  log.debug('strat.update tradingViewStrat224.200.11.32');
  
   bad_data = true;
 var fileOk = false;
