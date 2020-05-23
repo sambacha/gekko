@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const promisify = require('tiny-promisify');
-const pipelineRunner = promisify(require('../../core/workers/pipeline/parent'));
+const pipelineRunner = promisify(require('../../src/core/workers/pipeline/parent'));
 
 const cache = require('../state/cache');
 const broadcast = cache.get('broadcast');

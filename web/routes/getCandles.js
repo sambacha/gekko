@@ -29,7 +29,7 @@
 
 const _ = require('lodash');
 const promisify = require('tiny-promisify');
-const candleLoader = promisify(require('../../core/workers/loadCandles/parent'));
+const candleLoader = promisify(require('../../src/core/workers/loadCandles/parent'));
 const base = require('./baseConfig');
 
 module.exports = function *() {

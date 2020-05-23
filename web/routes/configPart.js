@@ -7,7 +7,7 @@ const parts = {
   performanceAnalyzer: 'config/plugins/performanceAnalyzer'
 }
 
-const gekkoRoot = __dirname + '/../../';
+const gekkoRoot = __dirname + '/../../src/';
 
 module.exports = function *() {
   if(!_.has(parts, this.params.part))
@@ -15,6 +15,6 @@ module.exports = function *() {
 
   const fileName = gekkoRoot + '/' + parts[this.params.part] + '.toml';
   this.body = {
-    part: yield fs.readFile(fileName, 'utf8') 
+    part: yield fs.readFile(fileName, 'utf8')
   }
 }
