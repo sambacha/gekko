@@ -6,7 +6,7 @@ const sinon = require('sinon');
 const _ = require('lodash');
 const moment = require('moment');
 
-const utils = require(__dirname + '/../../core/util');
+const utils = require(__dirname + '/../../src/core/util');
 
 const dirs = utils.dirs();
 const TrailingStop = require(dirs.broker + 'triggers/trailingStop');

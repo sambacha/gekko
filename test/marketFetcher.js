@@ -8,7 +8,7 @@ var proxyquire = require('proxyquire');
 var _ = require('lodash');
 var moment = require('moment');
 
-var util = require(__dirname + '/../core/util');
+var util = require(__dirname + '/../src/core/util');
 var config = util.getConfig();
 var dirs = util.dirs();
 
@@ -66,9 +66,9 @@ describe('budfox/marketFetcher', function() {
 
     mf.fetch();
     expect(getTradesSpy.callCount).to.equal(1);
-    
+
     var args = getTradesSpy.firstCall.args;
-    
+
     // test-config uses NO `tradingAdvisor`
     var since = args[0];
     expect(since).to.equal(undefined);
