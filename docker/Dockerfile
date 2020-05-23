@@ -18,17 +18,17 @@ RUN npm install --production && \
     npm cache clean --force
 
 # Install Gekko Broker dependencies
-WORKDIR exchange
-COPY exchange/package.json .
+WORKDIR /src/exchange
+COPY /src/exchange/package.json .
 RUN npm install --production && \
     npm cache clean --force
-WORKDIR ../
+WORKDIR /
 
 # Bundle app source
 COPY . /usr/src/app
 
 EXPOSE 3000
-RUN chmod +x /usr/src/app/docker-entrypoint.sh
-ENTRYPOINT ["/usr/src/app/docker-entrypoint.sh"]
+RUN chmod +x /usr/src/app/docker/docker-entrypoint.sh
+ENTRYPOINT ["/usr/src/app/docker/docker-entrypoint.sh"]
 
 CMD ["--config", "config.js", "--ui"]
