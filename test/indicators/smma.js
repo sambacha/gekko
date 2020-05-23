@@ -5,11 +5,11 @@ var sinon = require('sinon');
 
 var _ = require('lodash');
 
-var util = require('../../core/util');
+var util = require('../../src/core/util');
 var dirs = util.dirs();
 var INDICATOR_PATH = dirs.indicators;
 
-// Fake input prices to verify all indicators 
+// Fake input prices to verify all indicators
 // are working correctly by comparing fresh
 // calculated results to pre calculated results.
 

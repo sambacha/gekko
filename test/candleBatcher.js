@@ -6,7 +6,7 @@ var sinon = require('sinon');
 var _ = require('lodash');
 var moment = require('moment');
 
-var utils = require(__dirname + '/../core/util');
+var utils = require(__dirname + '/../src/core/util');
 
 var dirs = utils.dirs();
 var CandleBatcher = require(dirs.core + 'candleBatcher');

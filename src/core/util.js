@@ -25,10 +25,10 @@ var util = {
     if(!program.config)
         util.die('Please specify a config file.', true);
 
-    if(!fs.existsSync(util.dirs().gekko + program.config))
+    if(!fs.existsSync(util.dirs().root + program.config))
       util.die('Cannot find the specified config file.', true);
 
-    _config = require(util.dirs().gekko + program.config);
+    _config = require(util.dirs().root + program.config);
     return _config;
   },
   // overwrite the whole config
@@ -49,7 +49,7 @@ var util = {
       return _package;
 
 
-    _package = JSON.parse( fs.readFileSync(__dirname + '/../package.json', 'utf8') );
+    _package = JSON.parse( fs.readFileSync(__dirname + '/../../package.json', 'utf8') );
     return _package;
   },
   getRequiredNodeVersion: function() {
@@ -100,23 +100,25 @@ var util = {
     process.exit(1);
   },
   dirs: function() {
-    var ROOT = __dirname + '/../';
+    const ROOT = `${process.cwd()}/`;
+    const SRC_DIR = `${ROOT}/src/`
 
     return {
-      gekko: ROOT,
-      core: ROOT + 'core/',
-      markets: ROOT + 'core/markets/',
-      exchanges: ROOT + 'exchange/wrappers/',
-      plugins: ROOT + 'plugins/',
-      methods: ROOT + 'strategies/',
-      indicators: ROOT + 'strategies/indicators/',
-      budfox: ROOT + 'core/budfox/',
-      importers: ROOT + 'importers/exchanges/',
-      tools: ROOT + 'core/tools/',
-      workers: ROOT + 'core/workers/',
+      root: ROOT,
+      gekko: SRC_DIR,
+      core: SRC_DIR + 'core/',
+      markets: SRC_DIR + 'core/markets/',
+      exchanges: SRC_DIR + 'exchange/wrappers/',
+      plugins: SRC_DIR + 'plugins/',
+      methods: SRC_DIR + 'strategies/',
+      indicators: SRC_DIR + 'strategies/indicators/',
+      budfox: SRC_DIR + 'core/budfox/',
+      importers: SRC_DIR + 'importers/exchanges/',
+      tools: SRC_DIR + 'core/tools/',
+      workers: SRC_DIR + 'core/workers/',
       web: ROOT + 'web/',
-      config: ROOT + 'config/',
-      broker: ROOT + 'exchange/'
+      config: SRC_DIR + 'config/',
+      broker: SRC_DIR + 'exchange/'
     }
   },
   inherit: function(dest, source) {

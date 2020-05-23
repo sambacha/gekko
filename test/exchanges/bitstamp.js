@@ -23,7 +23,7 @@ var proxyquire = require('proxyquire');
 var _ = require('lodash');
 var moment = require('moment');
 
-var util = require(__dirname + '/../../core/util');
+var util = require(__dirname + '/../../src/core/util');
 var config = util.getConfig();
 var dirs = util.dirs();
 
