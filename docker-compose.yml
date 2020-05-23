@@ -1,7 +1,9 @@
 version: '3'
 services:
   gekko:
-    build: ./
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
     volumes:
       - ./volumes/gekko/history:/usr/src/app/history
       - ./config.js:/usr/src/app/config.js
