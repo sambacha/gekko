@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const fs = require('co-fs');
 
-const gekkoRoot = __dirname + '/../../';
+const gekkoRoot = __dirname + '/../../src/';
 
 module.exports = function *() {
   const strategyDir = yield fs.readdir(gekkoRoot + 'strategies');

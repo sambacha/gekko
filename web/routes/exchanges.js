@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const fs = require('co-fs');
 
-const gekkoRoot = __dirname + '/../../';
-var util = require(__dirname + '/../../core/util');
+const gekkoRoot = __dirname + '/../../src/';
+var util = require(__dirname + '/../../src/core/util');
 
 var config = {};
 
