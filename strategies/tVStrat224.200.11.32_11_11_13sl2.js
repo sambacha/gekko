@@ -1012,22 +1012,62 @@ strat.check = function() {
 
           if (attemptBuyCnt == ATTEMPT_BUY_LIMIT ) {
             attemptBuyCnt = 0//
+
+            if (stopLossShortPrice == 0){
+                stopLossShortPrice = signal_price_int + signal_price_int * STOPLOSS / 100
+           //     print("stopLossShortPrice "+str(stopLossShortPrice))
+            }
+            stopLossLongPrice = 0
           // log.debug("persistenceBuy_cnt_last "+persistenceBuy_cnt_last)
             log.info('advice short '+signal_price_int)//
             this.currentTrend = 'short'//
-            this.advice('short')// 
-            
+            this.advice('short')//             
           }
         
+          if (stopLossShortPrice > 0){
+            if (price > stopLossShortPrice){
+              //  total_trades = total_trades + 1
+                if (stopLossLongPrice == 0){
+                    stopLossLongPrice = price - price * STOPLOSS / 100
+                    print("stopLossLong Price " + str(stopLossLongPrice))
+                }
+                stopLossShortPrice = 0
+
+                log.info('advice STOPLOSS for short -> long '+signal_price_int)//
+                this.currentTrend = 'long'//
+                this.advice('long')// 
+            }
+          }
+
+
           if (attemptSellCnt == ATTEMPT_SELL_LIMIT ) {
             attemptSellCnt = 0//
-          
+            if (stopLossLongPrice == 0){
+              stopLossLongPrice = signal_price_int - signal_price_int * STOPLOSS / 100
+            }
+            stopLossShortPrice = 0          
             // log.debug("persistenceSell_cnt_last "+persistenceSell_cnt_last)
             log.info('advice long '+signal_price_int)//
             this.currentTrend = 'long'//
             this.advice('long')//
           
           }
+
+          if (stopLossLongPrice > 0){
+            if (price < stopLossLongPrice){
+              //  total_trades = total_trades + 1
+                if (stopLossShortPrice == 0){
+                  stopLossShortPrice = price + price * STOPLOSS / 100
+                    print("stopLossShort Price " + str(stopLossShortPrice))
+                }
+                stopLossLongPrice = 0
+
+                log.info('advice STOPLOSS for long -> short '+signal_price_int)//
+                this.currentTrend = 'short'//
+                this.advice('short')// 
+            }
+          }
+
 
   }
 }
