@@ -205,7 +205,7 @@ catch (err) {
 
               if (e < 20 && t < 20 && e > t && o < r) oStochKa = 1
               if (e > 80 && t > 80 && e < t && o > r) oStochKa = -1
-              log.debug("oStochKa "+oStochKa)
+              //log.debug("oStochKa "+oStochKa)
               //#######################################
 
               oCCI20a = 0
