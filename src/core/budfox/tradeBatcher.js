@@ -1,6 +1,6 @@
-// 
+//
 // Small wrapper that only propagates new trades.
-// 
+//
 // Expects trade batches to be written like:
 // [
 //  {
@@ -16,7 +16,7 @@
 //    amount: x
 //  }
 // ]
-// 
+//
 // Emits 'new trades' event with:
 // {
 //   amount: x,
@@ -25,45 +25,40 @@
 //   first: (trade),
 //   last: (trade)
 //   data: [
-//      // batch of new trades with 
+//      // batch of new trades with
 //      // moments instead of timestamps
 //   ]
 // }
 
-var _ = require('lodash');
-var moment = require('moment');
-var util = require('../util');
-var log = require('../log');
+var _ = require('lodash')
+var moment = require('moment')
+var util = require('../util')
+var log = require('../log')
 
-var TradeBatcher = function(tid) {
-  if(!_.isString(tid))
-    throw new Error('tid is not a string');
+var TradeBatcher = function (tid) {
+  if (!_.isString(tid)) { throw new Error('tid is not a string') }
 
-  _.bindAll(this);
-  this.tid = tid;
-  this.last = -1;
+  _.bindAll(this)
+  this.tid = tid
+  this.last = -1
 }
 
-util.makeEventEmitter(TradeBatcher);
+util.makeEventEmitter(TradeBatcher)
 
-TradeBatcher.prototype.write = function(batch) {
+TradeBatcher.prototype.write = function (batch) {
+  if (!_.isArray(batch)) { throw new Error('batch is not an array') }
 
-  if(!_.isArray(batch))
-    throw new Error('batch is not an array');
+  if (_.isEmpty(batch)) { return log.debug('Trade fetch came back empty.') }
 
-  if(_.isEmpty(batch))
-    return log.debug('Trade fetch came back empty.');
+  var filterBatch = this.filter(batch)
 
-  var filterBatch = this.filter(batch);
+  var amount = _.size(filterBatch)
+  if (!amount) { return log.debug('No new trades.') }
 
-  var amount = _.size(filterBatch);
-  if(!amount)
-    return log.debug('No new trades.');
+  var momentBatch = this.convertDates(filterBatch)
 
-  var momentBatch = this.convertDates(filterBatch);
-
-  var last = _.last(momentBatch);
-  var first = _.first(momentBatch);
+  var last = _.last(momentBatch)
+  var first = _.first(momentBatch)
 
   log.debug(
     'Processing', amount, 'new trades.',
@@ -73,7 +68,7 @@ TradeBatcher.prototype.write = function(batch) {
     last.date.format('YYYY-MM-DD HH:mm:ss'),
     'UTC.',
     '(' + first.date.from(last.date, true) + ')'
-  );
+  )
 
   this.emit('new batch', {
     amount: amount,
@@ -82,43 +77,40 @@ TradeBatcher.prototype.write = function(batch) {
     last: last,
     first: first,
     data: momentBatch
-  });
+  })
 
-  this.last = last[this.tid];
+  this.last = last[this.tid]
 
   // we overwrote those, get unix ts back
-  if(this.tid === 'date')
-    this.last = this.last.unix();
-
+  if (this.tid === 'date') { this.last = this.last.unix() }
 }
 
-TradeBatcher.prototype.filter = function(batch) {
+TradeBatcher.prototype.filter = function (batch) {
   // make sure we're not trying to count
   // beyond infinity
-  var lastTid = _.last(batch)[this.tid];
-  if(lastTid === lastTid + 1)
-    util.die('trade tid is max int, Gekko can\'t process..');
+  var lastTid = _.last(batch)[this.tid]
+  if (lastTid === lastTid + 1) { util.die('trade tid is max int, Gekko can\'t process..') }
 
   // remove trades that have zero amount
   // see @link
   // https://github.com/askmike/gekko/issues/486
-  batch = _.filter(batch, function(trade) {
-    return trade.amount > 0;
-  });
+  batch = _.filter(batch, function (trade) {
+    return trade.amount > 0
+  })
 
   // weed out known trades
   // TODO: optimize by stopping as soon as the
   // first trade is too old (reverse first)
-  return _.filter(batch, function(trade) {
-    return this.last < trade[this.tid];
-  }, this);
+  return _.filter(batch, function (trade) {
+    return this.last < trade[this.tid]
+  }, this)
 }
 
-TradeBatcher.prototype.convertDates = function(batch) {
-  return _.map(_.cloneDeep(batch), function(trade) {
-    trade.date = moment.unix(trade.date).utc();
-    return trade;
-  });
+TradeBatcher.prototype.convertDates = function (batch) {
+  return _.map(_.cloneDeep(batch), function (trade) {
+    trade.date = moment.unix(trade.date).utc()
+    return trade
+  })
 }
 
-module.exports = TradeBatcher;
+module.exports = TradeBatcher

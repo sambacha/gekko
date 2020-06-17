@@ -1,7 +1,7 @@
-// 
+//
 // Subscriptions glue plugins to events
 // flowing through the Gekko.
-// 
+//
 
 var subscriptions = [
   {
@@ -108,7 +108,7 @@ var subscriptions = [
     emitter: 'performanceAnalyzer',
     event: 'roundtrip',
     handler: 'processRoundtrip'
-  },
-];
+  }
+]
 
-module.exports = subscriptions;
+module.exports = subscriptions

@@ -1,30 +1,30 @@
-var method = {};
+var method = {}
 // Prepare everything our method needs
-method.init = function() {
+method.init = function () {
   this.name = 'tulip-adx'
-  this.trend = 'none';
-  this.requiredHistory = this.tradingAdvisor.historySize;
-  this.addTulipIndicator('myadx', 'adx', this.settings);
+  this.trend = 'none'
+  this.requiredHistory = this.tradingAdvisor.historySize
+  this.addTulipIndicator('myadx', 'adx', this.settings)
 }
 // What happens on every new candle?
-method.update = function(candle) {
+method.update = function (candle) {
   // nothing!
 }
-method.log = function() {
+method.log = function () {
   // nothing!
 }
-method.check = function(candle) {
-  var price = candle.close;
-  var adx = this.tulipIndicators.myadx.result.result;
+method.check = function (candle) {
+  var price = candle.close
+  var adx = this.tulipIndicators.myadx.result.result
   // console.dir(adx)
 
-  if(this.settings.thresholds.down > adx && this.trend !== 'short') {
-    this.trend = 'short';
-    this.advice('short');
-  } else if(this.settings.thresholds.up < adx && this.trend !== 'long'){
-    this.trend = 'long';
-    this.advice('long');
+  if (this.settings.thresholds.down > adx && this.trend !== 'short') {
+    this.trend = 'short'
+    this.advice('short')
+  } else if (this.settings.thresholds.up < adx && this.trend !== 'long') {
+    this.trend = 'long'
+    this.advice('long')
   }
 }
 
-module.exports = method;
+module.exports = method

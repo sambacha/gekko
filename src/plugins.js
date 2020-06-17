@@ -33,7 +33,7 @@ var plugins = [
     async: true,
     modes: ['realtime', 'importer'],
     path: config => config.adapter + '/writer',
-    version: 0.1,
+    version: 0.1
   },
   {
     name: 'Trading Advisor',
@@ -42,7 +42,7 @@ var plugins = [
     async: true,
     modes: ['realtime', 'backtest'],
     emits: true,
-    path: config => 'tradingAdvisor/tradingAdvisor.js',
+    path: config => 'tradingAdvisor/tradingAdvisor.js'
   },
   {
     name: 'IRC bot',
@@ -129,7 +129,7 @@ var plugins = [
     async: true,
     modes: ['realtime'],
     emits: true,
-    path: config => 'trader/trader.js',
+    path: config => 'trader/trader.js'
   },
   {
     name: 'Paper Trader',
@@ -138,7 +138,7 @@ var plugins = [
     async: false,
     modes: ['realtime', 'backtest'],
     emits: true,
-    path: config => 'paperTrader/paperTrader.js',
+    path: config => 'paperTrader/paperTrader.js'
   },
   {
     name: 'Performance Analyzer',
@@ -147,7 +147,7 @@ var plugins = [
     async: false,
     modes: ['realtime', 'backtest'],
     emits: true,
-    path: config => 'performanceAnalyzer/performanceAnalyzer.js',
+    path: config => 'performanceAnalyzer/performanceAnalyzer.js'
   },
   {
     name: 'Redis beacon',
@@ -253,8 +253,8 @@ var plugins = [
     description: 'Writes all buy/sell trades to a blotter CSV file',
     slug: 'blotter',
     async: false,
-    modes: ['realtime'],
-  },
-];
+    modes: ['realtime']
+  }
+]
 
-module.exports = plugins;
+module.exports = plugins

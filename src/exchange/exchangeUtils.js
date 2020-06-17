@@ -1,50 +1,48 @@
 // generic low level reusuable utils for interacting with exchanges.
 
-const retry = require('retry');
-const errors = require('./exchangeErrors');
-const _ = require('lodash');
+const retry = require('retry')
+const errors = require('./exchangeErrors')
+const _ = require('lodash')
 
 const retryInstance = (options, checkFn, callback, e) => {
-  if(!options) {
+  if (!options) {
     options = {
       retries: 100,
       factor: 1.2,
       minTimeout: 1 * 1000,
       maxTimeout: 4 * 1000
-    };
+    }
   }
 
-  let attempt = 0;
+  let attempt = 0
 
-  const operation = retry.operation(options);
-  operation.attempt(function(currentAttempt) {
+  const operation = retry.operation(options)
+  operation.attempt(function (currentAttempt) {
     checkFn((err, result) => {
-
-      if(!err) {
-        return callback(undefined, result);
+      if (!err) {
+        return callback(undefined, result)
       }
 
-      console.log(new Date, err.message);
+      console.log(new Date(), err.message)
 
-      let maxAttempts = err.retry;
-      if(maxAttempts === true)
-        maxAttempts = 10;
+      let maxAttempts = err.retry
+      if (maxAttempts === true) { maxAttempts = 10 }
 
-      if(err.retry && attempt++ < maxAttempts) {
-        return operation.retry(err);
+      if (err.retry && attempt++ < maxAttempts) {
+        return operation.retry(err)
       }
 
-      if(err.notFatal) {
-        if(err.backoffDelay) {
-          return setTimeout(() => operation.retry(err), err.backoffDelay);
+      if (err.notFatal) {
+        if (err.backoffDelay) {
+          return setTimeout(() => operation.retry(err), err.backoffDelay)
         }
 
-        return operation.retry(err);
+        return operation.retry(err)
       }
 
-      callback(err, result);
-    });
-  });
+      callback(err, result)
+    })
+  })
 }
 
 // es6 bind all: https://github.com/posrix/es6-class-bind-all/blob/master/lib/es6ClassBindAll.js
@@ -60,27 +58,27 @@ const bindAll = (targetClass, methodNames = []) => {
   }
 }
 
-const isValidOrder = ({api, market, amount, price}) => {
-  let reason = false;
+const isValidOrder = ({ api, market, amount, price }) => {
+  let reason = false
 
   // Check amount
-  if(amount < market.minimalOrder.amount) {
-    reason = 'Amount is too small';
+  if (amount < market.minimalOrder.amount) {
+    reason = 'Amount is too small'
   }
 
   // Some exchanges have restrictions on prices
-  if(
+  if (
     _.isFunction(api.isValidPrice) &&
     !api.isValidPrice(price)
   ) {
-    reason = 'Price is not valid';
+    reason = 'Price is not valid'
   }
 
-  if(
+  if (
     _.isFunction(api.isValidLot) &&
     !api.isValidLot(price, amount)
   ) {
-    reason = 'Lot size is too small';
+    reason = 'Lot size is too small'
   }
 
   return {
@@ -89,58 +87,57 @@ const isValidOrder = ({api, market, amount, price}) => {
   }
 }
 
-
 // https://gist.github.com/jiggzson/b5f489af9ad931e3d186
 const scientificToDecimal = num => {
-  if(/\d+\.?\d*e[\+\-]*\d+/i.test(num)) {
-    const zero = '0';
-    const parts = String(num).toLowerCase().split('e'); // split into coeff and exponent
-    const e = parts.pop(); // store the exponential part
-    const l = Math.abs(e); // get the number of zeros
-    const sign = e/l;
-    const coeff_array = parts[0].split('.');
-    if(sign === -1) {
-      num = zero + '.' + new Array(l).join(zero) + coeff_array.join('');
+  if (/\d+\.?\d*e[\+\-]*\d+/i.test(num)) {
+    const zero = '0'
+    const parts = String(num).toLowerCase().split('e') // split into coeff and exponent
+    const e = parts.pop() // store the exponential part
+    const l = Math.abs(e) // get the number of zeros
+    const sign = e / l
+    const coeff_array = parts[0].split('.')
+    if (sign === -1) {
+      num = zero + '.' + new Array(l).join(zero) + coeff_array.join('')
     } else {
-      const dec = coeff_array[1];
-      if(dec) {
-        l = l - dec.length;
+      const dec = coeff_array[1]
+      if (dec) {
+        l = l - dec.length
       }
-      num = coeff_array.join('') + new Array(l+1).join(zero);
+      num = coeff_array.join('') + new Array(l + 1).join(zero)
     }
   } else {
     // make sure we always cast to string
-    num = num + '';
+    num = num + ''
   }
 
-  return num;
+  return num
 }
 
 // TEMP until we have proper scheduling
 const cacheFn = (fn, timeout) => {
-  let nextCall = false;
-  let cache = false;
-  let inflight = false;
-  let callbackQueue = [];
+  let nextCall = false
+  let cache = false
+  let inflight = false
+  let callbackQueue = []
 
   return next => {
-    if(inflight) {
-      return callbackQueue.push(next);
+    if (inflight) {
+      return callbackQueue.push(next)
     }
 
-    const now = +new Date;
-    if(cache && now >= nextCall) {
-      return next(res.error, res.result);
+    const now = +new Date()
+    if (cache && now >= nextCall) {
+      return next(res.error, res.result)
     }
 
-    inflight = true;
+    inflight = true
     fn((error, result) => {
-      cache = {error, result};
-      nextCall = now + timeout;
-      next(error, result);
-      callbackQueue.forEach(cb => cb(error, result));
-      callbackQueue = [];
-      inflight = false;
+      cache = { error, result }
+      nextCall = now + timeout
+      next(error, result)
+      callbackQueue.forEach(cb => cb(error, result))
+      callbackQueue = []
+      inflight = false
     })
   }
 }
