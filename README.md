@@ -1,4 +1,7 @@
-# Gekko [![npm](https://img.shields.io/npm/dm/gekko.svg)]() [![Build Status](https://travis-ci.org/askmike/gekko.png)](https://travis-ci.org/askmike/gekko) [![Build status](https://ci.appveyor.com/api/projects/status/github/askmike/gekko?branch=stable&svg=true)](https://ci.appveyor.com/project/askmike/gekko)
+# Gekko 
+Gekko is a Bitcoin TA trading and backtesting platform that connects to popular Bitcoin exchanges. It is written in JavaScript and runs on [Node.js](http://nodejs.org).
+
+*Use Gekko at your own risk.*
 
 ## Fork information
 I created this fork to bring the gekko code base to the next level. I do this mostly, because I'm obsessed with clean code and I wanted to go through migrating a mid-size
@@ -21,31 +24,27 @@ Goals of the fork are to increase developer experience and code safety of the pr
 I will always make sure to keep the fork backwards compatible, so nothing should really change along the way. If you notice any bugs or different behavior to the original,
 open an issue
 
-## Contribution
-If you want to help me, PRs are always welcome. See CONTRIBUTING.md for more information.
-
-## Description
-![Gordon Gekko](http://mikevanrossum.nl/static/gekko.jpg)
-
-*The most valuable commodity I know of is information.*
-
--Gordon Gekko
-
-Gekko is a Bitcoin TA trading and backtesting platform that connects to popular Bitcoin exchanges. It is written in JavaScript and runs on [Node.js](http://nodejs.org).
-
-*Use Gekko at your own risk.*
 
 ## Documentation
 
 See [the documentation website](https://gekko.wizb.it/docs/introduction/about_gekko.html).
 
 ## Installation & Usage
+See [the installing Gekko doc](https://gekko.wizb.it/docs/installation/installing_gekko.html) for further details.
 
-See [the installing Gekko doc](https://gekko.wizb.it/docs/installation/installing_gekko.html).
+### Quickstart
+- npm install
+- cd src/exchange && npm install
+- npm start
+- goto http://localhost:3000
+
 
 ## Community & Support
 
 Gekko has [a forum](https://forum.gekko.wizb.it/) that is the place for discussions on using Gekko, automated trading and exchanges. In case you rather want to chat in realtime about Gekko feel free to join the [Gekko Support Discord](https://discord.gg/26wMygt).
+
+### Contribution
+If you want to help me, PRs are always welcome. See CONTRIBUTING.md for more information.
 
 ## Final
 
