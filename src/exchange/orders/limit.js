@@ -1,7 +1,7 @@
 // NOTE: this is currently broken, see
 // @link https://github.com/askmike/gekko/issues/2398
 
-throw ':(';
+throw ':('
 
 /*
   The limit order is a simple order:
@@ -11,40 +11,37 @@ throw ':(';
 
 */
 
-const _ = require('lodash');
-const async = require('async');
-const events = require('events');
-const moment = require('moment');
-const errors = require('../exchangeErrors');
-const BaseOrder = require('./order');
-const states = require('./states');
+const _ = require('lodash')
+const async = require('async')
+const events = require('events')
+const moment = require('moment')
+const errors = require('../exchangeErrors')
+const BaseOrder = require('./order')
+const states = require('./states')
 
 class LimitOrder extends BaseOrder {
-  constructor(api) {
-    super(api);
+  constructor (api) {
+    super(api)
   }
 
-  create(side, amount, params) {
-    this.side = side;
+  create (side, amount, params) {
+    this.side = side
 
-    this.postOnly = params.postOnly;
+    this.postOnly = params.postOnly
 
-    this.status = states.SUBMITTED;
-    this.emitStatus();
+    this.status = states.SUBMITTED
+    this.emitStatus()
 
-    this.createOrder(price, amount);
+    this.createOrder(price, amount)
   }
 
-  createOrder(price, amount) {
-    this.amount = this.api.roundAmount(amount);
-    this.price = this.api.roundPrice(price);
+  createOrder (price, amount) {
+    this.amount = this.api.roundAmount(amount)
+    this.price = this.api.roundPrice(price)
 
     // note: this assumes ticker data to be up to date
-    if(this.postOnly) {
-      if(side === 'buy' && this.price > this.data.ticker.ask)
-        throw new Error('Order crosses the book');
-      else if(side === 'sell' && this.price < this.data.ticker.bid)
-        throw new Error('Order crosses the book');
+    if (this.postOnly) {
+      if (side === 'buy' && this.price > this.data.ticker.ask) { throw new Error('Order crosses the book') } else if (side === 'sell' && this.price < this.data.ticker.bid) { throw new Error('Order crosses the book') }
     }
 
     this.submit({
@@ -52,193 +49,173 @@ class LimitOrder extends BaseOrder {
       amount: this.api.roundAmount(this.amount - alreadyFilled),
       price: this.price,
       alreadyFilled: this.filled
-    });
+    })
   }
 
-  handleCreate(err, id) {
-    if(err)
-      throw err;
+  handleCreate (err, id) {
+    if (err) { throw err }
 
-    this.status = states.OPEN;
-    this.emitStatus();
+    this.status = states.OPEN
+    this.emitStatus()
 
-    this.id = id;
+    this.id = id
 
-    if(this.cancelling)
-      return this.cancel();
+    if (this.cancelling) { return this.cancel() }
 
-    if(this.movingAmount)
-      return this.moveAmount();
+    if (this.movingAmount) { return this.moveAmount() }
 
-    if(this.movingPrice)
-      return this.movePrice();
+    if (this.movingPrice) { return this.movePrice() }
 
     this.timeout = setTimeout(this.checkOrder, this.checkInterval)
   }
 
-  checkOrder() {
-    this.checking = true;
-    this.api.checkOrder(this.id, this.handleCheck);
+  checkOrder () {
+    this.checking = true
+    this.api.checkOrder(this.id, this.handleCheck)
   }
 
-  handleCheck(err, result) {
-    if(this.cancelling || this.status === states.CANCELLED)
-      return;
+  handleCheck (err, result) {
+    if (this.cancelling || this.status === states.CANCELLED) { return }
 
-    this.checking = false;
+    this.checking = false
 
-    if(err)
-      throw err;
+    if (err) { throw err }
 
-    if(result.open) {
-      if(result.filledAmount !== this.filledAmount) {
-        this.filledAmount = result.filledAmount;
+    if (result.open) {
+      if (result.filledAmount !== this.filledAmount) {
+        this.filledAmount = result.filledAmount
 
         // note: doc event API
-        this.emit('fill', this.filledAmount);
+        this.emit('fill', this.filledAmount)
       }
 
-      if(this.cancelling)
-        return this.cancel();
+      if (this.cancelling) { return this.cancel() }
 
-      if(this.movingAmount)
-        return this.moveAmount();
+      if (this.movingAmount) { return this.moveAmount() }
 
-      if(this.movingPrice)
-        return this.movePrice();
+      if (this.movingPrice) { return this.movePrice() }
 
-      this.timeout = setTimeout(this.checkOrder, this.checkInterval);
-      return;
+      this.timeout = setTimeout(this.checkOrder, this.checkInterval)
+      return
     }
 
-    if(!result.executed) {
+    if (!result.executed) {
       // not open and not executed means it never hit the book
-      this.rejected();
-      return;
+      this.rejected()
+      return
     }
 
-    this.filled(this.price);
+    this.filled(this.price)
   }
 
-  movePrice(price) {
-    if(this.completed)
-      return;
+  movePrice (price) {
+    if (this.completed) { return }
 
-    if(!price)
-      price = this.movePriceTo;
+    if (!price) { price = this.movePriceTo }
 
-    if(this.price === this.api.roundPrice(price))
-      // effectively nothing changed
-      return;
+    if (this.price === this.api.roundPrice(price))
+    // effectively nothing changed
+    { return }
 
-    if(
+    if (
       this.status === states.SUBMITTED ||
       this.status === states.MOVING ||
       this.checking
     ) {
-      this.movePriceTo = price;
-      this.movingPrice = true;
-      return;
+      this.movePriceTo = price
+      this.movingPrice = true
+      return
     }
 
-    this.movingPrice = false;
+    this.movingPrice = false
 
-    this.price = this.api.roundPrice(price);
+    this.price = this.api.roundPrice(price)
 
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeout)
 
-    this.status = states.MOVING;
+    this.status = states.MOVING
 
     this.api.cancelOrder(this.id, (err, filled) => {
-      if(err)
-        throw err;
+      if (err) { throw err }
 
-      if(filled)
-        return this.filled(this.price);
+      if (filled) { return this.filled(this.price) }
 
       this.submit({
         side: this.side,
         amount: this.amount,
         price: this.price,
         alreadyFilled: this.filled
-      });
-    });
+      })
+    })
   }
 
-  moveAmount(amount) {
-    if(this.completed)
-      return;
+  moveAmount (amount) {
+    if (this.completed) { return }
 
-    if(!amount)
-      amount = this.moveAmountTo;
+    if (!amount) { amount = this.moveAmountTo }
 
-    if(this.amount === this.api.roundAmount(amount))
-      // effectively nothing changed
-      return;
+    if (this.amount === this.api.roundAmount(amount))
+    // effectively nothing changed
+    { return }
 
-    if(
+    if (
       this.status === states.SUBMITTED ||
       this.status === states.MOVING ||
       this.checking
     ) {
-      this.moveAmountTo = amount;
-      this.movingAmount = true;
-      return;
+      this.moveAmountTo = amount
+      this.movingAmount = true
+      return
     }
 
-    this.movingAmount = false;
-    this.amount = this.api.roundAmount(amount);
+    this.movingAmount = false
+    this.amount = this.api.roundAmount(amount)
 
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeout)
 
-    this.status = states.MOVING;
-    this.emitStatus();
+    this.status = states.MOVING
+    this.emitStatus()
 
     this.api.cancelOrder(this.id, (err, filled) => {
-      if(err)
-        throw err;
+      if (err) { throw err }
 
-      if(filled)
-        return this.filled(this.price);
+      if (filled) { return this.filled(this.price) }
 
       this.submit({
         side: this.side,
         amount: this.amount,
         price: this.price,
         alreadyFilled: this.filled
-      });
-    });
+      })
+    })
   }
 
-  cancel() {
-    if(this.completed)
-      return;
+  cancel () {
+    if (this.completed) { return }
 
-    if(
+    if (
       this.status === states.SUBMITTED ||
       this.status === states.MOVING ||
       this.checking
     ) {
-      this.cancelling = true;
-      return;
+      this.cancelling = true
+      return
     }
 
-    clearTimeout(this.timeout);
+    clearTimeout(this.timeout)
 
     this.api.cancelOrder(this.id, (err, filled) => {
-      if(err)
-        throw err;
+      if (err) { throw err }
 
-      this.cancelling = false;
+      this.cancelling = false
 
-      if(filled)
-        return this.filled(this.price);
+      if (filled) { return this.filled(this.price) }
 
-      this.status = states.CANCELLED;
-      this.emitStatus();
-      this.finish(false);
-    });
+      this.status = states.CANCELLED
+      this.emitStatus()
+      this.finish(false)
+    })
   }
 }
 
-module.exports = LimitOrder;
+module.exports = LimitOrder

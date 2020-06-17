@@ -1,54 +1,44 @@
-var _ = require('lodash');
-var moment = require('moment');
-var async = require('async');
-var os = require('os');
+var _ = require('lodash')
+var moment = require('moment')
+var async = require('async')
+var os = require('os')
 
-var util = require('../../util');
-var dirs = util.dirs();
+var util = require('../../util')
+var dirs = util.dirs()
 
-var dateRangeScan = require('../dateRangeScan/parent');
+var dateRangeScan = require('../dateRangeScan/parent')
 
-module.exports = function(config, done) {
+module.exports = function (config, done) {
+  util.setConfig(config)
 
-  util.setConfig(config);
-
-  var adapter = config[config.adapter];
-  var scan = require(dirs.gekko + adapter.path + '/scanner');
+  var adapter = config[config.adapter]
+  var scan = require(dirs.gekko + adapter.path + '/scanner')
 
   scan((err, markets) => {
+    if (err) { return done(err) }
 
-    if(err)
-      return done(err);
-
-      let numCPUCores = os.cpus().length;
-      if(numCPUCores === undefined)
-         numCPUCores = 1;
-      async.eachLimit(markets, numCPUCores, (market, next) => {
-
-      let marketConfig = _.clone(config);
-      marketConfig.watch = market;
+    let numCPUCores = os.cpus().length
+    if (numCPUCores === undefined) { numCPUCores = 1 }
+    async.eachLimit(markets, numCPUCores, (market, next) => {
+      const marketConfig = _.clone(config)
+      marketConfig.watch = market
 
       dateRangeScan(marketConfig, (err, ranges) => {
-        if(err)
-          return next();
+        if (err) { return next() }
 
-        market.ranges = ranges;
+        market.ranges = ranges
 
-        next();
-      });
-
+        next()
+      })
     }, err => {
-      let resp = {
+      const resp = {
         datasets: [],
         errors: []
       }
       markets.forEach(market => {
-        if(market.ranges)
-          resp.datasets.push(market);
-        else
-          resp.errors.push(market);
+        if (market.ranges) { resp.datasets.push(market) } else { resp.errors.push(market) }
       })
-      done(err, resp);
+      done(err, resp)
     })
-  });
+  })
 }

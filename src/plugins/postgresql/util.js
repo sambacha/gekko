@@ -1,7 +1,7 @@
-var config = require('../../core/util.js').getConfig();
+var config = require('../../core/util.js').getConfig()
 
-var watch = config.watch;
-if(watch) {
+var watch = config.watch
+if (watch) {
   var settings = {
     exchange: watch.exchange,
     pair: [watch.currency, watch.asset]
@@ -15,8 +15,8 @@ if(watch) {
  *
  * Set config.postgresql.database to use single db setup
  */
-function useSingleDatabase() {
-    return !!config.postgresql.database;
+function useSingleDatabase () {
+  return !!config.postgresql.database
 }
 
 /**
@@ -24,8 +24,8 @@ function useSingleDatabase() {
  * escape their names. Which we don't and so let's
  * just lowercase them.
  */
-function useLowerCaseTableNames() {
-  return !config.postgresql.noLowerCaseTableName;
+function useLowerCaseTableNames () {
+  return !config.postgresql.noLowerCaseTableName
 }
 
 module.exports = {
@@ -36,31 +36,31 @@ module.exports = {
 
   // returns DB name (depends on single db setup)
   database: function () {
-    return useSingleDatabase() ?
-      config.postgresql.database :
-      config.watch.exchange.toLowerCase().replace(/\-/g,'');
+    return useSingleDatabase()
+      ? config.postgresql.database
+      : config.watch.exchange.toLowerCase().replace(/\-/g, '')
   },
 
   // returns table name which can be different if we use
   // single or multiple db setup.
   table: function (name) {
     if (useSingleDatabase()) {
-      name = watch.exchange.replace(/\-/g,'') + '_' + name;
+      name = watch.exchange.replace(/\-/g, '') + '_' + name
     }
-    var fullName = [name, settings.pair.join('_')].join('_');
-    return useLowerCaseTableNames() ? fullName.toLowerCase() : fullName;
+    var fullName = [name, settings.pair.join('_')].join('_')
+    return useLowerCaseTableNames() ? fullName.toLowerCase() : fullName
   },
 
   startconstraint: function (name) {
     if (useSingleDatabase()) {
-      name = watch.exchange.replace(/\-/g,'') + '_' + name;
+      name = watch.exchange.replace(/\-/g, '') + '_' + name
     }
-    var fullName = [name, settings.pair.join('_')].join('_');
-    return useLowerCaseTableNames() ? fullName.toLowerCase() + '_start_key' : fullName + '_start_key';
+    var fullName = [name, settings.pair.join('_')].join('_')
+    return useLowerCaseTableNames() ? fullName.toLowerCase() + '_start_key' : fullName + '_start_key'
   },
 
   // postgres schema name. defaults to 'public'
   schema: function () {
-    return config.postgresql.schema ? config.postgresql.schema : 'public';
+    return config.postgresql.schema ? config.postgresql.schema : 'public'
   }
 }

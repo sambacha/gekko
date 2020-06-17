@@ -1,23 +1,23 @@
-var _ = require('lodash');
-var config = require('../../core/util.js').getConfig();
+var _ = require('lodash')
+var config = require('../../core/util.js').getConfig()
 
-var sqlite = require('./handle');
-var sqliteUtil = require('./util');
-var util = require('../../core/util');
-var log = require('../../core/log');
+var sqlite = require('./handle')
+var sqliteUtil = require('./util')
+var util = require('../../core/util')
+var log = require('../../core/log')
 
-var Store = function(done, pluginMeta) {
-  _.bindAll(this);
-  this.done = done;
+var Store = function (done, pluginMeta) {
+  _.bindAll(this)
+  this.done = done
 
-  this.db = sqlite.initDB(false);
-  this.db.serialize(this.upsertTables);
+  this.db = sqlite.initDB(false)
+  this.db.serialize(this.upsertTables)
 
-  this.cache = [];
-  this.buffered = util.gekkoMode() === "importer";
+  this.cache = []
+  this.buffered = util.gekkoMode() === 'importer'
 }
 
-Store.prototype.upsertTables = function() {
+Store.prototype.upsertTables = function () {
   var createQueries = [
     `
       CREATE TABLE IF NOT EXISTS
@@ -32,38 +32,37 @@ Store.prototype.upsertTables = function() {
         volume REAL NOT NULL,
         trades INTEGER NOT NULL
       );
-    `,
+    `
 
     // TODO: create trades
     // ``
 
     // TODO: create advices
     // ``
-  ];
+  ]
 
-  var next = _.after(_.size(createQueries), this.done);
+  var next = _.after(_.size(createQueries), this.done)
 
-  _.each(createQueries, function(q) {
-    this.db.run(q, next);
-  }, this);
+  _.each(createQueries, function (q) {
+    this.db.run(q, next)
+  }, this)
 }
 
-Store.prototype.writeCandles = function() {
-  if(_.isEmpty(this.cache))
-    return;
+Store.prototype.writeCandles = function () {
+  if (_.isEmpty(this.cache)) { return }
 
   const transaction = () => {
-    this.db.run("BEGIN TRANSACTION");
+    this.db.run('BEGIN TRANSACTION')
 
     var stmt = this.db.prepare(`
       INSERT OR IGNORE INTO ${sqliteUtil.table('candles')}
       VALUES (?,?,?,?,?,?,?,?,?)
-    `, function(err, rows) {
-        if(err) {
-          log.error(err);
-          return util.die('DB error at INSERT: '+ err);
-        }
-      });
+    `, function (err, rows) {
+      if (err) {
+        log.error(err)
+        return util.die('DB error at INSERT: ' + err)
+      }
+    })
 
     _.each(this.cache, candle => {
       stmt.run(
@@ -76,37 +75,36 @@ Store.prototype.writeCandles = function() {
         candle.vwp,
         candle.volume,
         candle.trades
-      );
-    });
+      )
+    })
 
-    stmt.finalize();
-    this.db.run("COMMIT");
+    stmt.finalize()
+    this.db.run('COMMIT')
     // TEMP: should fix https://forum.gekko.wizb.it/thread-57279-post-59194.html#pid59194
-    this.db.run("pragma wal_checkpoint;");
-    
-    this.cache = [];
+    this.db.run('pragma wal_checkpoint;')
+
+    this.cache = []
   }
 
-  this.db.serialize(transaction);
+  this.db.serialize(transaction)
 }
 
-var processCandle = function(candle, done) {
-  this.cache.push(candle);
-  if (!this.buffered || this.cache.length > 1000) 
-    this.writeCandles();
+var processCandle = function (candle, done) {
+  this.cache.push(candle)
+  if (!this.buffered || this.cache.length > 1000) { this.writeCandles() }
 
-  done();
-};
-
-var finalize = function(done) {
-  this.writeCandles();
-  this.db.close(() => { done(); });
-  this.db = null;
+  done()
 }
 
-if(config.candleWriter.enabled) {
-  Store.prototype.processCandle = processCandle;
-  Store.prototype.finalize = finalize;
+var finalize = function (done) {
+  this.writeCandles()
+  this.db.close(() => { done() })
+  this.db = null
+}
+
+if (config.candleWriter.enabled) {
+  Store.prototype.processCandle = processCandle
+  Store.prototype.finalize = finalize
 }
 
 // TODO: add storing of trades / advice?
@@ -125,4 +123,4 @@ if(config.candleWriter.enabled) {
 // if(config.adviceWriter.enabled)
 //   Store.prototype.processAdvice = processAdvice;
 
-module.exports = Store;
+module.exports = Store

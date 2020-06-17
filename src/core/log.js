@@ -6,17 +6,17 @@
 
 */
 
-var moment = require('moment');
-var fmt = require('util').format;
-var _ = require('lodash');
-var util = require('./util');
-var config = util.getConfig();
-var debug = config.debug;
-var silent = config.silent;
+var moment = require('moment')
+var fmt = require('util').format
+var _ = require('lodash')
+var util = require('./util')
+var config = util.getConfig()
+var debug = config.debug
+var silent = config.silent
 
-var sendToParent = function() {
+var sendToParent = function () {
   var send = method => (...args) => {
-    process.send({log: method, message: args.join(' ')});
+    process.send({ log: method, message: args.join(' ') })
   }
 
   return {
@@ -27,55 +27,50 @@ var sendToParent = function() {
   }
 }
 
-var Log = function() {
-  _.bindAll(this);
-  this.env = util.gekkoEnv();
+var Log = function () {
+  _.bindAll(this)
+  this.env = util.gekkoEnv()
 
-  if(this.env === 'standalone')
-    this.output = console;
-  else if(this.env === 'child-process')
-    this.output = sendToParent();
-};
+  if (this.env === 'standalone') { this.output = console } else if (this.env === 'child-process') { this.output = sendToParent() }
+}
 
 Log.prototype = {
-  _write: function(method, args, name) {
-    if(!name)
-      name = method.toUpperCase();
+  _write: function (method, args, name) {
+    if (!name) { name = method.toUpperCase() }
 
-    var message = moment().format('YYYY-MM-DD HH:mm:ss');
-    message += ' (' + name + '):\t';
-    message += fmt.apply(null, args);
+    var message = moment().format('YYYY-MM-DD HH:mm:ss')
+    message += ' (' + name + '):\t'
+    message += fmt.apply(null, args)
 
-    this.output[method](message);
+    this.output[method](message)
   },
-  error: function() {
-    this._write('error', arguments);
+  error: function () {
+    this._write('error', arguments)
   },
-  warn: function() {
-    this._write('warn', arguments);
+  warn: function () {
+    this._write('warn', arguments)
   },
-  info: function() {
-    this._write('info', arguments);
+  info: function () {
+    this._write('info', arguments)
   },
-  write: function() {
-    var args = _.toArray(arguments);
-    var message = fmt.apply(null, args);
-    this.output.info(message);
+  write: function () {
+    var args = _.toArray(arguments)
+    var message = fmt.apply(null, args)
+    this.output.info(message)
   }
 }
 
-if(debug)
-  Log.prototype.debug = function() {
-    this._write('info', arguments, 'DEBUG');  
+if (debug) {
+  Log.prototype.debug = function () {
+    this._write('info', arguments, 'DEBUG')
   }
-else
-  Log.prototype.debug = _.noop;
+} else { Log.prototype.debug = _.noop }
 
-if(silent) {
-  Log.prototype.debug = _.noop;
-  Log.prototype.info = _.noop;
-  Log.prototype.warn = _.noop;
-  Log.prototype.write = _.noop;
+if (silent) {
+  Log.prototype.debug = _.noop
+  Log.prototype.info = _.noop
+  Log.prototype.warn = _.noop
+  Log.prototype.write = _.noop
 }
 
-module.exports = new Log;
+module.exports = new Log()

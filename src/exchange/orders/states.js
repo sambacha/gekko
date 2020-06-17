@@ -11,13 +11,11 @@ const states = {
   // Order is open on the exchange
   OPEN: 'OPEN',
 
-
   CHECKING: 'CHECKING',
 
   CHECKED: 'CHECKED',
 
   // the orders below indicate a fully completed order
-
 
   // Order is completely filled
   FILLED: 'FILLED',
@@ -31,4 +29,4 @@ const states = {
   ERROR: 'ERROR'
 }
 
-module.exports = states;
+module.exports = states

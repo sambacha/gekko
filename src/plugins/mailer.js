@@ -1,33 +1,30 @@
-var email = require("emailjs");
-var _ = require('lodash');
-var log = require('../core/log.js');
-var util = require('../core/util.js');
-var config = util.getConfig();
-var mailConfig = config.mailer;
+var email = require('emailjs')
+var _ = require('lodash')
+var log = require('../core/log.js')
+var util = require('../core/util.js')
+var config = util.getConfig()
+var mailConfig = config.mailer
 
-var Mailer = function(done) {
-  _.bindAll(this);
+var Mailer = function (done) {
+  _.bindAll(this)
 
-  this.server;
-  this.price = 'N/A';
+  this.server
+  this.price = 'N/A'
 
-  this.done = done;
-  this.setup();
-};
+  this.done = done
+  this.setup()
+}
 
-Mailer.prototype.setup = function(done) {
-  var setupMail = function(err, result) {
-    if(result) {
-      console.log('Got it.');
-      mailConfig.password = result.password;
+Mailer.prototype.setup = function (done) {
+  var setupMail = function (err, result) {
+    if (result) {
+      console.log('Got it.')
+      mailConfig.password = result.password
     }
 
-    if(_.isEmpty(mailConfig.to))
-      mailConfig.to = mailConfig.email;
-    if(_.isEmpty(mailConfig.from))
-      mailConfig.from = mailConfig.email;
-    if(_.isEmpty(mailConfig.user) && mailConfig.smtpauth)
-      mailConfig.user = mailConfig.email;
+    if (_.isEmpty(mailConfig.to)) { mailConfig.to = mailConfig.email }
+    if (_.isEmpty(mailConfig.from)) { mailConfig.from = mailConfig.email }
+    if (_.isEmpty(mailConfig.user) && mailConfig.smtpauth) { mailConfig.user = mailConfig.email }
 
     this.server = email.server.connect({
       user: mailConfig.user,
@@ -36,11 +33,11 @@ Mailer.prototype.setup = function(done) {
       ssl: mailConfig.ssl,
       port: mailConfig.port,
       tls: mailConfig.tls
-    });
+    })
 
-    if(mailConfig.sendMailOnStart) {
+    if (mailConfig.sendMailOnStart) {
       this.mail(
-        "Gekko has started",
+        'Gekko has started',
         [
           "I've just started watching ",
           config.watch.exchange,
@@ -50,21 +47,20 @@ Mailer.prototype.setup = function(done) {
           config.watch.asset,
           ". I'll let you know when I got some advice"
         ].join(''),
-        _.bind(function(err) {
-          this.checkResults(err);
-          this.done();
+        _.bind(function (err) {
+          this.checkResults(err)
+          this.done()
         }, this)
-      );
-    } else
-      this.done();
+      )
+    } else { this.done() }
 
-    log.debug('Setup email adviser.');
-  };
+    log.debug('Setup email adviser.')
+  }
 
-  if(!mailConfig.password) {
+  if (!mailConfig.password) {
     // ask for the mail password
-    var prompt = require('prompt-lite');
-    prompt.start();
+    var prompt = require('prompt-lite')
+    prompt.start()
     var warning = [
       '\n\n\tYou configured Gekko to mail you advice, Gekko needs your email',
       'password to send emails (to you). Gekko is an opensource project',
@@ -72,33 +68,31 @@ Mailer.prototype.setup = function(done) {
       'check the code yourself.',
       '\n\n\tWARNING: If you have not downloaded Gekko from the github page above we',
       'CANNOT guarantuee that your email address & password are safe!\n'
-    ].join('\n\t');
-    log.warn(warning);
-    prompt.get({name: 'password', hidden: true}, _.bind(setupMail, this));
+    ].join('\n\t')
+    log.warn(warning)
+    prompt.get({ name: 'password', hidden: true }, _.bind(setupMail, this))
   } else {
-    setupMail.call(this);
+    setupMail.call(this)
   }
-};
+}
 
-Mailer.prototype.mail = function(subject, content, done) {
-
+Mailer.prototype.mail = function (subject, content, done) {
   this.server.send({
     text: content,
     from: mailConfig.from,
     to: mailConfig.to,
     subject: mailConfig.tag + subject
-  }, done || this.checkResults);
-};
+  }, done || this.checkResults)
+}
 
-Mailer.prototype.processCandle = function(candle, done) {
-  this.price = candle.close;
+Mailer.prototype.processCandle = function (candle, done) {
+  this.price = candle.close
 
-  done();
-};
+  done()
+}
 
-Mailer.prototype.processAdvice = function(advice) {
-
-  if (advice.recommendation == "soft" && mailConfig.muteSoft) return;
+Mailer.prototype.processAdvice = function (advice) {
+  if (advice.recommendation == 'soft' && mailConfig.muteSoft) return
 
   var text = [
     'Gekko is watching ',
@@ -111,28 +105,25 @@ Mailer.prototype.processAdvice = function(advice) {
     config.watch.currency,
     ' ',
     this.price
-  ].join('');
+  ].join('')
 
-  var subject = 'New advice: go ' + advice.recommendation;
+  var subject = 'New advice: go ' + advice.recommendation
 
-  this.mail(subject, text);
-};
+  this.mail(subject, text)
+}
 
-Mailer.prototype.processStratNotification = function({ content }) {
-  const subject = `New notification from ${config.tradingAdvisor.method}`;
+Mailer.prototype.processStratNotification = function ({ content }) {
+  const subject = `New notification from ${config.tradingAdvisor.method}`
   const text = [
     'Gekko received new notification :\n\n',
     content
-  ].join('');
+  ].join('')
 
-  this.mail(subject, text);
+  this.mail(subject, text)
 }
 
-Mailer.prototype.checkResults = function(err) {
-  if(err)
-    log.warn('error sending email', err);
-  else
-    log.info('Send advice via email.');
-};
+Mailer.prototype.checkResults = function (err) {
+  if (err) { log.warn('error sending email', err) } else { log.info('Send advice via email.') }
+}
 
-module.exports = Mailer;
+module.exports = Mailer

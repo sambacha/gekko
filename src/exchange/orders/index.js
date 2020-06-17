@@ -1,4 +1,4 @@
-const sticky = require('./sticky');
+const sticky = require('./sticky')
 
 module.exports = {
   sticky

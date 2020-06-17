@@ -1,80 +1,80 @@
 // wraps around a low level trigger and feeds
 // it live market data.
 
-const _ = require('lodash');
+const _ = require('lodash')
 
-const exchangeUtils = require('./exchangeUtils');
-const bindAll = exchangeUtils.bindAll;
+const exchangeUtils = require('./exchangeUtils')
+const bindAll = exchangeUtils.bindAll
 
-const triggers = require('./triggers');
+const triggers = require('./triggers')
 
 // @param api: a gekko broker wrapper instance
 // @param type: type of trigger to wrap
 // @param props: properties to feed to trigger
 class Trigger {
-  constructor({api, type, props, onTrigger}) {
-    this.onTrigger = onTrigger;
-    this.api = api;
+  constructor ({ api, type, props, onTrigger }) {
+    this.onTrigger = onTrigger
+    this.api = api
 
-    this.isLive = true;
+    this.isLive = true
 
     // note: we stay on the safe side and trigger
     // as soon as the bid goes below trail.
-    this.tickerProp = 'bid';
+    this.tickerProp = 'bid'
 
-    if(!_.has(triggers, type)) {
-      throw new Error('Gekko Broker does not know trigger ' + type);
+    if (!_.has(triggers, type)) {
+      throw new Error('Gekko Broker does not know trigger ' + type)
     }
 
-    this.CHECK_INTERVAL = this.api.interval * 10;
+    this.CHECK_INTERVAL = this.api.interval * 10
 
-    bindAll(this);
+    bindAll(this)
     this.trigger = new triggers[type]({
       onTrigger: this.propogateTrigger,
       ...props
     })
 
-    this.scheduleFetch();
+    this.scheduleFetch()
   }
 
-  scheduleFetch() {
-    this.timout = setTimeout(this.fetch, this.CHECK_INTERVAL);
+  scheduleFetch () {
+    this.timout = setTimeout(this.fetch, this.CHECK_INTERVAL)
   }
 
-  fetch() {
-    if(!this.isLive) {
-      return;
+  fetch () {
+    if (!this.isLive) {
+      return
     }
     this.api.getTicker(this.processTicker)
   }
 
-  processTicker(err, ticker) {
-    if(!this.isLive) {
-      return;
-    }
-    
-    if(err) {
-      return console.log('[GB/trigger] failed to fetch ticker:', err);
+  processTicker (err, ticker) {
+    if (!this.isLive) {
+      return
     }
 
-    this.price = ticker[this.tickerProp];
+    if (err) {
+      return console.log('[GB/trigger] failed to fetch ticker:', err)
+    }
 
-    this.trigger.updatePrice(this.price);
-    this.scheduleFetch();
+    this.price = ticker[this.tickerProp]
+
+    this.trigger.updatePrice(this.price)
+    this.scheduleFetch()
   }
 
-  cancel() {
-    this.isLive = false;
-    clearTimeout(this.timout);
+  cancel () {
+    this.isLive = false
+    clearTimeout(this.timout)
   }
 
-  propogateTrigger(payload) {
-    if(!this.isLive) {
-      return;
+  propogateTrigger (payload) {
+    if (!this.isLive) {
+      return
     }
-    this.isLive = false;
-    this.onTrigger(payload);
+    this.isLive = false
+    this.onTrigger(payload)
   }
 }
 
-module.exports = Trigger;
+module.exports = Trigger
