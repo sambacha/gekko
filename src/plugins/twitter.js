@@ -10,7 +10,6 @@ require('dotenv').config()
 var Twitter = function (done) {
   _.bindAll(this)
 
-  this.twitter
   this.price = 'N/A'
   this.done = done
   this.setup()
@@ -18,6 +17,9 @@ var Twitter = function (done) {
 
 Twitter.prototype.setup = function (done) {
   var setupTwitter = function (err, result) {
+    if (err) {
+      util.die('Error setting up Twitter')
+    }
     this.client = new TwitterApi({
       consumer_key: twitterConfig.consumer_key,
       consumer_secret: twitterConfig.consumer_secret,
@@ -50,10 +52,10 @@ Twitter.prototype.processCandle = function (candle, done) {
 }
 
 Twitter.prototype.processAdvice = function (advice) {
-  if (advice.recommendation == 'soft' && twitterConfig.muteSoft) return
+  if (advice.recommendation === 'soft' && twitterConfig.muteSoft) return
   var text = [
     'New  ', config.watch.asset, ' trend. Attempting to ',
-    advice.recommendation == 'short' ? 'sell' : 'buy',
+    advice.recommendation === 'short' ? 'sell' : 'buy',
     ' @',
     this.price
   ].join('')

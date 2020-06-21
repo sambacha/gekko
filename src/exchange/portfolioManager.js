@@ -3,7 +3,6 @@
 */
 
 const _ = require('lodash')
-const async = require('async')
 const errors = require('./exchangeErrors')
 // const EventEmitter = require('events');
 
@@ -27,8 +26,8 @@ class Portfolio {
 
   // convert into the portfolio expected by the performanceAnalyzer
   convertBalances (asset, currency) { // rename?
-    var asset = _.find(this.balances, a => a.name === this.config.asset).amount
-    var currency = _.find(this.balances, a => a.name === this.config.currency).amount
+    asset = _.find(this.balances, a => a.name === this.config.asset).amount
+    currency = _.find(this.balances, a => a.name === this.config.currency).amount
 
     return {
       currency,

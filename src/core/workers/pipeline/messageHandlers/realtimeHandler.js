@@ -9,7 +9,7 @@ module.exports = cb => {
       } else { cb(null, message) }
     },
     exit: status => {
-      if (status !== 0) { cb('Child process has died.') } else { cb(null, { done: true }) }
+      if (status !== 0) { cb(new Error('Child process has died.')) } else { cb(null, { done: true }) }
     }
   }
 }

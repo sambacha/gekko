@@ -10,7 +10,8 @@
 // input are transported candles.
 
 var _ = require('lodash')
-var util = require(__dirname + '/util')
+var path = require('path')
+var util = require(path.join(__dirname, '/util'))
 
 var CandleBatcher = function (candleSize) {
   if (!_.isNumber(candleSize)) { throw new Error('candleSize is not a number') }
@@ -76,12 +77,14 @@ CandleBatcher.prototype.calculate = function () {
     first
   )
 
-  if (candle.volume)
-  // we have added up all prices (relative to volume)
-  // now divide by volume to get the Volume Weighted Price
-  { candle.vwp /= candle.volume } else
-  // empty candle
-  { candle.vwp = candle.open }
+  if (candle.volume) {
+    // we have added up all prices (relative to volume)
+    // now divide by volume to get the Volume Weighted Price
+    candle.vwp /= candle.volume
+  } else {
+    // empty candle
+    candle.vwp = candle.open
+  }
 
   candle.start = first.start
   return candle

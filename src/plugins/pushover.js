@@ -1,4 +1,4 @@
-var push = require('pushover-notifications')
+var PushoverLib = require('pushover-notifications')
 var _ = require('lodash')
 var log = require('../core/log.js')
 var util = require('../core/util.js')
@@ -8,7 +8,6 @@ var pushoverConfig = config.pushover
 var Pushover = function () {
   _.bindAll(this)
 
-  this.p
   this.price = 'N/A'
 
   this.setup()
@@ -16,7 +15,7 @@ var Pushover = function () {
 
 Pushover.prototype.setup = function () {
   var setupPushover = function () {
-    this.p = new push({
+    this.p = new PushoverLib({
       user: pushoverConfig.user,
       token: pushoverConfig.key
     })
@@ -64,7 +63,7 @@ Pushover.prototype.processCandle = function (candle, callback) {
 }
 
 Pushover.prototype.processAdvice = function (advice) {
-  if (advice.recommendation == 'soft' && pushoverConfig.muteSoft) return
+  if (advice.recommendation === 'soft' && pushoverConfig.muteSoft) return
   var text = [
     advice.recommendation,
     this.price

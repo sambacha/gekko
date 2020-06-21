@@ -5,7 +5,6 @@ const moment = require('moment')
 const statslite = require('stats-lite')
 const util = require('../../core/util')
 const log = require(util.dirs().core + 'log')
-const ENV = util.gekkoEnv()
 
 const config = util.getConfig()
 const perfConfig = config.performanceAnalyzer
@@ -42,7 +41,6 @@ const PerformanceAnalyzer = function () {
   }
 
   this.portfolio = {}
-  this.balance
 
   this.start = {}
   this.openRoundTrip = false

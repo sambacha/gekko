@@ -1,5 +1,4 @@
 var Lakebtc = require('lakebtc_nodejs')
-var util = require('../core/util.js')
 var _ = require('lodash')
 var moment = require('moment')
 var log = require('../core/log')
@@ -12,8 +11,6 @@ var Trader = function (config) {
     this.clientID = config.username
   }
   this.name = 'LakeBTC'
-  this.balance
-  this.price
 
   this.lakebtc = new Lakebtc(this.key, this.secret)
 }
@@ -44,7 +41,7 @@ Trader.prototype.getPortfolio = function (callback) {
   var set = function (err, data) {
     var portfolio = []
     _.map(data.balance, function (amount, asset) {
-	  portfolio.push({ name: asset, amount: parseFloat(amount) })
+      portfolio.push({ name: asset, amount: parseFloat(amount) })
     })
     callback(err, portfolio)
   }
@@ -56,7 +53,7 @@ Trader.prototype.getTicker = function (callback) {
 }
 
 Trader.prototype.getFee = function (callback) {
-  callback(false, 0.002)
+  callback(null, 0.002)
 }
 
 Trader.prototype.buy = function (amount, price, callback) {

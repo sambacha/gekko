@@ -63,23 +63,7 @@ const recoverableErrors = [
   'EAI_AGAIN'
 ]
 
-// errors that might mean
-// the API call succeeded.
-const unknownResultErrors = [
-  '524'
-]
-
 Trader.prototype.processResponse = function (method, args, next) {
-  const requestAt = moment()
-
-  const checkTime = () => {
-    const diff = moment().diff(requestAt, 's')
-    if (diff > 10) {
-      console.log(new Date(), '[CF] API CALL TOOK', diff, 'SECONDS!')
-      console.log(new Date(), '[CF]', { method, args, next })
-    }
-  }
-
   const catcher = err => {
     if (!err || !err.message) {
       err = new Error(err || 'Empty error')
@@ -135,7 +119,7 @@ Trader.prototype.getTicker = function (callback) {
 }
 
 Trader.prototype.getFee = function (callback) {
-  callback(false, this.makerFee / 100)
+  callback(null, this.makerFee / 100)
 }
 
 Trader.prototype.getPortfolio = function (callback) {
@@ -175,7 +159,7 @@ Trader.prototype.addOrder = function (type, amount, price, callback) {
       console.log(new Date(), 'CF ERROR! CREATED ORDER BUT NO ID', res)
     }
 
-    callback(false, res.data.id)
+    callback(null, res.data.id)
   })
 
   const payload = {
@@ -245,7 +229,7 @@ Trader.prototype.getOrder = function (order, callback) {
     const date = moment(res.data.created_at)
     const fees = {}
     const feePercent = this.makerFee
-    callback(false, { price, amount, date, fees, feePercent })
+    callback(null, { price, amount, date, fees, feePercent })
   })
 
   this.coinfalcon.get('user/orders/' + order).then(handle.success).catch(handle.failure)

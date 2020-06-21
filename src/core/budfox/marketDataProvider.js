@@ -6,10 +6,10 @@
 //   will be the most recent one.
 
 const _ = require('lodash')
-const util = require(__dirname + '/../util')
+var path = require('path')
+const util = require(path.join(__dirname, '/../util'))
 
 const MarketFetcher = require('./marketFetcher')
-const dirs = util.dirs()
 
 const Manager = function (config) {
   _.bindAll(this)

@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const fs = require('fs')
 const request = require('request-promise')
-const Promise = require('bluebird')
 
 request({
   url: 'https://api.pro.coinbase.com/products',

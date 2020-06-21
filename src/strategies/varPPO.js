@@ -1,5 +1,4 @@
 // helpers
-var _ = require('lodash')
 var log = require('../core/log')
 
 // configuration

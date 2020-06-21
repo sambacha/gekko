@@ -2,13 +2,13 @@ const _ = require('lodash')
 const fs = require('fs')
 const moment = require('moment')
 const errors = require('./exchangeErrors')
-
+const path = require('path')
 const Checker = function () {
   _.bindAll(this)
 }
 
 Checker.prototype.getExchangeCapabilities = function (slug) {
-  if (!fs.existsSync(__dirname + '/wrappers/' + slug + '.js')) { throw new errors.ExchangeError(`Gekko does not know the exchange "${slug}"`) }
+  if (!fs.existsSync(path.join(__dirname, 'wrappers', `${slug}.js`))) { throw new errors.ExchangeError(`Gekko does not know the exchange "${slug}"`) }
 
   return require('./wrappers/' + slug).getCapabilities()
 }
@@ -23,8 +23,6 @@ Checker.prototype.cantMonitor = function (conf) {
   var name = exchange.name
 
   if ('monitorError' in exchange) { return 'At this moment Gekko can\'t monitor ' + name + ', find out more info here:\n\n' + exchange.monitorError }
-
-  var name = exchange.name
 
   if (!_.includes(exchange.currencies, conf.currency)) { return 'Gekko only supports the currencies [ ' + exchange.currencies.join(', ') + ' ] at ' + name + ' (not ' + conf.currency + ')' }
 
@@ -53,7 +51,7 @@ Checker.prototype.cantFetchFullHistory = function (conf) {
   if (!exchange.providesFullHistory) { return 'The exchange ' + name + ' does not provide full history (or Gekko doesn\'t support importing it)' }
 
   if ('exchangeMaxHistoryAge' in exchange) {
-    if (moment(config.importer.daterange.from) < moment().subtract(exchange.exchangeMaxHistoryAge, 'days')) {
+    if (moment(conf.importer.daterange.from) < moment().subtract(exchange.exchangeMaxHistoryAge, 'days')) {
       return 'Unsupported date from! ' + exchange.name + ' supports history of max ' + exchange.exchangeMaxHistoryAge + ' days..'
     }
   }

@@ -8,7 +8,6 @@ var mailConfig = config.mailer
 var Mailer = function (done) {
   _.bindAll(this)
 
-  this.server
   this.price = 'N/A'
 
   this.done = done
@@ -17,6 +16,10 @@ var Mailer = function (done) {
 
 Mailer.prototype.setup = function (done) {
   var setupMail = function (err, result) {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
     if (result) {
       console.log('Got it.')
       mailConfig.password = result.password
@@ -92,7 +95,7 @@ Mailer.prototype.processCandle = function (candle, done) {
 }
 
 Mailer.prototype.processAdvice = function (advice) {
-  if (advice.recommendation == 'soft' && mailConfig.muteSoft) return
+  if (advice.recommendation === 'soft' && mailConfig.muteSoft) return
 
   var text = [
     'Gekko is watching ',

@@ -14,9 +14,7 @@
 
 const _ = require('lodash')
 const async = require('async')
-const events = require('events')
 const moment = require('moment')
-const errors = require('../exchangeErrors')
 const BaseOrder = require('./order')
 const states = require('./states')
 
@@ -321,7 +319,7 @@ class StickyOrder extends BaseOrder {
 
         // if we are already at limit we dont care where the top is
         // note: might be string VS float
-        if (this.price == this.limit) {
+        if (this.price === this.limit) {
           this.scheduleNextCheck()
           return
         }
@@ -353,7 +351,7 @@ class StickyOrder extends BaseOrder {
 
           const bookSide = this.side === 'buy' ? 'bid' : 'ask'
           // note: might be string VS float
-          if (ticker[bookSide] != this.price) {
+          if (ticker[bookSide] !== this.price) {
             return this.move(this.calculatePrice(ticker))
           } else {
             this.scheduleNextCheck()
@@ -371,8 +369,7 @@ class StickyOrder extends BaseOrder {
         // not open and not executed means it never hit the book
         console.log(this.side, this.status, this.id, 'not open not executed!', result)
         this.rejected()
-        throw 'a'
-        return
+        throw new Error('a')
       }
 
       // order got filled!
@@ -467,7 +464,9 @@ class StickyOrder extends BaseOrder {
 
   calculateFilled () {
     let totalFilled = 0
-    _.each(this.orders, (order, id) => totalFilled += order.filled)
+    _.each(this.orders, (order, id) => {
+      totalFilled += order.filled
+    })
 
     return totalFilled
   }
@@ -550,9 +549,10 @@ class StickyOrder extends BaseOrder {
 
     if (!amount) { amount = this.moveAmountTo }
 
-    if (this.amount === this.roundAmount(amount))
     // effectively nothing changed
-    { return true }
+    if (this.amount === this.roundAmount(amount)) {
+      return true
+    }
 
     if (this.calculateFilled() > this.roundAmount(amount)) {
       // the amount is now below how much we have

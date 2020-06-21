@@ -9,11 +9,8 @@ var startTime = moment()
 
 var _config = false
 var _package = false
-var _nodeVersion = false
 var _gekkoMode = false
 var _gekkoEnv = false
-
-var _args = false
 
 // helper functions
 var util = {
@@ -41,7 +38,7 @@ var util = {
   getPackage: function () {
     if (_package) { return _package }
 
-    _package = JSON.parse(fs.readFileSync(__dirname + '/../../package.json', 'utf8'))
+    _package = JSON.parse(fs.readFileSync(path.join(__dirname, '/../../package.json'), 'utf8'))
     return _package
   },
   getRequiredNodeVersion: function () {
@@ -61,7 +58,7 @@ var util = {
   },
   defer: function (fn) {
     return function (args) {
-      var args = _.toArray(arguments)
+      args = _.toArray(arguments)
       return _.defer(function () { fn.apply(this, args) })
     }
   },

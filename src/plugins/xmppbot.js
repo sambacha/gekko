@@ -45,7 +45,7 @@ Actor.prototype.setState = function () {
 }
 
 Actor.prototype.rawStanza = function (stanza) {
-  if (stanza.is('presence') && (stanza.attrs.type == 'subscribe')) {
+  if (stanza.is('presence') && (stanza.attrs.type === 'subscribe')) {
     this.bot.send(new xmpp.Element('presence', { to: stanza.attrs.from, type: 'subscribed' }))
   }
   if (stanza.is('message') &&
@@ -58,8 +58,8 @@ Actor.prototype.rawStanza = function (stanza) {
       return
     }
 
-    var message_recv = body.getText() // Get Incoming Message
-    this.verifyQuestion(from, message_recv)
+    var messageRecv = body.getText() // Get Incoming Message
+    this.verifyQuestion(from, messageRecv)
   }
 }
 

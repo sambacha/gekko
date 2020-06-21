@@ -1,14 +1,12 @@
 var util = require('../../core/util')
 var _ = require('lodash')
 var fs = require('fs')
-var toml = require('toml')
 
 var config = util.getConfig()
 var dirs = util.dirs()
 var log = require(dirs.core + 'log')
 var CandleBatcher = require(dirs.core + 'candleBatcher')
 
-var moment = require('moment')
 var isLeecher = config.market && config.market.type === 'leech'
 
 var Actor = function (done) {

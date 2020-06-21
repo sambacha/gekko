@@ -11,7 +11,6 @@ var Fetcher = require(dirs.exchanges + 'binance')
 util.makeEventEmitter(Fetcher)
 
 var end = false
-var done = false
 var from = false
 
 var fetcher = new Fetcher(config.watch)
@@ -29,12 +28,12 @@ var handleFetch = (err, trades) => {
   }
 
   if (trades.length > 0) {
-    var last = moment.unix(_.last(trades).date).utc()
+    moment.unix(_.last(trades).date).utc()
     // Conversion to milliseconds epoch time means we have to compensate for possible leap seconds
     var next = from.clone().add(1, 'h').subtract(1, 's')
   } else {
     // Conversion to milliseconds epoch time means we have to compensate for possible leap seconds
-    var next = from.clone().add(1, 'h').subtract(1, 's')
+    from.clone().add(1, 'h').subtract(1, 's')
     log.debug('Import step returned no results, moving to the next 1h period')
   }
 

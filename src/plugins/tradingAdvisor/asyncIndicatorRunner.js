@@ -1,9 +1,6 @@
 const _ = require('lodash')
-const fs = require('fs')
 const util = require('../../core/util')
-const config = util.getConfig()
 const dirs = util.dirs()
-const log = require(dirs.core + 'log')
 
 const talib = require(dirs.core + 'talib')
 const tulind = require(dirs.core + 'tulind')
@@ -115,8 +112,6 @@ AsyncIndicatorRunner.prototype.addTalibIndicator = function (name, type, paramet
 
   if (this.setup) { util.die('Can only add talib indicators in the init method!') }
 
-  var basectx = this
-
   this.talibIndicators[name] = {
     run: talib[type].create(parameters),
     result: NaN
@@ -131,8 +126,6 @@ AsyncIndicatorRunner.prototype.addTulipIndicator = function (name, type, paramet
   if (!_.contains(allowedTulipIndicators, type)) { util.die('I do not know the tulip indicator ' + type) }
 
   if (this.setup) { util.die('Can only add tulip indicators in the init method!') }
-
-  var basectx = this
 
   this.tulipIndicators[name] = {
     run: tulind[type].create(parameters),

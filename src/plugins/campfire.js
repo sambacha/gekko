@@ -44,6 +44,8 @@ Actor.prototype = {
   },
 
   processAdvice: function (advice) {
+    // This seems to be a bug, campfire is not defined
+    // eslint-disable-next-line no-undef
     if (campfire.muteSoft && advice.recommendation === 'soft') return
     this.advice = advice.recommendation
     this.adviceTime = Moment.utc()

@@ -4,7 +4,6 @@ var pg = require('pg')
 
 const util = require('../../core/util.js')
 const config = util.getConfig()
-const dirs = util.dirs()
 var postgresUtil = require('./util')
 
 var connectionString = config.postgresql.connectionString
@@ -26,7 +25,10 @@ module.exports = done => {
       sql = "select datname from pg_database where datname='" + postgresUtil.database() + "'"
     }
 
-    var query = scanClient.query(sql, function (err, result) {
+    scanClient.query(sql, function (err, result) {
+      if (err) {
+        util.die('Error performing scan query')
+      }
       async.each(result.rows, (dbRow, next) => {
         var scanTablesClient = new pg.Client(connectionString + '/' + dbRow.datname)
         var dbName = dbRow.datname
@@ -36,7 +38,7 @@ module.exports = done => {
             return next()
           }
 
-          var query = scanTablesClient.query(`
+          scanTablesClient.query(`
             SELECT table_name
             FROM information_schema.tables
             WHERE table_schema='${postgresUtil.schema()}';

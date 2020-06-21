@@ -110,12 +110,12 @@ Trader.prototype.handleResponse = function (funcName, callback, nonMutating, pay
               }
 
               // string vs float
-              if (+o.descr.price != price) {
+              if (+o.descr.price !== price) {
                 return false
               }
 
               // string vs float
-              if (o.vol != amount) {
+              if (o.vol !== amount) {
                 return false
               }
 
@@ -146,7 +146,7 @@ Trader.prototype.handleResponse = function (funcName, callback, nonMutating, pay
 
             if (!_.isObject(order)) {
               console.log('refetched broken cancel, cannot find order...', data)
-              throw 'a'
+              throw new Error('a')
             }
 
             console.log(order)

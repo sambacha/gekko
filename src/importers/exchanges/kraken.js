@@ -13,7 +13,6 @@ var Fetcher = require(dirs.exchanges + 'kraken')
 util.makeEventEmitter(Fetcher)
 
 var end = false
-var done = false
 var from = false
 
 var lastId = false

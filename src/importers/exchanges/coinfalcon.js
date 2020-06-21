@@ -11,7 +11,6 @@ var Fetcher = require(dirs.exchanges + 'coinfalcon')
 util.makeEventEmitter(Fetcher)
 
 var end = false
-var done = false
 var from = false
 
 var fetcher = new Fetcher(config.watch)
@@ -27,7 +26,7 @@ var handleFetch = (unk, trades) => {
     var last = moment.unix(_.last(trades).date).utc()
     var next = last.clone()
   } else {
-    var next = from.clone().add(1, 'h')
+    from.clone().add(1, 'h')
     log.debug('Import step returned no results, moving to the next 1h period')
   }
 

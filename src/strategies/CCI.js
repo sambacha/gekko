@@ -1,5 +1,4 @@
 // helpers
-var _ = require('lodash')
 var log = require('../core/log.js')
 
 // let's create our own method
@@ -7,7 +6,6 @@ var method = {}
 
 // prepare everything our method needs
 method.init = function () {
-  this.currentTrend
   this.requiredHistory = this.tradingAdvisor.historySize
 
   this.age = 0
@@ -53,23 +51,21 @@ method.log = function (candle) {
  *
  */
 method.check = function (candle) {
-  var lastPrice = candle.close
-
   this.age++
   var cci = this.indicators.cci
 
   if (typeof (cci.result) === 'number') {
     // overbought?
-    if (cci.result >= this.uplevel && (this.trend.persisted || this.persisted == 0) && !this.trend.adviced && this.trend.direction == 'overbought') {
+    if (cci.result >= this.uplevel && (this.trend.persisted || this.persisted === 0) && !this.trend.adviced && this.trend.direction === 'overbought') {
       this.trend.adviced = true
       this.trend.duration++
       this.advice('short')
-    } else if (cci.result >= this.uplevel && this.trend.direction != 'overbought') {
+    } else if (cci.result >= this.uplevel && this.trend.direction !== 'overbought') {
       this.trend.duration = 1
       this.trend.direction = 'overbought'
       this.trend.persisted = false
       this.trend.adviced = false
-      if (this.persisted == 0) {
+      if (this.persisted === 0) {
         this.trend.adviced = true
         this.advice('short')
       }
@@ -78,16 +74,16 @@ method.check = function (candle) {
       if (this.trend.duration >= this.persisted) {
         this.trend.persisted = true
       }
-    } else if (cci.result <= this.downlevel && (this.trend.persisted || this.persisted == 0) && !this.trend.adviced && this.trend.direction == 'oversold') {
+    } else if (cci.result <= this.downlevel && (this.trend.persisted || this.persisted === 0) && !this.trend.adviced && this.trend.direction === 'oversold') {
       this.trend.adviced = true
       this.trend.duration++
       this.advice('long')
-    } else if (cci.result <= this.downlevel && this.trend.direction != 'oversold') {
+    } else if (cci.result <= this.downlevel && this.trend.direction !== 'oversold') {
       this.trend.duration = 1
       this.trend.direction = 'oversold'
       this.trend.persisted = false
       this.trend.adviced = false
-      if (this.persisted == 0) {
+      if (this.persisted === 0) {
         this.trend.adviced = true
         this.advice('long')
       }
@@ -97,7 +93,7 @@ method.check = function (candle) {
         this.trend.persisted = true
       }
     } else {
-      if (this.trend.direction != 'nodirection') {
+      if (this.trend.direction !== 'nodirection') {
         this.trend = {
           direction: 'nodirection',
           duration: 0,

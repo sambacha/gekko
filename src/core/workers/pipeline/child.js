@@ -19,9 +19,9 @@
   it is working.
 
 */
-
+const path = require('path')
 var start = (mode, config) => {
-  var util = require(__dirname + '/../../util')
+  var util = require(path.join(__dirname, '/../../util'))
 
   // force correct gekko env
   util.setGekkoEnv('child-process')

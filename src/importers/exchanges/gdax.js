@@ -16,8 +16,6 @@ const Fetcher = require(dirs.exchanges + 'gdax')
 const retry = require(dirs.exchanges + '../exchangeUtils').retry
 
 Fetcher.prototype.getTrades = function (sinceTid, callback) {
-  const lastScan = 0
-
   const handle = (err, data) => {
     if (err) return callback(err)
 
@@ -76,7 +74,6 @@ Fetcher.prototype.findFirstTrade = function (sinceTs, callback) {
 util.makeEventEmitter(Fetcher)
 
 let end = false
-const done = false
 let from = false
 
 let batch = []
@@ -89,13 +86,6 @@ let latestMoment = false
 
 const fetcher = new Fetcher(config.watch)
 
-const retryForever = {
-  forever: true,
-  factor: 1.2,
-  minTimeout: 10 * 1000,
-  maxTimeout: 120 * 1000
-}
-
 const fetch = () => {
   fetcher.import = true
 
@@ -104,9 +94,8 @@ const fetch = () => {
     setTimeout(() => {
       fetcher.getTrades(lastId, handleFetch)
     }, QUERY_DELAY)
-  }
-  // We are running the first query, and need to find the starting batch
-  else {
+  } else {
+    // We are running the first query, and need to find the starting batch
     const process = (err, firstBatchId) => {
       if (err) return handleFetch(err)
 

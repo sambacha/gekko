@@ -8,7 +8,6 @@ const blotterConfig = config.blotter
 var Blotter = function (done) {
   _.bindAll(this)
 
-  this.time
   this.valueAtBuy = 0.0
   this.filename = blotterConfig.filename
   this.dateformat = blotterConfig.dateFormat
@@ -39,17 +38,17 @@ Blotter.prototype.setup = function (done) {
 
 Blotter.prototype.processTradeCompleted = function (trade) {
   // if exchange doesn't send correct timezone, correct it
-  if (trade.date.format('Z') == '+00:00') {
+  if (trade.date.format('Z') === '+00:00') {
     var adjustTimezone = trade.date.utcOffset(this.timezone)
     this.time = adjustTimezone.format(this.dateformat)
   } else {
     this.time = trade.date.format(this.dateformat)
   }
   // If a trade date is from 1969 or 1970, there was an error with the trade
-  if (trade.date.format('YY') == '69' || trade.date.format('YY') == '70') {
+  if (trade.date.format('YY') === '69' || trade.date.format('YY') === '70') {
     log.error('Received 1969/1970 error, trade failed to execute, did not record in blotter')
     // Prevent roundTrip from writing error P&L in processRoundtrip method
-    if (trade.action == 'sell') {
+    if (trade.action === 'sell') {
       this.tradeError = true
     }
     return
@@ -60,7 +59,7 @@ Blotter.prototype.processTradeCompleted = function (trade) {
   if (trade.action === 'buy') {
     // time, price, amount, side, fees, value at buy
     this.outtxt = this.time + ',' + trade.effectivePrice.toFixed(2) + ',' + trade.amount.toFixed(8) + ',' + trade.action + ',' + trade.feePercent + ',' + this.valueAtBuy
-    if ((trade.price == 0 || isNaN(trade.price)) && (trade.amount == 0 || isNaN(trade.amount))) {
+    if ((trade.price === 0 || isNaN(trade.price)) && (trade.amount === 0 || isNaN(trade.amount))) {
       this.outtxt = this.outtxt + ',' + ",Trade probably went through but didn't receive correct price/amount info\n"
     } else {
       this.outtxt = this.outtxt + '\n'
@@ -70,7 +69,7 @@ Blotter.prototype.processTradeCompleted = function (trade) {
     var sellValue = (this.roundUp(trade.effectivePrice * trade.amount))
     // time, price, amount, side, fees, value at sell
     this.outtxt = this.time + ',' + trade.effectivePrice.toFixed(2) + ',' + trade.amount.toFixed(8) + ',' + trade.action + ',' + trade.feePercent + ',' + sellValue + ','
-    if ((trade.price == 0 || isNaN(trade.price)) && (trade.amount == 0 || isNaN(trade.amount))) {
+    if ((trade.price === 0 || isNaN(trade.price)) && (trade.amount === 0 || isNaN(trade.amount))) {
       this.inaccurateData = true
     }
     this.valueAtBuy = 0.0
@@ -96,7 +95,6 @@ Blotter.prototype.processRoundtrip = function (trip) {
   if (this.inaccurateData) {
     this.outtxt = this.outtxt + this.roundUp(trip.pnl) + ",Trade probably went through but didn't receive correct price/amount info\n"
     this.inaccurateData = false
-    this.writeBlotter
     return
   }
 

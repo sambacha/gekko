@@ -1,5 +1,4 @@
 var _ = require('lodash')
-var fs = require('fs')
 var moment = require('moment')
 
 var util = require('../util')
@@ -61,15 +60,15 @@ Stitcher.prototype.prepareHistoricalData = function (done) {
   this.reader.mostRecentWindow(idealStartTime, endTime, function (localData) {
     // now we know what data is locally available, what
     // data would we need from the exchange?
-
+    let idealExchangeStartTime, idealExchangeStartTimeTS
     if (!localData) {
       log.info('\tNo usable local data available, trying to get as much as possible from the exchange..')
-      var idealExchangeStartTime = idealStartTime.clone()
-      var idealExchangeStartTimeTS = idealExchangeStartTime.unix()
+      idealExchangeStartTime = idealStartTime.clone()
+      idealExchangeStartTimeTS = idealExchangeStartTime.unix()
     } else if (idealStartTime.unix() < localData.from) {
       log.info('\tLocal data is still too recent, trying to get as much as possible from the exchange')
-      var idealExchangeStartTime = idealStartTime.clone()
-      var idealExchangeStartTimeTS = idealExchangeStartTime.unix()
+      idealExchangeStartTime = idealStartTime.clone()
+      idealExchangeStartTimeTS = idealExchangeStartTime.unix()
     } else {
       log.debug('\tAvailable local data:')
       log.debug('\t\tfrom:', this.ago(localData.from))
@@ -80,8 +79,8 @@ Stitcher.prototype.prepareHistoricalData = function (done) {
 
       // make sure we grab back in history far enough
       var secondsOverlap = 60 * 15 // 15 minutes
-      var idealExchangeStartTimeTS = localData.to - secondsOverlap
-      var idealExchangeStartTime = moment.unix(idealExchangeStartTimeTS).utc()
+      idealExchangeStartTimeTS = localData.to - secondsOverlap
+      idealExchangeStartTime = moment.unix(idealExchangeStartTimeTS).utc()
 
       // already set the
       util.setConfigProperty(
@@ -102,6 +101,11 @@ Stitcher.prototype.prepareHistoricalData = function (done) {
 
     log.debug('\tFetching exchange data since', this.ago(idealExchangeStartTimeTS))
     this.checkExchangeTrades(idealExchangeStartTime, function (err, exchangeData) {
+      if (err) {
+        log.error(err)
+        return util.die(err.message)
+      }
+
       log.debug('\tAvailable exchange data:')
       log.debug('\t\tfrom:', this.ago(exchangeData.from))
       log.debug('\t\tto:', this.ago(exchangeData.to))
@@ -208,6 +212,11 @@ Stitcher.prototype.checkExchangeTrades = function (since, next) {
 
 Stitcher.prototype.seedLocalData = function (from, to, next) {
   this.reader.get(from, to, 'full', function (err, rows) {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
+
     rows = _.map(rows, row => {
       row.start = moment.unix(row.start)
       return row

@@ -1,4 +1,6 @@
-var util = require(__dirname + '/../../util')
+const path = require('path')
+var util = require(path.join(__dirname, '/../../util'))
+var log = require('../../log.js')
 
 var dirs = util.dirs()
 var ipc = require('relieve').IPCEE(process)
@@ -16,6 +18,10 @@ ipc.on('start', config => {
   var scan = require(dirs.tools + 'dateRangeScanner')
   scan(
     (err, ranges, reader) => {
+      if (err) {
+        log.error(err)
+        return util.die(err.message)
+      }
       reader.close()
       ipc.send('ranges', ranges)
       process.exit(0)

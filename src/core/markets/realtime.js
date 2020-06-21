@@ -1,5 +1,3 @@
-const _ = require('lodash')
-
 const util = require('../util')
 const dirs = util.dirs()
 

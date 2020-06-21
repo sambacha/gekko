@@ -7,7 +7,6 @@
  */
 
 // helpers
-var _ = require('lodash')
 var log = require('../core/log')
 
 // let's create our own method
@@ -59,14 +58,8 @@ method.log = function () {
 }
 
 method.check = function (candle) {
-  var price = candle.close
-
   var ppo = this.indicators.ppo
-  var long = ppo.result.longEMA
-  var short = ppo.result.shortEMA
-  var macd = ppo.result.macd
   var result = ppo.result.ppo
-  var macdSignal = ppo.result.MACDsignal
   var ppoSignal = ppo.result.PPOsignal
 
   // TODO: is this part of the indicator or not?

@@ -7,7 +7,6 @@
  */
 
 // helpers
-var _ = require('lodash')
 var log = require('../core/log.js')
 
 // let's create our own method
@@ -61,9 +60,8 @@ method.check = function () {
 
   if (macddiff > this.settings.thresholds.up) {
     // new trend detected
-    if (this.trend.direction !== 'up')
-    // reset the state for the new trend
-    {
+    if (this.trend.direction !== 'up') {
+      // reset the state for the new trend
       this.trend = {
         duration: 0,
         persisted: false,
@@ -84,9 +82,8 @@ method.check = function () {
     } else { this.advice() }
   } else if (macddiff < this.settings.thresholds.down) {
     // new trend detected
-    if (this.trend.direction !== 'down')
-    // reset the state for the new trend
-    {
+    if (this.trend.direction !== 'down') {
+      // reset the state for the new trend
       this.trend = {
         duration: 0,
         persisted: false,

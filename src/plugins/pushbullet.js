@@ -27,10 +27,9 @@ config.pushbullet = {
 
  **/
 
-var pushbullet = require('pushbullet')
+var PushBulletClient = require('pushbullet')
 var _ = require('lodash')
 const moment = require('moment')
-const request = require('request')
 var log = require('../core/log.js')
 var util = require('../core/util.js')
 var config = util.getConfig()
@@ -39,7 +38,6 @@ var pbConf = config.pushbullet
 var Pushbullet = function (done) {
   _.bindAll(this)
 
-  this.pusher
   this.price = 'N/A'
   this.startingBalance = pbConf.startingBalance === undefined ? 0 : Number(pbConf.startingBalance)
   this.advicePrice = 0
@@ -54,6 +52,9 @@ var Pushbullet = function (done) {
 
 Pushbullet.prototype.setup = function (done) {
   var setupPushBullet = function (err, result) {
+    if (err) {
+      util.die('Error setting up Pushbullet')
+    }
     if (pbConf.sendMessageOnStart) {
       var title = pbConf.tag
       var exchange = config.watch.exchange
@@ -249,9 +250,8 @@ function getNumStr (num, fixed = 4) {
   }
 
   let insPos = dp - 3
-  insCount = 0
+
   while (insPos > 0) {
-    insCount++
     numStr = numStr.slice(0, insPos) + ',' + numStr.slice(insPos)
     insPos -= 3
   }
@@ -274,7 +274,7 @@ function getPastTense (action) {
 }
 
 Pushbullet.prototype.mail = function (subject, content, done) {
-  var pusher = new pushbullet(pbConf.key)
+  var pusher = new PushBulletClient(pbConf.key)
   pusher.note(pbConf.email, subject, content, function (error, response) {
     if (error || !response) {
       log.error('Pushbullet ERROR:', error)

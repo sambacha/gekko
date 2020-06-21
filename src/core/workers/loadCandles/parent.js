@@ -33,14 +33,14 @@
 
 const fork = require('child_process').fork
 const _ = require('lodash')
-
+const path = require('path')
 module.exports = (config, callback) => {
   var debug = typeof v8debug === 'object'
   if (debug) {
     process.execArgv = []
   }
 
-  const child = fork(__dirname + '/child')
+  const child = fork(path.join(__dirname, '/child'))
 
   const message = {
     what: 'start',

@@ -7,7 +7,6 @@ const iftttConfig = config.ifttt
 
 const IFTTT = function (done) {
   _.bindAll(this)
-  this.ifttt
   this.price = 'N/A'
   this.done = done
   this.setup()
@@ -48,7 +47,7 @@ IFTTT.prototype.portfolioUpdate = function (portfolio) {
 }
 
 IFTTT.prototype.processAdvice = function (advice) {
-  if (advice.recommendation == 'soft' && iftttConfig.muteSoft) return
+  if (advice.recommendation === 'soft' && iftttConfig.muteSoft) return
 
   const text = [
     'Gekko is watching ',
@@ -70,7 +69,7 @@ IFTTT.prototype.send = function (content) {
     .send({ value1: content })
     .end(function (err, res) {
       if (err || !res) {
-        log.error('IFTTT ERROR:', error)
+        log.error('IFTTT ERROR:', err)
       } else {
         log.info('IFTTT Message Sent')
       }
