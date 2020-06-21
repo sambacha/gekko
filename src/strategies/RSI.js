@@ -6,10 +6,7 @@
 
  */
 // helpers
-var _ = require('lodash')
 var log = require('../core/log.js')
-
-var RSI = require('./indicators/RSI.js')
 
 // let's create our own method
 var method = {}

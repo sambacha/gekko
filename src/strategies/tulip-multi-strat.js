@@ -1,4 +1,3 @@
-var _ = require('lodash')
 var log = require('../core/log.js')
 
 var method = {}
@@ -32,20 +31,20 @@ Tulip MACD: ${this.macd}
 
 method.check = function () {
   // just add a long and short to each array when new indicators are used
-  const all_long = [
+  const allLong = [
     this.adx > this.settings.up && this.trend !== 'long',
     this.settings.macd_up < this.macd && this.trend !== 'long'
   ].reduce((total, long) => long && total, true)
-  const all_short = [
+  const allShort = [
     this.adx < this.settings.down && this.trend !== 'short',
     this.settings.macd_down > this.macd && this.trend !== 'short'
   ].reduce((total, long) => long && total, true)
 
   // combining all indicators with AND
-  if (all_long) {
+  if (allLong) {
     log.debug('tulip-multi-strat In low')
     this.advice('long')
-  } else if (all_short) {
+  } else if (allShort) {
     log.debug('tulip-multi-strat In high')
     this.advice('short')
   } else {

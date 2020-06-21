@@ -3,6 +3,8 @@ const _ = require('lodash')
 const moment = require('moment')
 const retry = require('../exchangeUtils').retry
 const marketData = require('./poloniex-markets.json')
+const log = require('../core/log.js')
+const util = require('../core/util.js')
 
 const Trader = function (config) {
   _.bindAll(this)
@@ -13,8 +15,6 @@ const Trader = function (config) {
     this.asset = config.asset
   }
   this.name = 'Poloniex'
-  this.balance
-  this.price
 
   this.pair = this.currency + '_' + this.asset
 
@@ -138,17 +138,15 @@ Trader.prototype.processResponse = function (next, fn, payload) {
           console.log(new Date(), 'cancelOrder invalid order')
           error = undefined
           data = { filled: true }
-        }
-
-        // it might be cancelled
-        else if (includes(error.message, unknownResultErrors)) {
+        } else if (includes(error.message, unknownResultErrors)) {
+          // it might be cancelled
           setTimeout(() => {
             this.getRawOpenOrders((err, orders) => {
               if (err) {
                 return next(err)
               }
 
-              const order = _.find(orders, o => o.orderNumber == payload)
+              const order = _.find(orders, o => o.orderNumber === payload)
 
               // the cancel did not work since the order still exists
               if (order) {
@@ -185,6 +183,10 @@ Trader.prototype.processResponse = function (next, fn, payload) {
         if (includes(error.message, unknownResultErrors)) {
           return setTimeout(() => {
             this.findLastOrder(10, payload, (err, lastTrade) => {
+              if (err) {
+                log.error(err)
+                return util.die(err.message)
+              }
               if (lastTrade) {
                 return next(undefined, lastTrade)
               }
@@ -462,7 +464,6 @@ Trader.prototype.cancelOrder = function (order, callback) {
 
 Trader.prototype.getTrades = function (since, callback, descending) {
   const firstFetch = !!since
-  const args = _.toArray(arguments)
 
   const handle = (err, result) => {
     if (err) { return callback(err) }

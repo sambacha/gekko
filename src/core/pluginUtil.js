@@ -1,8 +1,8 @@
+const path = require('path')
 var _ = require('lodash')
-var async = require('async')
 var Emitter = require('./emitter')
 
-var util = require(__dirname + '/util')
+var util = require(path.join(__dirname, 'util'))
 
 var log = require(util.dirs().core + 'log')
 
@@ -25,7 +25,7 @@ var pluginHelper = {
 
     _.each(plugin.dependencies, function (dep) {
       try {
-        var a = require(dep.module)
+        require(dep.module)
       } catch (e) {
         log.error('ERROR LOADING DEPENDENCY', dep.module)
 
@@ -81,11 +81,12 @@ var pluginHelper = {
     var cannotLoad = pluginHelper.cannotLoad(plugin)
     if (cannotLoad) { return next(cannotLoad) }
 
-    if (plugin.path) { var Constructor = require(pluginDir + plugin.path(config)) } else { var Constructor = require(pluginDir + plugin.slug) }
+    let Constructor, instance
+    if (plugin.path) { Constructor = require(pluginDir + plugin.path(config)) } else { Constructor = require(pluginDir + plugin.slug) }
 
     if (plugin.async) {
       inherits(Constructor, Emitter)
-      var instance = new Constructor(util.defer(function (err) {
+      instance = new Constructor(util.defer(function (err) {
         next(err, instance)
       }), plugin)
       Emitter.call(instance)
@@ -93,7 +94,7 @@ var pluginHelper = {
       instance.meta = plugin
     } else {
       inherits(Constructor, Emitter)
-      var instance = new Constructor(plugin)
+      instance = new Constructor(plugin)
       Emitter.call(instance)
 
       instance.meta = plugin

@@ -21,6 +21,10 @@ var Kodi = function (done) {
 
 Kodi.prototype.setup = function (done) {
   var setupKodi = function (err, result) {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
     if (kodiConfig.sendMessageOnStart) {
       var currency = config.watch.currency
       var asset = config.watch.asset

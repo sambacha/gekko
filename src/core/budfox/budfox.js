@@ -8,9 +8,8 @@
 // > [tosses back the handkerchief and walks away]
 
 var _ = require('lodash')
-var async = require('async')
-
-var util = require(__dirname + '/../util')
+var path = require('path')
+var util = require(path.join(__dirname, '/../util'))
 var dirs = util.dirs()
 
 var Heart = require(dirs.budfox + 'heart')

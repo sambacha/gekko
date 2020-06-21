@@ -57,7 +57,6 @@ util.makeEventEmitter(Fetcher)
 
 var iterator = false
 var end = false
-var done = false
 
 var fetcher = new Fetcher(config.watch)
 

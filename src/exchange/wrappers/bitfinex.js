@@ -3,7 +3,6 @@ const Bitfinex = require('bitfinex-api-node')
 const _ = require('lodash')
 const moment = require('moment')
 
-const Errors = require('../exchangeErrors')
 const retry = require('../exchangeUtils').retry
 
 const marketData = require('./bitfinex-markets.json')
@@ -15,8 +14,6 @@ var Trader = function (config) {
     this.secret = config.secret
   }
   this.name = 'Bitfinex'
-  this.balance
-  this.price
   this.asset = config.asset
   this.currency = config.currency
   this.pair = this.asset + this.currency
@@ -186,7 +183,7 @@ Trader.prototype.sell = function (amount, price, callback) {
   this.submitOrder('sell', amount, price, callback)
 }
 
-Trader.prototype.checkOrder = function (order_id, callback) {
+Trader.prototype.checkOrder = function (orderId, callback) {
   const processResponse = (err, data) => {
     if (err) {
       console.log('this is after we have retried fetching it')
@@ -209,11 +206,11 @@ Trader.prototype.checkOrder = function (order_id, callback) {
     })
   }
 
-  const fetcher = cb => this.bitfinex.order_status(order_id, this.handleResponse('checkOrder', cb))
+  const fetcher = cb => this.bitfinex.order_status(orderId, this.handleResponse('checkOrder', cb))
   retry(null, fetcher, processResponse)
 }
 
-Trader.prototype.getOrder = function (order_id, callback) {
+Trader.prototype.getOrder = function (orderId, callback) {
   const processResponse = (err, data) => {
     if (err) return callback(err)
 
@@ -227,32 +224,13 @@ Trader.prototype.getOrder = function (order_id, callback) {
     // the `past_trades` call is not returning
     // any data.
     return callback(undefined, { price, amount, date })
-
-    const processPastTrade = (err, data) => {
-      if (err) return callback(err)
-
-      console.log('processPastTrade', data)
-      const trade = _.first(data)
-
-      const fees = {
-        [trade.fee_currency]: trade.fee_amount
-      }
-
-      callback(undefined, { price, amount, date, fees })
-    }
-
-    // we need another API call to fetch the fees
-    const feeFetcher = cb => this.bitfinex.past_trades(this.currency, { since: data.timestamp }, this.handleResponse('pastTrades', cb))
-    retry(null, feeFetcher, processPastTrade)
-
-    callback(undefined, { price, amount, date })
   }
 
-  const fetcher = cb => this.bitfinex.order_status(order_id, this.handleResponse('getOrder', cb))
+  const fetcher = cb => this.bitfinex.order_status(orderId, this.handleResponse('getOrder', cb))
   retry(null, fetcher, processResponse)
 }
 
-Trader.prototype.cancelOrder = function (order_id, callback) {
+Trader.prototype.cancelOrder = function (orderId, callback) {
   const processResponse = (err, data) => {
     if (err) {
       return callback(err)
@@ -261,7 +239,7 @@ Trader.prototype.cancelOrder = function (order_id, callback) {
     return callback(undefined, false)
   }
 
-  const handler = cb => this.bitfinex.cancel_order(order_id, this.handleResponse('cancelOrder', cb))
+  const handler = cb => this.bitfinex.cancel_order(orderId, this.handleResponse('cancelOrder', cb))
   retry(null, handler, processResponse)
 }
 

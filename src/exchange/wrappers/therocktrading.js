@@ -4,8 +4,6 @@ const moment = require('moment')
 const retry = require('../exchangeUtils').retry
 const marketData = require('./therocktrading-markets.json')
 
-const QUERY_DELAY = 350
-
 const Trader = function (config) {
   this.post_only = true
   this.use_sandbox = false
@@ -216,7 +214,7 @@ Trader.prototype.checkOrder = function (order, callback) {
     if (err) return callback(err)
 
     var status = data.status
-    if (status == 'executed') {
+    if (status === 'executed') {
       return callback(undefined, { executed: true, open: false, filledAmount: parseFloat(data.amount) })
     } else if (status === 'deleted') {
       return callback(undefined, { executed: false, open: false, filledAmount: parseFloat(data.amount - data.amount_unfilled) })

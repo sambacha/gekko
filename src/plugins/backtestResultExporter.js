@@ -10,7 +10,6 @@ const moment = require('moment')
 const fs = require('fs')
 
 const BacktestResultExporter = function () {
-  this.performanceReport
   this.roundtrips = []
   this.stratUpdates = []
   this.stratCandles = []

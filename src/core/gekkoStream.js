@@ -4,7 +4,6 @@
 const Writable = require('stream').Writable
 const _ = require('lodash')
 const async = require('async')
-const moment = require('moment')
 
 const util = require('./util')
 const env = util.gekkoEnv()
@@ -35,7 +34,6 @@ if (config.debug && mode !== 'importer') {
       return this.finalize()
     }
 
-    const start = moment()
     var relayed = false
     var at = null
 

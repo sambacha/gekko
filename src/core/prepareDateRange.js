@@ -21,6 +21,11 @@ var setDateRange = function (from, to) {
 
 module.exports = function (done) {
   scan((err, ranges) => {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
+
     if (_.size(ranges) === 0) { util.die('No history found for this market', true) }
 
     if (_.size(ranges) === 1) {
@@ -45,8 +50,12 @@ module.exports = function (done) {
     })
 
     prompt.get({ name: 'option' }, (err, result) => {
+      if (err) {
+        log.error(err)
+        return util.die(err.message)
+      }
       var option = parseInt(result.option)
-      if (option === NaN) { util.die('Not an option..', true) }
+      if (isNaN(option)) { util.die('Not an option..', true) }
 
       var range = ranges[option - 1]
 

@@ -45,8 +45,8 @@
 
 var _ = require('lodash')
 var moment = require('moment')
-
-var util = require(__dirname + '/../util')
+var path = require('path')
+var util = require(path.join(__dirname, '/../util'))
 
 var CandleCreator = function () {
   _.bindAll(this)
@@ -102,12 +102,11 @@ CandleCreator.prototype.fillBuckets = function (trades) {
 
 // convert each bucket into a candle
 CandleCreator.prototype.calculateCandles = function () {
-  var minutes = _.size(this.buckets)
-
   // catch error from high volume getTrades
-  if (this.lastTrade !== undefined)
-  // create a string referencing the minute this trade happened in
-  { var lastMinute = this.lastTrade.date.format('YYYY-MM-DD HH:mm') }
+  if (this.lastTrade !== undefined) {
+    // create a string referencing the minute this trade happened in
+    var lastMinute = this.lastTrade.date.format('YYYY-MM-DD HH:mm')
+  }
 
   var candles = _.map(this.buckets, function (bucket, name) {
     var candle = this.calculateCandle(bucket)
@@ -168,6 +167,8 @@ CandleCreator.prototype.addEmptyCandles = function (candles) {
     return +candle.start
   })
 
+  // start is actually changed with .add, sneaky eslint error
+  // eslint-disable-next-line
   while (start < end) {
     start.add(1, 'm')
     i = +start

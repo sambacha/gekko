@@ -31,8 +31,8 @@ console.log(`
   $$    $$/ $$       |$$ | $$  |$$ | $$  |$$    $$/ 
    $$$$$$/  $$$$$$$$/ $$/   $$/ $$/   $$/  $$$$$$/
 `)
-
-const util = require(__dirname + '/core/util')
+const path = require('path')
+const util = require(path.join(__dirname, 'core', 'util'))
 
 console.log('\tGekko v' + util.getVersion())
 console.log('\tI\'m gonna make you rich, Bud Fox.', '\n\n')

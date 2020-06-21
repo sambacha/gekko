@@ -1,14 +1,9 @@
-const _ = require('lodash')
-const fs = require('fs')
-
 const util = require('../../core/util.js')
 const config = util.getConfig()
 const dirs = util.dirs()
 
 const log = require(util.dirs().core + 'log')
 const postgresUtil = require('./util')
-
-const adapter = config.postgresql
 
 // verify the correct dependencies are installed
 const pluginHelper = require(dirs.core + 'pluginUtil')
@@ -23,8 +18,6 @@ if (cannotLoad) {
 }
 
 const pg = require('pg')
-
-const version = adapter.version
 
 const dbName = postgresUtil.database()
 

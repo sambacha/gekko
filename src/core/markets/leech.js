@@ -6,6 +6,8 @@ const _ = require('lodash')
 const moment = require('moment')
 
 const util = require('../util')
+const log = require('../log')
+
 const dirs = util.dirs()
 const config = util.getConfig()
 
@@ -23,8 +25,8 @@ if (!exchange) { util.die(`Unsupported exchange: ${slug}`) }
 
 const error = exchangeChecker.cantMonitor(config.watch)
 if (error) { util.die(error, true) }
-
-if (config.market.from) { var fromTs = moment.utc(config.market.from).unix() } else { var fromTs = moment().startOf('minute').unix() }
+let fromTs
+if (config.market.from) { fromTs = moment.utc(config.market.from).unix() } else { fromTs = moment().startOf('minute').unix() }
 
 var Market = function () {
   _.bindAll(this)
@@ -61,6 +63,11 @@ Market.prototype.get = function () {
 }
 
 Market.prototype.processCandles = function (err, candles) {
+  if (err) {
+    log.error(err)
+    return util.die(err.message)
+  }
+
   var amount = _.size(candles)
   if (amount === 0) {
     // no new candles!

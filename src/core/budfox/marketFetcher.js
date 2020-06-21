@@ -8,11 +8,10 @@
 
 const _ = require('lodash')
 const moment = require('moment')
-const utc = moment.utc
-const util = require(__dirname + '/../util')
+const path = require('path')
+const util = require(path.join(__dirname, '/../util'))
 const dirs = util.dirs()
 
-const config = util.getConfig()
 const log = require(dirs.core + 'log')
 const exchangeChecker = require(dirs.gekko + 'exchange/exchangeChecker')
 
@@ -30,8 +29,6 @@ const Fetcher = function (config) {
   this.exchangeTrader = new DataProvider(config.watch)
 
   this.exchange = exchangeChecker.settings(config.watch)
-
-  var requiredHistory = config.tradingAdvisor.candleSize * config.tradingAdvisor.historySize
 
   // If the trading adviser is enabled we might need a very specific fetch since
   // to line up [local db, trading method, and fetching]

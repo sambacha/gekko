@@ -1,8 +1,7 @@
 const async = require('async')
 var _ = require('lodash')
-var util = require('../../core/util.js')
-var log = require(`${util.dirs().core}log`)
 
+var util = require('../../core/util.js')
 var handle = require('./handle')
 
 module.exports = done => {
@@ -18,6 +17,10 @@ module.exports = done => {
         const [exchange, type] = collection.split('_')
         if (type === 'candles') {
           handle.collection(collection).distinct('pair', {}, (err, pairs) => {
+            if (err) {
+              console.error(err)
+              return util.die(err.message)
+            }
             console.log(exchange)
             pairs.forEach((pair) => {
               pair = pair.split('_')

@@ -1,7 +1,6 @@
 const moment = require('moment')
 const _ = require('lodash')
 
-const Errors = require('../exchangeErrors')
 const marketData = require('./binance-markets.json')
 const exchangeUtils = require('../exchangeUtils')
 const retry = exchangeUtils.retry
@@ -113,7 +112,7 @@ Trader.prototype.handleResponse = function (funcName, callback) {
         console.log(new Date(), 'cancelOrder', 'UNKNOWN_ORDER')
         // order got filled in full before it could be
         // cancelled, meaning it was NOT cancelled.
-        return callback(false, { filled: true })
+        return callback(null, { filled: true })
       }
 
       if (funcName === 'checkOrder' && error.message.includes('Order does not exist.')) {
@@ -178,10 +177,10 @@ Trader.prototype.getPortfolio = function (callback) {
     if (err) return callback(err)
 
     const findAsset = item => item.asset === this.asset
-    const assetAmount = parseFloat(_.find(data.balances, findAsset).free)
+    let assetAmount = parseFloat(_.find(data.balances, findAsset).free)
 
     const findCurrency = item => item.asset === this.currency
-    const currencyAmount = parseFloat(_.find(data.balances, findCurrency).free)
+    let currencyAmount = parseFloat(_.find(data.balances, findCurrency).free)
 
     if (!_.isNumber(assetAmount) || _.isNaN(assetAmount)) {
       assetAmount = 0
@@ -360,7 +359,7 @@ Trader.prototype.getOrder = function (order, callback) {
 
     const trades = _.filter(data, t => {
       // note: the API returns a string after creating
-      return t.orderId == order
+      return t.orderId === order
     })
 
     if (!trades.length) {

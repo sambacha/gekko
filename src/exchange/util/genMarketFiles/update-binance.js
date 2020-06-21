@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const fs = require('fs')
 const request = require('request-promise')
-const Promise = require('bluebird')
 
 const getOrderMinSize = currency => {
   if (currency === 'BTC') return 0.001

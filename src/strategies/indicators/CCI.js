@@ -1,8 +1,6 @@
 /*
  * CCI
  */
-var log = require('../../core/log')
-
 var Indicator = function (settings) {
   this.input = 'candle'
   this.tp = 0.0
@@ -42,9 +40,9 @@ Indicator.prototype.update = function (candle) {
 Indicator.prototype.calculate = function (tp) {
   var sumtp = 0.0
 
-	 for (var i = 0; i < this.size; i++) {
+  for (let i = 0; i < this.size; i++) {
     sumtp = sumtp + this.hist[i]
-	 }
+  }
 
   this.avgtp = sumtp / this.size
 
@@ -52,7 +50,7 @@ Indicator.prototype.calculate = function (tp) {
 
   var sum = 0.0
   // calculate tps
-  for (var i = 0; i < this.size; i++) {
+  for (let i = 0; i < this.size; i++) {
     var z = (this.hist[i] - this.avgtp)
     if (z < 0) z = z * -1.0
     sum = sum + z

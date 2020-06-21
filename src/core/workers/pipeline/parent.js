@@ -1,4 +1,5 @@
 var fork = require('child_process').fork
+const path = require('path')
 
 module.exports = (mode, config, callback) => {
   var debug = typeof v8debug === 'object'
@@ -6,7 +7,7 @@ module.exports = (mode, config, callback) => {
     process.execArgv = []
   }
 
-  var child = fork(__dirname + '/child')
+  var child = fork(path.join(__dirname, 'child'))
 
   // How we should handle client messages depends
   // on the mode of the Pipeline that is being ran.

@@ -40,7 +40,6 @@ method.log = function () {
 // information, check if we should
 // update or not.
 method.check = function (candle) {
-  var price = candle.close
   var result = this.talibIndicators.mymacd.result
   var macddiff = result.outMACD - result.outMACDSignal
 

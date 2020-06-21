@@ -1,12 +1,20 @@
 // The heart schedules and emit ticks every 20 seconds.
 
-var util = require(__dirname + '/../util')
+var path = require('path')
+var util = require(path.join(__dirname, '/../util'))
 var log = require(util.dirs().core + 'log')
 
 var _ = require('lodash')
 var moment = require('moment')
 
-if (util.getConfig().watch.tickrate) { var TICKRATE = util.getConfig().watch.tickrate } else if (util.getConfig().watch.exchange === 'okcoin') { var TICKRATE = 2 } else { var TICKRATE = 20 }
+let TICKRATE
+if (util.getConfig().watch.tickrate) {
+  TICKRATE = util.getConfig().watch.tickrate
+} else if (util.getConfig().watch.exchange === 'okcoin') { // Todo: tech debt, needs to be refactored
+  TICKRATE = 2
+} else {
+  TICKRATE = 20
+}
 
 var Heart = function () {
   this.lastTick = false

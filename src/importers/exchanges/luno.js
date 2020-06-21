@@ -30,11 +30,11 @@ Fetcher.prototype.getTrades = function (since, callback, descending) {
 
       if (error) {
         console.log(funcName, 'processResponse received ERROR:', error.message)
-        if (includes(error.message, recoverableErrors)) {
+        if (recoverableErrors.includes(error.message)) {
           error.notFatal = true
         }
 
-        if (includes(error.message, ['error 429'])) {
+        if (error.message === 'error 429') {
           error.notFatal = true
           error.backoffDelay = 10000
         }
@@ -51,7 +51,7 @@ Fetcher.prototype.getTrades = function (since, callback, descending) {
       console.log('Error importing trades:', err)
       return
     }
-    trades = _.map(result.trades, function (t) {
+    const trades = _.map(result.trades, function (t) {
       return {
         price: t.price,
         date: Math.round(t.timestamp / 1000),
@@ -62,8 +62,8 @@ Fetcher.prototype.getTrades = function (since, callback, descending) {
     callback(null, trades.reverse())
   }
 
-  if (moment.isMoment(since)) since = since.valueOf();
-  (_.isNumber(since) && since > 0) ? since : since = 0
+  if (moment.isMoment(since)) since = since.valueOf()
+  since = _.isNumber(since) && since > 0 ? since : since = 0
 
   console.log('importer getting trades from Luno since', moment.utc(since).format('YYYY-MM-DD HH:mm:ss'), 'UTC')
 

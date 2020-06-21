@@ -1,5 +1,7 @@
+const path = require('path')
+
 var start = (config, candleSize, daterange) => {
-  var util = require(__dirname + '/../../util')
+  var util = require(path.join(__dirname, '/../../util'))
 
   // force correct gekko env
   util.setGekkoEnv('child-process')

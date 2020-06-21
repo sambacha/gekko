@@ -7,8 +7,6 @@
 
 const _ = require('lodash')
 const async = require('async')
-const events = require('events')
-const moment = require('moment')
 const checker = require('./exchangeChecker')
 const errors = require('./exchangeErrors')
 const Portfolio = require('./portfolioManager')

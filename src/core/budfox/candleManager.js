@@ -3,13 +3,9 @@
 // - `candle`: the most recent candle after a fetch Gekko.
 
 var _ = require('lodash')
-var moment = require('moment')
-var fs = require('fs')
-
-var util = require(__dirname + '/../util')
+var path = require('path')
+var util = require(path.join(__dirname, '/../util'))
 var dirs = util.dirs()
-var config = util.getConfig()
-var log = require(dirs.core + 'log')
 
 var CandleCreator = require(dirs.budfox + 'candleCreator')
 

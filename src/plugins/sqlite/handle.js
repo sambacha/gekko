@@ -1,6 +1,5 @@
-var _ = require('lodash')
 var fs = require('fs')
-
+let sqlite3 = require('sqlite3')
 var util = require('../../core/util.js')
 var config = util.getConfig()
 var dirs = util.dirs()
@@ -18,10 +17,9 @@ var cannotLoad = pluginHelper.cannotLoad(pluginMock)
 if (cannotLoad) util.die(cannotLoad)
 
 // should be good now
-if (config.debug) var sqlite3 = require('sqlite3').verbose()
-else var sqlite3 = require('sqlite3')
-
-var plugins = require(util.dirs().gekko + 'plugins')
+if (config.debug) {
+  sqlite3 = sqlite3.verbose()
+}
 
 var version = adapter.version
 

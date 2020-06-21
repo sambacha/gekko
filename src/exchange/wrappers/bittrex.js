@@ -1,6 +1,7 @@
 const Bittrex = require('node.bittrex.api')
 const _ = require('lodash')
 const moment = require('moment')
+const util = require('../../core/util')
 const retry = require('../exchangeUtils').retry
 
 // Helper methods
@@ -24,9 +25,6 @@ var Trader = function (config) {
   }
 
   this.name = 'Bittrex'
-  this.balance
-  this.price
-
   this.pair = [this.currency, this.asset].join('-')
 
   Bittrex.options({
@@ -86,8 +84,8 @@ Trader.prototype.getPortfolio = function (callback) {
 
     data = data.result
 
-    let assetEntry = _.find(data, i => i.Currency == this.asset)
-    let currencyEntry = _.find(data, i => i.Currency == this.currency)
+    let assetEntry = _.find(data, i => i.Currency === this.asset)
+    let currencyEntry = _.find(data, i => i.Currency === this.currency)
 
     if (_.isUndefined(assetEntry)) {
       assetEntry = {
@@ -145,7 +143,7 @@ Trader.prototype.getTicker = function (callback) {
 }
 
 Trader.prototype.getFee = function (callback) {
-  callback(false, 0.00025)
+  callback(null, 0.00025)
 }
 
 Trader.prototype.buy = function (amount, price, callback) {
@@ -197,7 +195,7 @@ Trader.prototype.checkOrder = function (order, callback) {
     }
 
     console.log('checkOrder', result)
-    throw 'a'
+    throw new Error('a')
   }
 
   const fetch = next => this.bittrexApi.getopenorders({ market: this.pair }, this.processResponse(next))
@@ -242,14 +240,8 @@ Trader.prototype.cancelOrder = function (order, callback) {
     if (err) {
       return callback(err)
     }
-
-    throw 'a'
-
-    // if(!result.success && result.message === 'ORDER_NOT_OPEN') {
-    //   log.debug('getOrder', 'ORDER_NOT_OPEN: assuming already closed or executed');
-    // }
-
-    callback(undefined, true)
+    // Todo: Removed unreachable code below, can't figure out why throwing here
+    throw new Error('a')
   }
 
   const fetch = next => this.bittrexApi.cancel({ uuid: order }, this.processResponse(next))

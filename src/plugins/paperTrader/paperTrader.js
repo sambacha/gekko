@@ -1,7 +1,6 @@
 const _ = require('lodash')
 
 const util = require('../../core/util')
-const ENV = util.gekkoEnv()
 
 const config = util.getConfig()
 const calcConfig = config.paperTrader
@@ -40,8 +39,6 @@ const PaperTrader = function () {
   this.propogatedTriggers = 0
 
   this.warmupCompleted = false
-
-  this.warmupCandle
 }
 
 PaperTrader.prototype.relayPortfolioChange = function () {
@@ -86,11 +83,9 @@ PaperTrader.prototype.updatePosition = function (what) {
 
     this.exposed = true
     this.trades++
-  }
-
-  // virtually trade all {currency} to {asset}
-  // at the current price (minus fees)
-  else if (what === 'short') {
+  } else if (what === 'short') {
+    // virtually trade all {currency} to {asset}
+    // at the current price (minus fees)
     cost = (1 - this.fee) * (this.portfolio.asset * this.price)
     this.portfolio.currency += this.extractFee(this.portfolio.asset * this.price)
     amount = this.portfolio.currency / this.price

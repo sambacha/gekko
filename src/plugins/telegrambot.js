@@ -5,7 +5,7 @@ const config = require('../core/util').getConfig()
 const telegrambot = config.telegrambot
 const emitTrades = telegrambot.emitTrades
 const utc = moment.utc
-const telegram = require('node-telegram-bot-api')
+const Telegram = require('node-telegram-bot-api')
 
 const Actor = function () {
   _.bindAll(this)
@@ -30,7 +30,7 @@ const Actor = function () {
   this.rawCommands = _.keys(this.commands)
   this.chatId = null
   this.subscribers = []
-  this.bot = new telegram(telegrambot.token, { polling: true })
+  this.bot = new Telegram(telegrambot.token, { polling: true })
   this.bot.onText(/(.+)/, this.verifyQuestion)
 }
 

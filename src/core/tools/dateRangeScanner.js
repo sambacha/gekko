@@ -2,7 +2,6 @@ var BATCH_SIZE = 60 // minutes
 var MISSING_CANDLES_ALLOWED = 3 // minutes, per batch
 
 var _ = require('lodash')
-var moment = require('moment')
 var async = require('async')
 
 var util = require('../util')
@@ -28,6 +27,11 @@ var scan = function (done) {
       boundry: reader.getBoundry,
       available: reader.countTotal
     }, (err, res) => {
+      if (err) {
+        log.error(err)
+        return util.die(err.message)
+      }
+
       var first = res.boundry.first
       var last = res.boundry.last
 
@@ -72,6 +76,11 @@ var scan = function (done) {
             from,
             iterator.to,
             (err, count) => {
+              if (err) {
+                log.error(err)
+                return util.die(err.message)
+              }
+
               var complete = count + MISSING_CANDLES_ALLOWED > BATCH_SIZE
 
               if (complete) {

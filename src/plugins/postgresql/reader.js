@@ -1,6 +1,5 @@
 var _ = require('lodash')
 var util = require('../../core/util.js')
-var config = util.getConfig()
 var log = require(util.dirs().core + 'log')
 
 var handle = require('./handle')
@@ -91,6 +90,10 @@ Reader.prototype.mostRecentWindow = function (from, to, next) {
 
 Reader.prototype.tableExists = function (name, next) {
   this.db.connect((err, client, done) => {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
     client.query(`
       SELECT table_name
       FROM information_schema.tables
@@ -113,6 +116,10 @@ Reader.prototype.get = function (from, to, what, next) {
   }
 
   this.db.connect((err, client, done) => {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
     var query = client.query(new Query(`
     SELECT ${what} from ${postgresUtil.table('candles')}
     WHERE start <= ${to} AND start >= ${from}
@@ -156,6 +163,10 @@ Reader.prototype.count = function (from, to, next) {
 
 Reader.prototype.countTotal = function (next) {
   this.db.connect((err, client, done) => {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
     var query = client.query(new Query(`
     SELECT COUNT(*) as count from ${postgresUtil.table('candles')}
     `))
@@ -173,6 +184,10 @@ Reader.prototype.countTotal = function (next) {
 
 Reader.prototype.getBoundry = function (next) {
   this.db.connect((err, client, done) => {
+    if (err) {
+      log.error(err)
+      return util.die(err.message)
+    }
     var query = client.query(new Query(`
     SELECT (
       SELECT start

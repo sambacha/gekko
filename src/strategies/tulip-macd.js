@@ -39,7 +39,6 @@ method.log = function () {
 // information, check if we should
 // update or not.
 method.check = function (candle) {
-  var price = candle.close
   var result = this.tulipIndicators.mymacd.result
   var macddiff = result.macd - result.macdSignal
 

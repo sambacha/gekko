@@ -43,7 +43,6 @@ Fetcher.prototype.getTrades = function (since, to, page, callback, descending) {
 util.makeEventEmitter(Fetcher)
 
 var end = false
-var done = false
 var from = false
 
 var page = 1

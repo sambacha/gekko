@@ -1,8 +1,6 @@
-var BTCChina = require('btc-china-fork')
 var util = require('../../core/util.js')
 var _ = require('lodash')
 var moment = require('moment')
-var log = require('../../core/log')
 
 var config = util.getConfig()
 
@@ -18,15 +16,15 @@ Fetcher.prototype.getTrades = function (fromTid, sinceTime, callback) {
 
     callback(result)
   }.bind(this)
-
+  let params
   if (sinceTime) {
-    var params = {
+    params = {
       limit: 1,
       sincetype: 'time',
       since: sinceTime
     }
   } else if (fromTid) {
-    var params = {
+    params = {
       limit: 5000,
       since: fromTid
     }
@@ -39,7 +37,6 @@ util.makeEventEmitter(Fetcher)
 
 var iterator = false
 var end = false
-var done = false
 var from = false
 
 var fetcher = new Fetcher(config.watch)

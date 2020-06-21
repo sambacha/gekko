@@ -1,5 +1,4 @@
 var log = require('../core/log')
-var moment = require('moment')
 var _ = require('lodash')
 var util = require('../core/util.js')
 var config = util.getConfig()
@@ -19,7 +18,7 @@ Actor.prototype.processCandle = function (candle, done) {
 }
 
 Actor.prototype.processAdvice = function (advice) {
-  if (adviceLoggerConfig.muteSoft && advice.recommendation == 'soft') return
+  if (adviceLoggerConfig.muteSoft && advice.recommendation === 'soft') return
   console.log()
   log.info('We have new trading advice!')
   log.info('\t Position:', advice.recommendation)

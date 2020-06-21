@@ -185,9 +185,10 @@ var pipeline = (settings) => {
 
     _.each(plugins, function (plugin) {
       _.each(marketSubscriptions, function (sub) {
-        if (sub.event === 'candle')
-        // these are handled via the market stream
-        { return }
+        if (sub.event === 'candle') {
+          // these are handled via the market stream
+          return
+        }
 
         if (plugin[sub.handler]) {
           market.on(sub.event, plugin[sub.handler])

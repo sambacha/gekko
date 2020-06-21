@@ -5,7 +5,6 @@ const config = util.getConfig()
 const dirs = util.dirs()
 const log = require(dirs.core + 'log')
 
-const ENV = util.gekkoEnv()
 const mode = util.gekkoMode()
 const startTime = util.getStartTime()
 
@@ -17,7 +16,7 @@ const AsyncIndicatorRunner = require('./asyncIndicatorRunner')
 
 _.each(indicatorFiles, function (indicator) {
   const indicatorName = indicator.split('.')[0]
-  if (indicatorName[0] != '_') {
+  if (indicatorName[0] !== '_') {
     try {
       Indicators[indicatorName] = require(indicatorsPath + indicator)
     } catch (e) {
@@ -48,8 +47,6 @@ var Base = function (settings) {
   this.completedWarmup = false
 
   this.asyncIndicatorRunner = new AsyncIndicatorRunner()
-
-  this._currentDirection
 
   // make sure we have all methods
   _.each(['init', 'check'], function (fn) {
@@ -218,9 +215,8 @@ Base.prototype.addIndicator = function (name, type, parameters) {
 
   if (this.setup) { util.die('Can only add indicators in the init method!') }
 
-  return this.indicators[name] = new Indicators[type](parameters)
-
   // some indicators need a price stream, others need full candles
+  this.indicators[name] = new Indicators[type](parameters)
 }
 
 Base.prototype.advice = function (newDirection) {

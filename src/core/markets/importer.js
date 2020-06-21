@@ -6,15 +6,15 @@ var log = require(dirs.core + 'log')
 var moment = require('moment')
 var gekkoEnv = util.gekkoEnv()
 
-var adapter = config[config.adapter]
 var daterange = config.importer.daterange
 
 var from = moment.utc(daterange.from)
 
+let to
 if (daterange.to) {
-  var to = moment.utc(daterange.to)
+  to = moment.utc(daterange.to)
 } else {
-  var to = moment().utc()
+  to = moment().utc()
   log.debug(
     'No end date specified for importing, setting to',
     to.format()

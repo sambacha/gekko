@@ -8,7 +8,6 @@ const slackConfig = config.slack
 const Slack = function (done) {
   _.bindAll(this)
 
-  this.slack
   this.price = 'N/A'
 
   this.done = done
@@ -19,6 +18,9 @@ Slack.prototype.setup = function (done) {
   this.slack = new WebClient(slackConfig.token)
 
   const setupSlack = function (error, result) {
+    if (error) {
+      util.die('Error setting up Slack')
+    }
     if (slackConfig.sendMessageOnStart) {
       const body = this.createResponse('#439FE0', 'Gekko started!')
       this.send(body)
@@ -36,7 +38,7 @@ Slack.prototype.processCandle = function (candle, done) {
 }
 
 Slack.prototype.processAdvice = function (advice) {
-  if (advice.recommendation == 'soft' && slackConfig.muteSoft) return
+  if (advice.recommendation === 'soft' && slackConfig.muteSoft) return
 
   const color = advice.recommendation === 'long' ? 'good' : (advice.recommendation === 'short' ? 'danger' : 'warning')
   const body = this.createResponse(color, 'There is a new trend! The advice is to go `' + advice.recommendation + '`! Current price is `' + this.price + '`')

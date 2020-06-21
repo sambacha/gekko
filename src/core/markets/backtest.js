@@ -63,6 +63,11 @@ Market.prototype.get = function () {
 }
 
 Market.prototype.processCandles = function (err, candles) {
+  if (err) {
+    log.error(err)
+    return util.die(err.message)
+  }
+
   this.pushing = true
   var amount = _.size(candles)
 

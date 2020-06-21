@@ -3,13 +3,11 @@
 const batchSize = 1000
 
 const _ = require('lodash')
-const fs = require('fs')
 const moment = require('moment')
 
 const util = require('../../core/util')
 const config = util.getConfig()
 const dirs = util.dirs()
-const log = require(dirs.core + '/log')
 
 const adapter = config[config.adapter]
 const Reader = require(dirs.gekko + adapter.path + '/reader')
@@ -75,7 +73,7 @@ const handleCandles = (err, data) => {
     util.die('Encountered an error..')
   }
 
-  if (_.size(data) && _.last(data).start >= toUnix || iterator.from.unix() >= toUnix) { DONE = true }
+  if ((_.size(data) && _.last(data).start >= toUnix) || iterator.from.unix() >= toUnix) { DONE = true }
 
   batcher.write(data)
   batcher.flush()

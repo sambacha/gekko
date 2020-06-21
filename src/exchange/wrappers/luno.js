@@ -1,8 +1,7 @@
 const Luno = require('bitx')
 const _ = require('lodash')
 const moment = require('moment')
-const node_util = require('util')
-const Errors = require('../exchangeErrors')
+const nodeUtil = require('util')
 const retry = require('../exchangeUtils').retry
 const name = 'Luno'
 
@@ -26,12 +25,12 @@ const Trader = function (config) {
 }
 
 const log = function () {
-  const message = node_util.format.apply(null, _.toArray(arguments))
+  const message = nodeUtil.format.apply(null, _.toArray(arguments))
   console.log(moment().format('YYYY-MM-DD HH:mm:ss') + ' (DEBUG):    ' + message)
 }
 
 Trader.prototype.inspect = function (obj) {
-  return node_util.inspect(obj, {
+  return nodeUtil.inspect(obj, {
     showhidden: false,
     depth: null,
     breakLength: Infinity,
@@ -244,7 +243,7 @@ Trader.prototype.getOrder = function (order, callback) {
   // log(name, 'getOrder() order id:', order);
 
   if (!order) {
-    return callback('invalid order_id', false)
+    return callback(new Error('invalid order_id'), false)
   }
   const process = (err, data) => {
     if (err) {
@@ -283,7 +282,7 @@ Trader.prototype.checkOrder = function (order, callback) {
   // log(name, 'checkOrder() order id:', order);
 
   if (!order) {
-    return callback('invalid order_id')
+    return callback(new Error('invalid order_id'))
   }
   const process = (err, data) => {
     if (err) {
@@ -308,7 +307,7 @@ Trader.prototype.cancelOrder = function (order, callback) {
   log(name, 'cancelOrder() order id:', order)
 
   if (!order) {
-    return callback('invalid order_id')
+    return callback(new Error('invalid order_id'))
   }
   const process = (err, data) => {
     if (err) {
@@ -370,8 +369,8 @@ Trader.prototype.getTrades = function (since, callback, descending) {
     callback(undefined, trades)
   }
 
-  if (moment.isMoment(since)) since = since.valueOf();
-  (_.isNumber(since) && since > 0) ? since : since = 0
+  if (moment.isMoment(since)) since = since.valueOf()
+  since = (_.isNumber(since) && since > 0) ? since : 0
 
   const options = {
     pair: this.pair,

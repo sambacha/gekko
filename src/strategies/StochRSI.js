@@ -9,8 +9,6 @@
 var _ = require('lodash')
 var log = require('../core/log.js')
 
-var RSI = require('./indicators/RSI.js')
-
 // let's create our own method
 var method = {}
 
@@ -39,9 +37,10 @@ method.update = function (candle) {
 
   this.RSIhistory.push(this.rsi)
 
-  if (_.size(this.RSIhistory) > this.interval)
-  // remove oldest RSI value
-  { this.RSIhistory.shift() }
+  if (_.size(this.RSIhistory) > this.interval) {
+    // remove oldest RSI value
+    this.RSIhistory.shift()
+  }
 
   this.lowestRSI = _.min(this.RSIhistory)
   this.highestRSI = _.max(this.RSIhistory)

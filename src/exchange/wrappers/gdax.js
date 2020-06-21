@@ -2,13 +2,19 @@ const Gdax = require('gdax')
 const _ = require('lodash')
 const moment = require('moment')
 
-const errors = require('../exchangeErrors')
 const retry = require('../exchangeUtils').retry
 
 const BATCH_SIZE = 100
 const QUERY_DELAY = 350
 
 const marketData = require('./coinbase-markets.json')
+
+const retryForever = {
+  forever: true,
+  factor: 1.2,
+  minTimeout: 10,
+  maxTimeout: 30
+}
 
 const Trader = function (config) {
   this.post_only = true
@@ -146,7 +152,7 @@ Trader.prototype.getFee = function (callback) {
 }
 
 Trader.prototype.roundPrice = function (price) {
-  return this.getMaxDecimalsNumber(price, this.currency == 'BTC' ? 5 : 2)
+  return this.getMaxDecimalsNumber(price, this.currency === 'BTC' ? 5 : 2)
 }
 
 Trader.prototype.roundAmount = function (amount) {
@@ -155,7 +161,7 @@ Trader.prototype.roundAmount = function (amount) {
 
 Trader.prototype.buy = function (amount, price, callback) {
   const buyParams = {
-    price: this.getMaxDecimalsNumber(price, this.currency == 'BTC' ? 5 : 2),
+    price: this.getMaxDecimalsNumber(price, this.currency === 'BTC' ? 5 : 2),
     size: this.getMaxDecimalsNumber(amount),
     product_id: this.pair,
     post_only: this.post_only
@@ -176,7 +182,7 @@ Trader.prototype.buy = function (amount, price, callback) {
 
 Trader.prototype.sell = function (amount, price, callback) {
   const sellParams = {
-    price: this.getMaxDecimalsNumber(price, this.currency == 'BTC' ? 5 : 2),
+    price: this.getMaxDecimalsNumber(price, this.currency === 'BTC' ? 5 : 2),
     size: this.getMaxDecimalsNumber(amount),
     product_id: this.pair,
     post_only: this.post_only
@@ -209,7 +215,7 @@ Trader.prototype.checkOrder = function (order, callback) {
     // @link:
     // https://stackoverflow.com/questions/48132078/available-gdax-order-statuses-and-meanings
     var status = data.status
-    if (status == 'pending') {
+    if (status === 'pending') {
       // technically not open yet, but will be soon
       return callback(undefined, { executed: false, open: true, filledAmount: 0 })
     } if (status === 'done' || status === 'settled') {
@@ -329,7 +335,7 @@ Trader.prototype.getTrades = function (since, callback, descending) {
 
         this.scanbackResults = this.scanbackResults.concat(result.reverse())
 
-        if (this.scanbackTid != first.trade_id) {
+        if (this.scanbackTid !== first.trade_id) {
           this.scanbackTid = first.trade_id
           setTimeout(() => {
             const handler = cb =>
@@ -397,7 +403,7 @@ Trader.prototype.getMaxDecimalsNumber = function (number, decimalLimit = 8) {
     .length
 
   var decimalMultiplier = 1
-  for (i = 0; i < decimalLimit; i++) {
+  for (let i = 0; i < decimalLimit; i++) {
     decimalMultiplier *= 10
   }
 

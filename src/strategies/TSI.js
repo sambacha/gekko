@@ -1,8 +1,5 @@
 // helpers
-var _ = require('lodash')
 var log = require('../core/log.js')
-
-var TSI = require('./indicators/TSI.js')
 
 // let's create our own method
 var method = {}

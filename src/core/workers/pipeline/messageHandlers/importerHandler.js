@@ -11,7 +11,7 @@ module.exports = cb => {
       } else if (message.type === 'log') { console.log(message.log) }
     },
     exit: status => {
-      if (status !== 0) { return cb('Child process has died.') } else { cb(null, { done: true }) }
+      if (status !== 0) { return cb(new Error('Child process has died.')) } else { cb(null, { done: true }) }
     }
   }
 }

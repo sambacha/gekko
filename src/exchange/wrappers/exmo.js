@@ -6,7 +6,7 @@ const CryptoJS = require('crypto-js')
 const querystring = require('querystring')
 const request = require('request')
 
-API_URL = 'https://api.exmo.com/v1/'
+const API_URL = 'https://api.exmo.com/v1/'
 
 const marketData = require('./exmo-markets.json')
 
@@ -44,30 +44,30 @@ const includes = (str, list) => {
 
 Trader.prototype.api_query = function (method, params, callback) {
   params.nonce = this.nonce++
-  var post_data = querystring.stringify(params)
+  var postData = querystring.stringify(params)
 
   var options = {
-	  url: API_URL + method,
-	  headers: { Key: this.key, Sign: CryptoJS.HmacSHA512(post_data, this.secret).toString(CryptoJS.enc.hex) },
-	  form: params
+    url: API_URL + method,
+    headers: { Key: this.key, Sign: CryptoJS.HmacSHA512(postData, this.secret).toString(CryptoJS.enc.hex) },
+    form: params
   }
 
- 	request.post(options, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      data = JSON.parse(body)
+  request.post(options, function (error, response, body) {
+    if (!error && response.statusCode === 200) {
+      const data = JSON.parse(body)
       if (data.error) error = { message: data.error }
-      else if (data.result != undefined && data.result == false) error = { message: '"result": false' }
+      else if (data.result !== undefined && data.result === false) error = { message: '"result": false' }
       callback(error, data)
     } else {
       console.log('cb request error')
       console.log(body)
 
       if (error) {
-			  if (includes(error.message, recoverableErrors)) {
+        if (includes(error.message, recoverableErrors)) {
           error.notFatal = true
-			  }
+        }
         console.log(error)
-        	callback(error)
+        callback(error)
       };
     };
   })
@@ -141,15 +141,15 @@ Trader.prototype.sell = function (amount, price, callback) {
   this.submitOrder('sell', amount, price, callback)
 }
 
-Trader.prototype.getOrder = function (order_id, callback) {
+Trader.prototype.getOrder = function (orderId, callback) {
   const processResponse = (err, data) => {
     if (err) { return callback(err) }
 
     data = data[this.pair]
 
-    if (data == undefined) return callback(new Error('Orders not found'))
+    if (data === undefined) return callback(new Error('Orders not found'))
 
-    const order = _.find(data, function (o) { return o.order_id === +order_id })
+    const order = _.find(data, function (o) { return o.order_id === +orderId })
 
     if (!order) return callback(new Error('Order not found'))
 
@@ -160,17 +160,17 @@ Trader.prototype.getOrder = function (order_id, callback) {
   retry(null, fetch, processResponse)
 }
 
-Trader.prototype.checkOrder = function (order_id, callback) {
+Trader.prototype.checkOrder = function (orderId, callback) {
   const processResponse = (err, data) => {
     if (err) { return callback(err) }
 
     data = data[this.pair]
 
-    if (data == undefined) {
+    if (data === undefined) {
       return callback(undefined, { executed: true, open: false })
     }
 
-    const order = _.find(data, function (o) { return o.order_id === +order_id })
+    const order = _.find(data, function (o) { return o.order_id === +orderId })
     if (!order) { return callback(undefined, { executed: true, open: false }) }
 
     callback(undefined, { executed: false, open: true /*, filledAmount: order.startingAmount - order.amount */ })
@@ -180,7 +180,7 @@ Trader.prototype.checkOrder = function (order_id, callback) {
   retry(null, fetch, processResponse)
 }
 
-Trader.prototype.cancelOrder = function (order_id, callback) {
+Trader.prototype.cancelOrder = function (orderId, callback) {
   const processResponse = (err, data) => {
     if (err) {
       return callback(err)
@@ -189,7 +189,7 @@ Trader.prototype.cancelOrder = function (order_id, callback) {
     return callback(undefined, false)
   }
 
-  const fetch = cb => this.api_query('order_cancel', { order_id }, cb)
+  const fetch = cb => this.api_query('order_cancel', { order_id: orderId }, cb)
   retry(null, fetch, processResponse)
 }
 

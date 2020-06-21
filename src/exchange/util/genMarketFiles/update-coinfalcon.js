@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const fs = require('fs')
 const request = require('request-promise')
-const Promise = require('bluebird')
 
 const options = {
   url: 'https://coinfalcon.com/api/v1/markets',

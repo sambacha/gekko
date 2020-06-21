@@ -1,6 +1,5 @@
 var _ = require('lodash')
 var util = require('../../core/util.js')
-var config = util.getConfig()
 var log = require(util.dirs().core + 'log')
 
 var sqlite = require('./handle')
