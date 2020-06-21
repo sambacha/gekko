@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/jnikles/gekko.svg)](https://travis-ci.org/jnikles/gekko)
+
 # Gekko 
 Gekko is a Bitcoin TA trading and backtesting platform that connects to popular Bitcoin exchanges. It is written in JavaScript and runs on [Node.js](http://nodejs.org).
 
