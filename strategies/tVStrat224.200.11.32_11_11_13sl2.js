@@ -19,8 +19,8 @@ var fileName_last//
 
 //var signal_price_pos//
 //var signal_price//
-var signal_price_int = 0//
-//var signal_price_int_last = 0//
+var price = 0//
+//var price_last = 0//
 
 //var signal_sell_pos//
 //var signal_sell//
@@ -172,10 +172,10 @@ catch (err) {
             var H1_string_cut = H1_string[0].substring(40, H1_string[0].length-1)// 
            // log.debug("H1_string_cut "+H1_string_cut)//
             var indicators = H1_string_cut.split(',')
-            log.debug("indicators.length "+indicators.length)//
+            //log.debug("indicators.length "+indicators.length)//
             if (indicators.length == 82){
 
-              signal_price_int = Number.parseFloat(indicators[31])
+              price = Number.parseFloat(indicators[31])
 
               oRSIa = 0
 
@@ -877,13 +877,13 @@ catch (err) {
                   H1_SUM_BUY += 1
                   H1_MA_BUY += 1
               }
-              log.debug("signal_price_int "+signal_price_int)//
+              log.debug("price "+price)//
               log.debug("H1_SUM_BUY "+H1_SUM_BUY)//
               log.debug("H1_SUM_SELL "+H1_SUM_SELL)//
               log.debug("H1_SUM_NEUTRAL "+H1_SUM_NEUTRAL)//
 
 
-              if (signal_price_int >0){ 
+              if (price >0){ 
                 if (fileName != fileName_last) {
               
                   for (let step = historyDeep; step > 1 ;step--){
@@ -1014,12 +1014,12 @@ strat.check = function() {
             attemptBuyCnt = 0//
 
             if (stopLossShortPrice == 0){
-                stopLossShortPrice = signal_price_int + signal_price_int * STOPLOSS / 100
+                stopLossShortPrice = price + price * STOPLOSS / 100
            //     print("stopLossShortPrice "+str(stopLossShortPrice))
             }
             stopLossLongPrice = 0
           // log.debug("persistenceBuy_cnt_last "+persistenceBuy_cnt_last)
-            log.info('advice short '+signal_price_int)//
+            log.info('advice short '+price)//
             this.currentTrend = 'short'//
             this.advice('short')//             
           }
@@ -1033,7 +1033,7 @@ strat.check = function() {
                 }
                 stopLossShortPrice = 0
 
-                log.info('advice STOPLOSS for short -> long '+signal_price_int)//
+                log.info('advice STOPLOSS for short -> long '+price)//
                 this.currentTrend = 'long'//
                 this.advice('long')// 
             }
@@ -1043,11 +1043,11 @@ strat.check = function() {
           if (attemptSellCnt == ATTEMPT_SELL_LIMIT ) {
             attemptSellCnt = 0//
             if (stopLossLongPrice == 0){
-              stopLossLongPrice = signal_price_int - signal_price_int * STOPLOSS / 100
+              stopLossLongPrice = price - price * STOPLOSS / 100
             }
             stopLossShortPrice = 0          
             // log.debug("persistenceSell_cnt_last "+persistenceSell_cnt_last)
-            log.info('advice long '+signal_price_int)//
+            log.info('advice long '+price)//
             this.currentTrend = 'long'//
             this.advice('long')//
           
@@ -1062,7 +1062,7 @@ strat.check = function() {
                 }
                 stopLossLongPrice = 0
 
-                log.info('advice STOPLOSS for long -> short '+signal_price_int)//
+                log.info('advice STOPLOSS for long -> short '+price)//
                 this.currentTrend = 'short'//
                 this.advice('short')// 
             }
