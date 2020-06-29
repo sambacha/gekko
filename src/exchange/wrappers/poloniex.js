@@ -3,8 +3,8 @@ const _ = require('lodash')
 const moment = require('moment')
 const retry = require('../exchangeUtils').retry
 const marketData = require('./poloniex-markets.json')
-const log = require('../core/log.js')
-const util = require('../core/util.js')
+const log = require('../../core/log')
+const util = require('../../core/util.js')
 
 const Trader = function (config) {
   _.bindAll(this)
