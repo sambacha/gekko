@@ -1029,7 +1029,7 @@ strat.check = function() {
               //  total_trades = total_trades + 1
                 if (stopLossLongPrice == 0){
                     stopLossLongPrice = price - price * STOPLOSS / 100
-                    print("stopLossLong Price " + str(stopLossLongPrice))
+                    //print("stopLossLong Price " + str(stopLossLongPrice))
                 }
                 stopLossShortPrice = 0
 
@@ -1058,7 +1058,7 @@ strat.check = function() {
               //  total_trades = total_trades + 1
                 if (stopLossShortPrice == 0){
                   stopLossShortPrice = price + price * STOPLOSS / 100
-                    print("stopLossShort Price " + str(stopLossShortPrice))
+                    //print("stopLossShort Price " + str(stopLossShortPrice))
                 }
                 stopLossLongPrice = 0
 
