@@ -106,6 +106,8 @@ TradeBatcher.prototype.write = function(batch) {
  // console.log(momentBatch);
   
 
+  log.debug(''); //for separating log messages
+
   log.debug(
     'Processing', amount, 'new trades.',
     'From',
