@@ -27,7 +27,7 @@ var price = 0//
 //var signal_sell_int = 0//
 //var signal_sell_int_last = 0//
 
-var signal_total = 28//
+//var signal_total = 28//
 
 //var signal_neutral_pos//
 //var signal_neutral//
@@ -162,9 +162,9 @@ catch (err) {
   
   //log.debug(fileContent)//
  
-  if (fileOk){
-
-  let fileContent = fs.readFileSync(fileName, "utf8")//
+if (fileOk){
+    if (fileName != fileName_last) {
+        let fileContent = fs.readFileSync(fileName, "utf8")//
 
         var H1_string = fileContent.match(/H1\{.\"data\"\:\[.*?\]/g)//
           if (Array.isArray(H1_string)){
@@ -175,790 +175,785 @@ catch (err) {
             //log.debug("indicators.length "+indicators.length)//
             if (indicators.length == 82){
 
-              price = Number.parseFloat(indicators[31])
-
-              oRSIa = 0
-
-              var e = Number.parseFloat(indicators[3])
-              var t = Number.parseFloat(indicators[4])
-              //log.debug("e "&e)
-              //log.debug("t "&t)
-
-              //            computeRSISignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < 30 && t > e && (o = n.BUY), e > 70 && t < e && (o = n.SELL), o//
-              if (e < 30 && t > e)   oRSIa = -1 
-              if (e > 70 && t < e)  oRSIa = 1
-
-              //log.debug("oRSIa "+oRSIa)
-              //#######################################
-              oStochKa = 0
-
-              var e = Number.parseFloat(indicators[5])
-              var t = Number.parseFloat(indicators[6])
-              var o = Number.parseFloat(indicators[7])
-              var r = Number.parseFloat(indicators[8])
-
-              //            computeStochSignal: function(e, t, o, r) {
-              //                var i = n.NEUTRAL//
-              //                return e < 20 && t < 20 && e > t && o < r && (i = n.BUY), e > 80 && t > 80 && e < t && o > r && (i = n.SELL
-
-              if (e < 20 && t < 20 && e > t && o < r) oStochKa = -1
-              if (e > 80 && t > 80 && e < t && o > r) oStochKa = 1
-              //log.debug("oStochKa "+oStochKa)
-              //#######################################
-
-              oCCI20a = 0
-
-              var e = Number.parseFloat (indicators[9])
-              var t = Number.parseFloat (indicators[10])
-              //log.debug("e "&e)
-              //log.debug("t "&t)
-              //            computeCCI20Signal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < -100 && e > t && (o = n.BUY), e > 100 && e < t && (o = n.SELL), o//
-              if (e < -100 && e > t)  oCCI20a = -1
-              if (e > 100 && e < t)  oCCI20a = 1
-
-
-              //log.debug("oCCI20a "+oCCI20a)
-              //#######################################
-
-              oADXa=0
-
-              var e = Number.parseFloat(indicators[11])
-              var t = Number.parseFloat(indicators[12])
-              var o = Number.parseFloat(indicators[13])
-              var r = Number.parseFloat(indicators[14])
-              var i = Number.parseFloat(indicators[15])
-              //            computeADXSignal: function(e, t, o, r, i) {
-              //                var a = n.NEUTRAL//
-              //                return e > 20 && r < i && t > o && (a = n.BUY), e > 20 && r > i && t < o && (a = n.SELL),
-              if (e > 20 && r < i && t > o)  oADXa = 1
-              if (e > 20 && r > i && t < o)  oADXa = -1
-
-              //log.debug("oADXa "+oADXa)
-              //#######################################
-
-              oAOa=0
-
-              var e = Number.parseFloat(indicators[16])
-              var t = Number.parseFloat(indicators[17])
-              //log.debug("e "+e)
-              //log.debug("t "+t)
-              
-              //            computeAOSignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return (e > 0 && t < 0 || e > 0 && t > 0 && e > t) && (o = n.BUY), (e < 0 && t > 0 || e < 0 && t < 0 && e < t) && (o = n.SELL),
-              if (e > 0 && t < 0 || e > 0 && t > 0 && e > t) oAOa = 1
-              if (e < 0 && t > 0 || e < 0 && t < 0 && e < t) oAOa = -1           
-
-              //log.debug("oAOa "+oAOa)
-              //#######################################
-              oMoma=0
-
-              var e = Number.parseFloat(indicators[18])
-              var t = Number.parseFloat(indicators[19])
-              //           computeMomSignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  oMoma = -1
-              if (e > t)  oMoma = 1
-
-              //log.debug("oMoma "+oMoma)
-              //#######################################
-              oMACDmacda=0
-
-              var e = Number.parseFloat(indicators[20])
-              var t = Number.parseFloat(indicators[21])
-              //            computeMACDSignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e > t && (o = n.BUY), e < t && (o = n.SELL), o//
-              if (e > t)  oMACDmacda = 1
-              if (e < t)  oMACDmacda = -1
-
-              //log.debug("oMACDmacda "+oMACDmacda)
-              //#######################################
-              oStochRSIKa=0
-
-              var e = Number.parseFloat(indicators[22])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  oStochRSIKa = 1
-              if (1 == e)  oStochRSIKa = -1
-
-              //log.debug("oStochRSIKa "+oStochRSIKa)
-              //#######################################
-              oWRa=0
-
-              var e = Number.parseFloat(indicators[24])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  oWRa = 1
-              if (1 == e)  oWRa = -1
-
-              //log.debug("oWRa "+oWRa)
-              //#######################################
-              oBBPowera=0
-
-              var e = Number.parseFloat(indicators[26])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  oBBPowera = -1
-              if (1 == e)  oBBPowera = 1
-              //log.debug("oBBPowera "+oBBPowera)
-              //#######################################
-              oUOa=0
-
-              var e = Number.parseFloat(indicators[28])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  oUOa = -1
-              if (1 == e)  oUOa = 1
-              //log.debug("oUOa "+oUOa)
-              //#######################################
-              maEMA5a=0
-
-              var e = Number.parseFloat(indicators[30])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA5a = 1
-              if (e > t)  maEMA5a = -1
-
-              //log.debug("maEMA5a "+maEMA5a)
-              //#######################################
-              maSMA5a=0
-
-              var e = Number.parseFloat(indicators[32])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA5a = 1
-              if (e > t)  maSMA5a = -1
-              //log.debug("maSMA5a "+maSMA5a)
-              //#######################################
-              maEMA10a=0
-
-              var e = Number.parseFloat(indicators[33])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA10a = 1
-              if (e > t)  maEMA10a = -1
-              //log.debug("maEMA10a "+maEMA10a)
-              //#######################################
-              maSMA10a=0
-
-              var e = Number.parseFloat(indicators[34])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA10a = 1
-              if (e > t)  maSMA10a = -1
-              //log.debug("maSMA10a "+maSMA10a)
-              //#######################################
-              maEMA20a=0
-
-              var e = Number.parseFloat(indicators[35])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA20a = 1
-              if (e > t)  maEMA20a = -1
-              //log.debug("maEMA20a "+maEMA20a)
-              //#######################################
-              maSMA20a=0
-
-              var e = Number.parseFloat(indicators[36])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA20a = 1
-              if (e > t)  maSMA20a = -1
-              //log.debug("maSMA20a "+maSMA20a)
-              //#######################################
-              maEMA30a=0
-
-              var e = Number.parseFloat(indicators[37])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA30a = 1
-              if (e > t)  maEMA30a = -1
-              //log.debug("maEMA30a "+maEMA30a)
-              //#######################################
-              maSMA30a=0
-
-              var e = Number.parseFloat(indicators[38])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA30a = 1
-              if (e > t)  maSMA30a = -1
-              //log.debug("maSMA30a "+maSMA30a)
-              //#######################################
-              maEMA50a=0
-
-              var e = Number.parseFloat(indicators[39])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA50a = 1
-              if (e > t)  maEMA50a = -1
-              //log.debug("maEMA50a "+maEMA50a)
-              //#######################################
-              maSMA50a=0
-
-              var e = Number.parseFloat(indicators[40])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA50a = 1
-              if (e > t)  maSMA50a = -1
-              //log.debug("maSMA50a "+maSMA50a)
-              //#######################################
-              maEMA100a=0
-
-              var e = Number.parseFloat(indicators[41])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA100a = 1
-              if (e > t)  maEMA100a = -1
-              //log.debug("maEMA100a "+maEMA100a)
-              //#######################################
-              maSMA100a=0
-
-              var e = Number.parseFloat(indicators[42])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA100a = 1
-              if (e > t)  maSMA100a = -1
-              //log.debug("maSMA100a "+maSMA100a)
-              //#######################################
-              maEMA200a=0
-
-              var e = Number.parseFloat(indicators[43])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maEMA200a = 1
-              if (e > t)  maEMA200a = -1
-              //log.debug("maEMA200a "+maEMA200a)
-              //#######################################
-              maSMA200a=0
-
-              var e = Number.parseFloat(indicators[44])
-              var t = Number.parseFloat(indicators[31]) //close
-
-              //            computeMASignal: function(e, t) {
-              //                var o = n.NEUTRAL//
-              //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
-              if (e < t)  maSMA200a = 1
-              if (e > t)  maSMA200a = -1
-              //log.debug("maSMA200a "+maSMA200a)
-              //#######################################
-              maIchimokuBLinea=0
-
-              var e = Number.parseFloat(indicators[45])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  maIchimokuBLinea = -1
-              if (1 == e)  maIchimokuBLinea = 1
-
-              //log.debug("maIchimokuBLinea "+maIchimokuBLinea)
-              //#######################################
-              maVWMAa=0
-
-              var e = Number.parseFloat(indicators[47])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  maVWMAa = -1
-              if (1 == e)  maVWMAa = 1
-              //log.debug("maVWMAa "+maVWMAa)
-              //#######################################
-              maHullMA9a=0
-
-              var e = Number.parseFloat(indicators[49])
-              //log.ddebug("e "&e)
-              //            computeSimpleSignal: function(e) {
-              //                var t = n.NEUTRAL//
-              //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
-              if (-1 == e)  maHullMA9a = -1
-              if (1 == e)  maHullMA9a = 1
-              //log.debug("maHullMA9a "+maHullMA9a)
-              //#######################################
-              H1_OSC_SELL = 0
-              H1_OSC_NEUTRAL = 0
-              H1_OSC_BUY = 0
-      
-              H1_MA_SELL = 0
-              H1_MA_NEUTRAL = 0
-              H1_MA_BUY = 0
-      
-              H1_SUM_SELL = 0
-              H1_SUM_NEUTRAL = 0
-              H1_SUM_BUY = 0
-
-              if (oRSIa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oRSIa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oRSIa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-
-              if (oStochKa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oStochKa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oStochKa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oCCI20a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oCCI20a == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oCCI20a == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oADXa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oADXa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oADXa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oAOa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oAOa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oAOa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oMoma == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oMoma == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oMoma == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oMACDmacda == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oMACDmacda == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oMACDmacda == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oStochRSIKa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oStochRSIKa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oStochRSIKa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oWRa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oWRa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oWRa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oBBPowera == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oBBPowera == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oBBPowera == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (oUOa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_OSC_NEUTRAL += 1
-              }
-              if (oUOa == -1){
-                  H1_SUM_SELL += 1
-                  H1_OSC_SELL += 1
-              }
-              if (oUOa == 1){
-                  H1_SUM_BUY += 1
-                  H1_OSC_BUY += 1
-              }
-              if (maEMA5a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA5a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA5a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA5a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA5a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA5a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maEMA10a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA10a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA10a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA10a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA10a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA10a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maEMA20a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA20a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA20a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA20a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA20a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA20a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maEMA30a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA30a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA30a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA30a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA30a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA30a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maEMA50a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA50a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA50a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA50a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA50a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA50a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maEMA100a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA100a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA100a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA100a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA100a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA100a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maEMA200a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maEMA200a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maEMA200a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maSMA200a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maSMA200a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maSMA200a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maIchimokuBLinea == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maIchimokuBLinea == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maIchimokuBLinea == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maVWMAa == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maVWMAa == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maVWMAa == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              if (maHullMA9a == 0){
-                  H1_SUM_NEUTRAL += 1
-                  H1_MA_NEUTRAL += 1
-              }
-              if (maHullMA9a == -1){
-                  H1_SUM_SELL += 1
-                  H1_MA_SELL += 1
-              }
-              if (maHullMA9a == 1){
-                  H1_SUM_BUY += 1
-                  H1_MA_BUY += 1
-              }
-              log.debug("price "+price)//
-              log.debug("H1_OSC_BUY "+H1_OSC_BUY)//
-              log.debug("H1_OSC_SELL "+H1_OSC_SELL)//
-              log.debug("H1_OSC_NEUTRAL "+H1_OSC_NEUTRAL)//
-
-
-              if (price >0){ 
-                if (fileName != fileName_last) {
-              
-                  for (let step = historyDeep; step > 1 ;step--){
+                price = Number.parseFloat(indicators[31])
+
+                oRSIa = 0
+
+                var e = Number.parseFloat(indicators[3])
+                var t = Number.parseFloat(indicators[4])
+                //log.debug("e "&e)
+                //log.debug("t "&t)
+
+                //            computeRSISignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < 30 && t > e && (o = n.BUY), e > 70 && t < e && (o = n.SELL), o//
+                if (e < 30 && t > e)   oRSIa = -1 
+                if (e > 70 && t < e)  oRSIa = 1
+
+                //log.debug("oRSIa "+oRSIa)
+                //#######################################
+                oStochKa = 0
+
+                var e = Number.parseFloat(indicators[5])
+                var t = Number.parseFloat(indicators[6])
+                var o = Number.parseFloat(indicators[7])
+                var r = Number.parseFloat(indicators[8])
+
+                //            computeStochSignal: function(e, t, o, r) {
+                //                var i = n.NEUTRAL//
+                //                return e < 20 && t < 20 && e > t && o < r && (i = n.BUY), e > 80 && t > 80 && e < t && o > r && (i = n.SELL
+
+                if (e < 20 && t < 20 && e > t && o < r) oStochKa = -1
+                if (e > 80 && t > 80 && e < t && o > r) oStochKa = 1
+                //log.debug("oStochKa "+oStochKa)
+                //#######################################
+
+                oCCI20a = 0
+
+                var e = Number.parseFloat (indicators[9])
+                var t = Number.parseFloat (indicators[10])
+                //log.debug("e "&e)
+                //log.debug("t "&t)
+                //            computeCCI20Signal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < -100 && e > t && (o = n.BUY), e > 100 && e < t && (o = n.SELL), o//
+                if (e < -100 && e > t)  oCCI20a = -1
+                if (e > 100 && e < t)  oCCI20a = 1
+
+
+                //log.debug("oCCI20a "+oCCI20a)
+                //#######################################
+
+                oADXa=0
+
+                var e = Number.parseFloat(indicators[11])
+                var t = Number.parseFloat(indicators[12])
+                var o = Number.parseFloat(indicators[13])
+                var r = Number.parseFloat(indicators[14])
+                var i = Number.parseFloat(indicators[15])
+                //            computeADXSignal: function(e, t, o, r, i) {
+                //                var a = n.NEUTRAL//
+                //                return e > 20 && r < i && t > o && (a = n.BUY), e > 20 && r > i && t < o && (a = n.SELL),
+                if (e > 20 && r < i && t > o)  oADXa = 1
+                if (e > 20 && r > i && t < o)  oADXa = -1
+
+                //log.debug("oADXa "+oADXa)
+                //#######################################
+
+                oAOa=0
+
+                var e = Number.parseFloat(indicators[16])
+                var t = Number.parseFloat(indicators[17])
+                //log.debug("e "+e)
+                //log.debug("t "+t)
+                
+                //            computeAOSignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return (e > 0 && t < 0 || e > 0 && t > 0 && e > t) && (o = n.BUY), (e < 0 && t > 0 || e < 0 && t < 0 && e < t) && (o = n.SELL),
+                if (e > 0 && t < 0 || e > 0 && t > 0 && e > t) oAOa = 1
+                if (e < 0 && t > 0 || e < 0 && t < 0 && e < t) oAOa = -1           
+
+                //log.debug("oAOa "+oAOa)
+                //#######################################
+                oMoma=0
+
+                var e = Number.parseFloat(indicators[18])
+                var t = Number.parseFloat(indicators[19])
+                //           computeMomSignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  oMoma = -1
+                if (e > t)  oMoma = 1
+
+                //log.debug("oMoma "+oMoma)
+                //#######################################
+                oMACDmacda=0
+
+                var e = Number.parseFloat(indicators[20])
+                var t = Number.parseFloat(indicators[21])
+                //            computeMACDSignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e > t && (o = n.BUY), e < t && (o = n.SELL), o//
+                if (e > t)  oMACDmacda = 1
+                if (e < t)  oMACDmacda = -1
+
+                //log.debug("oMACDmacda "+oMACDmacda)
+                //#######################################
+                oStochRSIKa=0
+
+                var e = Number.parseFloat(indicators[22])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  oStochRSIKa = 1
+                if (1 == e)  oStochRSIKa = -1
+
+                //log.debug("oStochRSIKa "+oStochRSIKa)
+                //#######################################
+                oWRa=0
+
+                var e = Number.parseFloat(indicators[24])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  oWRa = 1
+                if (1 == e)  oWRa = -1
+
+                //log.debug("oWRa "+oWRa)
+                //#######################################
+                oBBPowera=0
+
+                var e = Number.parseFloat(indicators[26])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  oBBPowera = -1
+                if (1 == e)  oBBPowera = 1
+                //log.debug("oBBPowera "+oBBPowera)
+                //#######################################
+                oUOa=0
+
+                var e = Number.parseFloat(indicators[28])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  oUOa = -1
+                if (1 == e)  oUOa = 1
+                //log.debug("oUOa "+oUOa)
+                //#######################################
+                maEMA5a=0
+
+                var e = Number.parseFloat(indicators[30])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA5a = 1
+                if (e > t)  maEMA5a = -1
+
+                //log.debug("maEMA5a "+maEMA5a)
+                //#######################################
+                maSMA5a=0
+
+                var e = Number.parseFloat(indicators[32])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA5a = 1
+                if (e > t)  maSMA5a = -1
+                //log.debug("maSMA5a "+maSMA5a)
+                //#######################################
+                maEMA10a=0
+
+                var e = Number.parseFloat(indicators[33])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA10a = 1
+                if (e > t)  maEMA10a = -1
+                //log.debug("maEMA10a "+maEMA10a)
+                //#######################################
+                maSMA10a=0
+
+                var e = Number.parseFloat(indicators[34])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA10a = 1
+                if (e > t)  maSMA10a = -1
+                //log.debug("maSMA10a "+maSMA10a)
+                //#######################################
+                maEMA20a=0
+
+                var e = Number.parseFloat(indicators[35])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA20a = 1
+                if (e > t)  maEMA20a = -1
+                //log.debug("maEMA20a "+maEMA20a)
+                //#######################################
+                maSMA20a=0
+
+                var e = Number.parseFloat(indicators[36])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA20a = 1
+                if (e > t)  maSMA20a = -1
+                //log.debug("maSMA20a "+maSMA20a)
+                //#######################################
+                maEMA30a=0
+
+                var e = Number.parseFloat(indicators[37])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA30a = 1
+                if (e > t)  maEMA30a = -1
+                //log.debug("maEMA30a "+maEMA30a)
+                //#######################################
+                maSMA30a=0
+
+                var e = Number.parseFloat(indicators[38])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA30a = 1
+                if (e > t)  maSMA30a = -1
+                //log.debug("maSMA30a "+maSMA30a)
+                //#######################################
+                maEMA50a=0
+
+                var e = Number.parseFloat(indicators[39])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA50a = 1
+                if (e > t)  maEMA50a = -1
+                //log.debug("maEMA50a "+maEMA50a)
+                //#######################################
+                maSMA50a=0
+
+                var e = Number.parseFloat(indicators[40])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA50a = 1
+                if (e > t)  maSMA50a = -1
+                //log.debug("maSMA50a "+maSMA50a)
+                //#######################################
+                maEMA100a=0
+
+                var e = Number.parseFloat(indicators[41])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA100a = 1
+                if (e > t)  maEMA100a = -1
+                //log.debug("maEMA100a "+maEMA100a)
+                //#######################################
+                maSMA100a=0
+
+                var e = Number.parseFloat(indicators[42])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA100a = 1
+                if (e > t)  maSMA100a = -1
+                //log.debug("maSMA100a "+maSMA100a)
+                //#######################################
+                maEMA200a=0
+
+                var e = Number.parseFloat(indicators[43])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maEMA200a = 1
+                if (e > t)  maEMA200a = -1
+                //log.debug("maEMA200a "+maEMA200a)
+                //#######################################
+                maSMA200a=0
+
+                var e = Number.parseFloat(indicators[44])
+                var t = Number.parseFloat(indicators[31]) //close
+
+                //            computeMASignal: function(e, t) {
+                //                var o = n.NEUTRAL//
+                //                return e < t && (o = n.BUY), e > t && (o = n.SELL), o//
+                if (e < t)  maSMA200a = 1
+                if (e > t)  maSMA200a = -1
+                //log.debug("maSMA200a "+maSMA200a)
+                //#######################################
+                maIchimokuBLinea=0
+
+                var e = Number.parseFloat(indicators[45])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  maIchimokuBLinea = -1
+                if (1 == e)  maIchimokuBLinea = 1
+
+                //log.debug("maIchimokuBLinea "+maIchimokuBLinea)
+                //#######################################
+                maVWMAa=0
+
+                var e = Number.parseFloat(indicators[47])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  maVWMAa = -1
+                if (1 == e)  maVWMAa = 1
+                //log.debug("maVWMAa "+maVWMAa)
+                //#######################################
+                maHullMA9a=0
+
+                var e = Number.parseFloat(indicators[49])
+                //log.ddebug("e "&e)
+                //            computeSimpleSignal: function(e) {
+                //                var t = n.NEUTRAL//
+                //                return -1 === e && (t = n.SELL), 1 === e && (t = n.BUY), t//
+                if (-1 == e)  maHullMA9a = -1
+                if (1 == e)  maHullMA9a = 1
+                //log.debug("maHullMA9a "+maHullMA9a)
+                //#######################################
+                H1_OSC_SELL = 0
+                H1_OSC_NEUTRAL = 0
+                H1_OSC_BUY = 0
+        
+                H1_MA_SELL = 0
+                H1_MA_NEUTRAL = 0
+                H1_MA_BUY = 0
+        
+                H1_SUM_SELL = 0
+                H1_SUM_NEUTRAL = 0
+                H1_SUM_BUY = 0
+
+                if (oRSIa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oRSIa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oRSIa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+
+                if (oStochKa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oStochKa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oStochKa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oCCI20a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oCCI20a == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oCCI20a == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oADXa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oADXa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oADXa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oAOa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oAOa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oAOa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oMoma == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oMoma == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oMoma == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oMACDmacda == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oMACDmacda == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oMACDmacda == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oStochRSIKa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oStochRSIKa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oStochRSIKa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oWRa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oWRa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oWRa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oBBPowera == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oBBPowera == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oBBPowera == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (oUOa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_OSC_NEUTRAL += 1
+                }
+                if (oUOa == -1){
+                    H1_SUM_SELL += 1
+                    H1_OSC_SELL += 1
+                }
+                if (oUOa == 1){
+                    H1_SUM_BUY += 1
+                    H1_OSC_BUY += 1
+                }
+                if (maEMA5a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA5a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA5a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA5a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA5a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA5a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maEMA10a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA10a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA10a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA10a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA10a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA10a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maEMA20a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA20a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA20a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA20a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA20a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA20a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maEMA30a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA30a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA30a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA30a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA30a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA30a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maEMA50a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA50a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA50a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA50a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA50a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA50a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maEMA100a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA100a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA100a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA100a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA100a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA100a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maEMA200a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maEMA200a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maEMA200a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maSMA200a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maSMA200a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maSMA200a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maIchimokuBLinea == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maIchimokuBLinea == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maIchimokuBLinea == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maVWMAa == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maVWMAa == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maVWMAa == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                if (maHullMA9a == 0){
+                    H1_SUM_NEUTRAL += 1
+                    H1_MA_NEUTRAL += 1
+                }
+                if (maHullMA9a == -1){
+                    H1_SUM_SELL += 1
+                    H1_MA_SELL += 1
+                }
+                if (maHullMA9a == 1){
+                    H1_SUM_BUY += 1
+                    H1_MA_BUY += 1
+                }
+                log.debug("price "+price)//
+                log.debug("H1_OSC_BUY "+H1_OSC_BUY)//
+                log.debug("H1_OSC_SELL "+H1_OSC_SELL)//
+                log.debug("H1_OSC_NEUTRAL "+H1_OSC_NEUTRAL)//
+
+                if (price >0){ 
+                    for (let step = historyDeep; step > 1 ;step--){
                     historyB[step] = historyB[step-1]//
                     historyS[step] = historyS[step-1]//
-                  }
+                    }
                 
-                  historyB[1] = H1_OSC_BUY//
-                  historyS[1] = H1_OSC_SELL//
+                    historyB[1] = H1_OSC_BUY//
+                    historyS[1] = H1_OSC_SELL//
                 
-                  historyBMin = 100//
-                  historySMin = 100//
+                    historyBMin = 100//
+                    historySMin = 100//
                 
-                for (let step = 1; step <= historyDeep; step++) {
-                  if (historyB[step] > 0)// 
-                    if (historyB[step] < historyBMin )  historyBMin = historyB[step]//
-                  if (historyS[step] > 0) //
-                    if (historyS[step] < historySMin ) historySMin = historyS[step]//
-                }
+                    for (let step = 1; step <= historyDeep; step++) {
+                        if (historyB[step] > 0)// 
+                        if (historyB[step] < historyBMin )  historyBMin = historyB[step]//
+                        if (historyS[step] > 0) //
+                        if (historyS[step] < historySMin ) historySMin = historyS[step]//
+                    }
+                    
+                    historyBDiff = H1_OSC_BUY - historyBMin//
+                    historySDiff = H1_OSC_SELL - historySMin//
+
+                    log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff)//
+
+                    //historyBDiff = (historyBDiff_last+historyBDiff)/2
+                    //historySDiff = (historySDiff_last+historySDiff)/2
+
+                    if(this.currentTrend === 'long') log.debug('is long')//
+                    if(this.currentTrend === 'short') log.debug('is short')//
+
+                    //log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff)//
+                    
+                    if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
+                        persistenceBuy_cnt = persistenceBuy_cnt +1
+                    } else { 
+                        persistenceBuy_cnt = 0//
+                    }
+                    
+                    if (historySDiff > PERSISTENCE_CANDLE_HIGH  ) {
+                        persistenceSell_cnt = persistenceSell_cnt +1
+                    }else {
+                        persistenceSell_cnt = 0//
+                    }
+
+                    if (persistenceSell_cnt == PERSISTENCE_SELL) {
+                        attemptSellCnt = attemptSellCnt +1
+                        attemptBuyCnt = 0//
+                    }
                 
-                historyBDiff = H1_OSC_BUY - historyBMin//
-                historySDiff = H1_OSC_SELL - historySMin//
-    
-                log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff)//
-    
-                //historyBDiff = (historyBDiff_last+historyBDiff)/2
-                //historySDiff = (historySDiff_last+historySDiff)/2
-    
-                if(this.currentTrend === 'long') log.debug('is long')//
-                if(this.currentTrend === 'short') log.debug('is short')//
-    
-                log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff)//
+                    if (persistenceBuy_cnt == PERSISTENCE_BUY) {
+                        attemptBuyCnt = attemptBuyCnt +1
+                        attemptSellCnt = 0//
+                    }
                 
-                if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
-                    persistenceBuy_cnt = persistenceBuy_cnt +1
-                } else { 
-                    persistenceBuy_cnt = 0//
-                }
-                
-                if (historySDiff > PERSISTENCE_CANDLE_HIGH  ) {
-                    persistenceSell_cnt = persistenceSell_cnt +1
-                }else {
-                    persistenceSell_cnt = 0//
-                }
-    
-                if (persistenceSell_cnt == PERSISTENCE_SELL) {
-                  attemptSellCnt = attemptSellCnt +1
-                  attemptBuyCnt = 0//
-                }
-            
-              if (persistenceBuy_cnt == PERSISTENCE_BUY) {
-                  attemptBuyCnt = attemptBuyCnt +1
-                  attemptSellCnt = 0//
-              }
-          
-                  log.debug('persistenceBuy_cnt '+persistenceBuy_cnt+'  persistenceSell_cnt '+persistenceSell_cnt)//
-    
-                  H1_OSC_BUY_LAST = H1_OSC_BUY//
-                  H1_OSC_SELL_LAST = H1_OSC_SELL//
-    
-                  historyBDiff_last = historyBDiff//
-                  historySDiff_last = historySDiff//
-    
-                  fileName_last = fileName//
-                  bad_data = false//
-                }
-    
-            } 
+                    log.debug('persistenceBuy_cnt '+persistenceBuy_cnt+'  persistenceSell_cnt '+persistenceSell_cnt)//
+                    log.debug('attemptBuyCnt '+attemptBuyCnt+'  attemptSellCnt '+attemptSellCnt)//
+
+                    H1_OSC_BUY_LAST = H1_OSC_BUY//
+                    H1_OSC_SELL_LAST = H1_OSC_SELL//
+
+                    historyBDiff_last = historyBDiff//
+                    historySDiff_last = historySDiff//
+
+                    fileName_last = fileName//
+                    bad_data = false//
+                } //if (price >0)
 
             } //if (indicators.length == 82){
-          }  
-
-
+        }  //if (Array.isArray(H1_string))
         
-      } 
+    } //if (fileName != fileName_last
+}//if (fileOk
 
 }
 
