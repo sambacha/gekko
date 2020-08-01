@@ -70,11 +70,13 @@ var stopLossShortPrice = 0
 
 var ATTEMPT_SELL_LIMIT = 2//
 var ATTEMPT_BUY_LIMIT = 2//
-var attemptSellCnt, attemptBuyCnt//
+var attemptSellCnt = 0
+var attemptBuyCnt = 0
 
-var persistenceSell_cnt, persistenceBuy_cnt//
+var persistenceSell_cnt = 0
+var persistenceBuy_cnt = 0
 
-var sellIntent, buyIntent, startIntentPrice//
+//var sellIntent, buyIntent, startIntentPrice//
 
 //var sumBH1, sumBH1_last, sumSH1, 
 var H1_SUM_SELL, H1_SUM_SELL_LAST, H1_SUM_NEUTRAL,H1_SUM_NEUTRAL_LAST, H1_SUM_BUY,H1_SUM_BUY_LAST//
