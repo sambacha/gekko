@@ -27,7 +27,7 @@ var price = 0//
 //var signal_sell_int = 0//
 //var signal_sell_int_last = 0//
 
-var signal_total = 28//
+//var signal_total = 28//
 
 //var signal_neutral_pos//
 //var signal_neutral//
@@ -70,11 +70,13 @@ var stopLossShortPrice = 0
 
 var ATTEMPT_SELL_LIMIT = 3//
 var ATTEMPT_BUY_LIMIT = 2//
-var attemptSellCnt, attemptBuyCnt//
+var attemptSellCnt = 0
+var attemptBuyCnt = 0
 
-var persistenceSell_cnt, persistenceBuy_cnt//
+var persistenceSell_cnt = 0
+var persistenceBuy_cnt = 0
 
-var sellIntent, buyIntent, startIntentPrice//
+//var sellIntent, buyIntent, startIntentPrice//
 
 //var sumBH1, sumBH1_last, sumSH1, 
 var H1_SUM_SELL, H1_SUM_SELL_LAST, H1_SUM_NEUTRAL,H1_SUM_NEUTRAL_LAST, H1_SUM_BUY,H1_SUM_BUY_LAST//
@@ -162,9 +164,9 @@ catch (err) {
   
   //log.debug(fileContent)//
  
-  if (fileOk){
-
-  let fileContent = fs.readFileSync(fileName, "utf8")//
+if (fileOk){
+    if (fileName != fileName_last) {
+        let fileContent = fs.readFileSync(fileName, "utf8")//
 
         var H1_string = fileContent.match(/H1\{.\"data\"\:\[.*?\]/g)//
           if (Array.isArray(H1_string)){
@@ -883,10 +885,8 @@ catch (err) {
               log.debug("H1_SUM_NEUTRAL "+H1_SUM_NEUTRAL)//
 
 
-              if (price >0){ 
-                if (fileName != fileName_last) {
-              
-                  for (let step = historyDeep; step > 1 ;step--){
+                if (price >0){ 
+                    for (let step = historyDeep; step > 1 ;step--){
                     historyB[step] = historyB[step-1]//
                     historyS[step] = historyS[step-1]//
                   }
@@ -912,12 +912,12 @@ catch (err) {
                 //historyBDiff = (historyBDiff_last+historyBDiff)/2
                 //historySDiff = (historySDiff_last+historySDiff)/2
     
-                if(this.currentTrend === 'long') log.debug('is long')//
-                if(this.currentTrend === 'short') log.debug('is short')//
-    
-                log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff)//
-                
-                if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
+                    if(this.currentTrend === 'long') log.debug('is long')//
+                    if(this.currentTrend === 'short') log.debug('is short')//
+
+                    //log.debug('historyBDiff '+historyBDiff+'  historySDiff '+historySDiff)//
+                    
+                    if (historyBDiff > PERSISTENCE_CANDLE_HIGH ) {
                     persistenceBuy_cnt = persistenceBuy_cnt +1
                 } else { 
                     persistenceBuy_cnt = 0//
@@ -939,26 +939,24 @@ catch (err) {
                   attemptSellCnt = 0//
               }
           
-                  log.debug('persistenceBuy_cnt '+persistenceBuy_cnt+'  persistenceSell_cnt '+persistenceSell_cnt)//
+                    log.debug('persistenceBuy_cnt '+persistenceBuy_cnt+'  persistenceSell_cnt '+persistenceSell_cnt)//
+                    log.debug('attemptBuyCnt '+attemptBuyCnt+'  attemptSellCnt '+attemptSellCnt)//
     
                   H1_SUM_BUY_LAST = H1_SUM_BUY//
                   H1_SUM_SELL_LAST = H1_SUM_SELL//
     
                   historyBDiff_last = historyBDiff//
                   historySDiff_last = historySDiff//
-    
-                  fileName_last = fileName//
-                  bad_data = false//
-                }
-    
-            } 
+
+                    fileName_last = fileName//
+                    bad_data = false//
+                } //if (price >0)
 
             } //if (indicators.length == 82){
-          }  
-
-
+        }  //if (Array.isArray(H1_string))
         
-      } 
+    } //if (fileName != fileName_last
+}//if (fileOk
 
 }
 
