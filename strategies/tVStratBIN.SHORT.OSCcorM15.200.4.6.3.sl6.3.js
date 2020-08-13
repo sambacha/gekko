@@ -101,7 +101,7 @@ strat.init = function() {
 
 // What happens on every new CANDLE?
 strat.update = function(candle) {
-  log.debug('strat.update tVStratBIN.SHORT.OSCcorM15.200.4.6.2.sl2.3')//
+  log.debug('strat.update tVStratBIN.SHORT.OSCcorM15.200.4.6.3.sl6.3')//
  
   bad_data = true//
 var fileOk = false//
