@@ -67,7 +67,7 @@ var PERSISTENCE_BUY = 6//
 var ATTEMPT_SELL_LIMIT = 3//
 var ATTEMPT_BUY_LIMIT = 3//
 
-var STOPLOSS = 8
+var STOPLOSS = 9
 var TRAILING = 2
 
 var stopLossLongPrice = 0
@@ -101,7 +101,7 @@ strat.init = function() {
 
 // What happens on every new CANDLE?
 strat.update = function(candle) {
-  log.debug('strat.update tVStratBIN.SHORT.OSCcorM15.300.4.6.3.sl8.2')//
+  log.debug('strat.update tVStratBIN.SHORT.OSCcorM15.300.4.6.3.sl9.2')//
  
   bad_data = true//
 var fileOk = false//
