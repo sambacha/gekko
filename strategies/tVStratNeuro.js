@@ -235,7 +235,7 @@ if (fileOk){
                 //getPythonData(neuroData)
                 let options = {
                     mode: 'text',
-                    pythonPath: 'neuro/venv/bin/python3',
+                    pythonPath: '/home/administrator/test/gekko0419-git/neuro/venv/bin/python3',
                     //pythonPath: 'C:/Users/Texno/workspace/bot/gekko0419-git/neuro/venv/Scripts',
                     pythonOptions: ['-u'], // get print results in real-time
                     scriptPath: 'neuro/'+scriptName,
