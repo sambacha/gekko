@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow import keras
 import json
 import numpy as np
-
+import re
 
 
 def create_model():
@@ -50,22 +50,29 @@ def main():
     #print(lines)
     #print(lines[1])
 
-    model = create_model()
-    
-    model.load_weights("./neuro/model/cp.ckpt")
     
     #model.summary()
     temp = np.asarray(sys.argv)
     temp2 = temp[1:211]
     #print(len(temp2))
-    #print(temp2[0])
     #print(temp2[209])
+    scriptName = ""
+    match = re.search(r'\\.+\\', temp[0])
+    if match: 
+    #    print(match[0])
+        scriptName = match[0]
+        scriptName= scriptName[1: len(scriptName)-1]
+    #    print(scriptName)
+    #else: print("not found")
+    
     temp3 = np.float32(temp2)
     
     neuroData = (np.expand_dims(temp3,0))
 
-    #print("starting magic...")
-    #print(neuroData)
+    model = create_model()
+    
+    model.load_weights("./neuro/"+scriptName+"/model/cp.ckpt")
+
     predictions = model.predict(neuroData)
     out = '{"prediction":"'+str(predictions)+'",'
     #print('{"prediction":"'+str(predictions)+'"}')
