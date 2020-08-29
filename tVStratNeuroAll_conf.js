@@ -139,7 +139,7 @@ config.mailer = {
 
   password: 'tt12345TT',       // Your Gmail Password - if not supplied Gekko will prompt on startup.
 
-  tag: '[Neuro] ',      // Prefix all email subject lines with this
+  tag: '[NeuroAll] ',      // Prefix all email subject lines with this
 
             //       ADVANCED MAIL SETTINGS
             // you can leave those as is if you
