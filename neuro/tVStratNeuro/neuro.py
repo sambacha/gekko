@@ -69,14 +69,15 @@ def main():
     predictions = model.predict(neuroData)
     out = '{"prediction":"'+str(predictions)+'",'
     #print('{"prediction":"'+str(predictions)+'"}')
+    outPred = '"action":0}'
     if predictions[0][1] > 0.5:
-        out = out + '"action":'+'-'+str(predictions[0][1])+'}'
+        outPred= '"action":'+'-'+str(predictions[0][1])+'}'
         #print("action -"+str(predictions[0][1]))
     #down
     if predictions[0][2] > 0.5:
-        out = out + '"action":'+str(predictions[0][2])+'}'
+        outPred= '"action":'+str(predictions[0][2])+'}'
      #   print("action "+str(predictions[0][2]))
-    print(out)
+    print(out+outPred)
     #for item in lines:
     #    total_sum_inArray += item
         #return the sum to the output stream

@@ -9,7 +9,9 @@
 // long || short).
 
 var log = require('../core/log')//
-
+var path = require('path');
+var scriptName = path.basename(__filename);
+scriptName = scriptName.substring(0,scriptName.length -3)
 ////////////////////////neuro////////////////////////////////////
 var {PythonShell} = require('python-shell');
 var neuroData=[210]
@@ -58,7 +60,7 @@ strat.init = function() {
 
 // What happens on every new CANDLE?
 strat.update = function(candle) {
-  log.debug('strat.update tVStratNeuro')//
+  log.debug('strat.update '+scriptName)//
  
   bad_data = true//
 var fileOk = false//
@@ -135,8 +137,9 @@ catch (err) {
         }
         predictionResult = null//console.log(predictionResult);
     }
-  //log.debug(fileContent)//
  
+
+
 if (fileOk){
     
     if (fileName != fileName_last) {
@@ -232,9 +235,9 @@ if (fileOk){
                 //getPythonData(neuroData)
                 let options = {
                     mode: 'text',
-                   // pythonPath: 'neuro/venv/',
+                    pythonPath: 'neuro/venv/bin/python3',
                     pythonOptions: ['-u'], // get print results in real-time
-                    scriptPath: 'neuro',
+                    scriptPath: 'neuro/'+scriptName,
                     args: neuroData
                   };
 
