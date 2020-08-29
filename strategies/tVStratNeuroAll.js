@@ -315,7 +315,7 @@ strat.check = function() {
   if (bad_data) log.debug('no new data') 
     else {
 
-            if (predictionAction < -0.9) {
+            if (predictionAction < -0.98) {
                 if (sellPrice == 0) {
                     sellPrice = price
                     trailingPrice = price
