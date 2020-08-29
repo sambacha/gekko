@@ -55,16 +55,16 @@ def main():
     temp = np.asarray(sys.argv)
     temp2 = temp[1:211]
     #print(len(temp2))
-    #print(temp2[209])
+    #print(temp[0])
     scriptName = ""
-    match = re.search(r'\\.+\\', temp[0])
+    match = re.search('/.+/', temp[0])
     if match: 
     #    print(match[0])
         scriptName = match[0]
         scriptName= scriptName[1: len(scriptName)-1]
-    #    print(scriptName)
+        #print(scriptName)
     #else: print("not found")
-    
+
     temp3 = np.float32(temp2)
     
     neuroData = (np.expand_dims(temp3,0))
