@@ -238,7 +238,7 @@ if (fileOk){
                     pythonPath: '/home/administrator/test/gekko0419-git/neuro/venv/bin/python3',
                     //pythonPath: 'C:/Users/Texno/workspace/bot/gekko0419-git/neuro/venv/Scripts',
                     pythonOptions: ['-u'], // get print results in real-time
-                    scriptPath: './neuro/'+scriptName,
+                    scriptPath: '/home/administrator/test/gekko0419-git/neuro/'+scriptName,
                     args: neuroData
                   };
 
