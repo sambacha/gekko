@@ -57,7 +57,7 @@ def main():
     #print(len(temp2))
     #print(temp[0])
     scriptName = ""
-    match = re.search('/.+/', temp[0])
+    match = re.search('/.+?/', temp[0])
     if match: 
     #    print(match[0])
         scriptName = match[0]
@@ -71,7 +71,8 @@ def main():
 
     model = create_model()
     
-    model.load_weights("./neuro/"+scriptName+"/model/cp.ckpt")
+    #model.load_weights("./neuro/"+scriptName+"/model/cp.ckpt")
+    model.load_weights("/home/administrator/test/gekko0419-git/neuro/tVStratNeuroAll/model/cp.ckpt")
 
     predictions = model.predict(neuroData)
     out = '{"prediction":"'+str(predictions)+'",'
