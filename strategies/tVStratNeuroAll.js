@@ -253,15 +253,12 @@ if (fileOk){
                     
                   });
 
-                log.debug("new price "+price)//
-
                 if(this.currentTrend === 'long') log.debug('is long')//
                 if(this.currentTrend === 'short') log.debug('is short')//
                     
-                
-               
 
             } //if (indicators.length == 82){
+              else log.debug('bad data')//
         }  //if (Array.isArray(M15_string))
         
     } //if (fileName != fileName_last
@@ -312,9 +309,9 @@ strat.log = function() {
 // update || not.
 strat.check = function() {
   log.debug('strat.check')//
-  if (bad_data) log.debug('no new data') 
-    else {
-
+  if (!bad_data)  {
+    //else {
+      //log.debug('new prediction')
             if (predictionAction < -0.98) {
                 if (sellPrice == 0) {
                     sellPrice = price
