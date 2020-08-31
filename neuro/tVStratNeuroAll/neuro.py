@@ -53,15 +53,15 @@ def main():
     
     #model.summary()
     temp = np.asarray(sys.argv)
-    temp2 = temp[1:211]
+    temp2 = temp[2:212]
     #print(len(temp2))
     #print(temp[0])
-    scriptName = ""
-    match = re.search('/.+?/', temp[0])
-    if match: 
+    scriptName = temp[1]
+    #match = re.search('/.+?/', temp[0])
+    #if match: 
     #    print(match[0])
-        scriptName = match[0]
-        scriptName= scriptName[1: len(scriptName)-1]
+    #    scriptName = match[0]
+    #    scriptName= scriptName[1: len(scriptName)-1]
         #print(scriptName)
     #else: print("not found")
 
@@ -71,8 +71,8 @@ def main():
 
     model = create_model()
     
-    #model.load_weights("./neuro/"+scriptName+"/model/cp.ckpt")
-    model.load_weights("/home/administrator/test/gekko0419-git/neuro/tVStratNeuroAll/model/cp.ckpt")
+    model.load_weights("./neuro/"+scriptName+"/model/cp.ckpt")
+    #model.load_weights("/home/administrator/test/gekko0419-git/neuro/tVStratNeuroAll/model/cp.ckpt")
 
     predictions = model.predict(neuroData)
     out = '{"prediction":"'+str(predictions)+'",'
