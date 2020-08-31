@@ -70,7 +70,7 @@ def main():
 
     model = create_model()
     
-    model.load_weights("./neuro/"+scriptName+"/model/cp.ckpt")
+    model.load_weights("/home/administrator/test/gekko0419-git/neuro/"+scriptName+"/model/cp.ckpt")
     #model.load_weights("/home/administrator/test/gekko0419-git/neuro/tVStratNeuroAll/model/cp.ckpt")
 
     predictions = model.predict(neuroData)
