@@ -51,17 +51,16 @@ def main():
     #print(lines[1])
 
     
-    #model.summary()
     temp = np.asarray(sys.argv)
-    temp2 = temp[2:212]
+    temp2 = temp[1:211]
     #print(len(temp2))
     #print(temp[0])
-    scriptName = temp[1]
-    #match = re.search('/.+?/', temp[0])
-    #if match: 
+    scriptName = ""
+    match = re.search('neuro/.+/', temp[0])
+    if match: 
     #    print(match[0])
-    #    scriptName = match[0]
-    #    scriptName= scriptName[1: len(scriptName)-1]
+        scriptName = match[0]
+        scriptName= scriptName[6: len(scriptName)-1]
         #print(scriptName)
     #else: print("not found")
 

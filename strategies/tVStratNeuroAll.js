@@ -239,7 +239,7 @@ if (fileOk){
                     //pythonPath: 'C:/Users/Texno/workspace/bot/gekko0419-git/neuro/venv/Scripts',
                     pythonOptions: ['-u'], // get print results in real-time
                     scriptPath: '/home/administrator/test/gekko0419-git/neuro/'+scriptName,
-                    args: scriptName, neuroData
+                    args: neuroData
                   };
 
                 log.debug("starting magic..."+price)//
