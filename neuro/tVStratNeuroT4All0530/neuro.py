@@ -8,7 +8,7 @@ config = configparser.ConfigParser()  # создаём объекта парсе
 
 def action():
     config['System']['busy'] = 'True'
-    with open('../busy.ini', 'w') as configfile:
+    with open('/home/administrator/test/gekko0419-git/neuro/busy.ini', 'w') as configfile:
         config.write(configfile)
 
 
@@ -90,7 +90,7 @@ def action():
     # print("Proot! "+str(total_sum_inArray))
 
     config['System']['busy'] = 'False'
-    with open('../busy.ini', 'w') as configfile:
+    with open('/home/administrator/test/gekko0419-git/neuro/busy.ini', 'w') as configfile:
         config.write(configfile)
 
 
@@ -103,7 +103,7 @@ def read_in():
 def main():
     #print("123")
 
-    config.read("../busy.ini")  # читаем конфиг
+    config.read("/home/administrator/test/gekko0419-git/neuro/busy.ini")  # читаем конфиг
 
     #print(config["System"]["busy"])  # обращаемся как к обычному словарю!
     if config["System"]["busy"] == "True":
@@ -111,7 +111,7 @@ def main():
         while cnt < 60:
             cnt = cnt+1
             time.sleep(1)
-            config.read("../busy.ini")  # читаем конфиг
+            config.read("/home/administrator/test/gekko0419-git/neuro/busy.ini")  # читаем конфиг
             if config["System"]["busy"] == "False":
                 cnt = 100
 
