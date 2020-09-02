@@ -5,10 +5,15 @@ import time
 
 config = configparser.ConfigParser()  # создаём объекта парсера
 
+startTime = time.time()
+elapsed = ""
+fileName = '/home/administrator/test/gekko0419-git/neuro/busy.ini'
+fileName = '../busy.ini'
+
 
 def action():
     config['System']['busy'] = 'True'
-    with open('/home/administrator/test/gekko0419-git/neuro/busy.ini', 'w') as configfile:
+    with open(fileName, 'w') as configfile:
         config.write(configfile)
 
 
@@ -72,8 +77,9 @@ def action():
     model.load_weights("/home/administrator/test/gekko0419-git/neuro/" + scriptName + "/model/cp.ckpt")
     # model.load_weights("/home/administrator/test/gekko0419-git/neuro/tVStratNeuroAll/model/cp.ckpt")
 
+    elapsed = str(round(time.time()-startTime, 2))
     predictions = model.predict(neuroData)
-    out = '{"prediction":"' + str(predictions) + '",'
+    out = '{"elapsed":"'+elapsed+'","prediction":"'+str(predictions)+'",'
     # print('{"prediction":"'+str(predictions)+'"}')
     outPred = '"action":0}'
     if predictions[0][1] > 0.5:
@@ -90,7 +96,7 @@ def action():
     # print("Proot! "+str(total_sum_inArray))
 
     config['System']['busy'] = 'False'
-    with open('/home/administrator/test/gekko0419-git/neuro/busy.ini', 'w') as configfile:
+    with open(fileName, 'w') as configfile:
         config.write(configfile)
 
 
@@ -103,7 +109,7 @@ def read_in():
 def main():
     #print("123")
 
-    config.read("/home/administrator/test/gekko0419-git/neuro/busy.ini")  # читаем конфиг
+    config.read(fileName)  # читаем конфиг
 
     #print(config["System"]["busy"])  # обращаемся как к обычному словарю!
     if config["System"]["busy"] == "True":
@@ -111,15 +117,18 @@ def main():
         while cnt < 60:
             cnt = cnt+1
             time.sleep(1)
-            config.read("/home/administrator/test/gekko0419-git/neuro/busy.ini")  # читаем конфиг
+            config.read(fileName)  # читаем конфиг
             if config["System"]["busy"] == "False":
                 cnt = 100
 
         if cnt == 100:
             action()
+
+        elapsed = str(round(time.time()-startTime, 2))
+        print('{"elapsed":"'+elapsed+'","prediction":"0","action":"0"}')
+
     else:
         action()
-
 
 
 if __name__ == '__main__':
