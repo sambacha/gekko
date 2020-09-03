@@ -41,7 +41,7 @@ var fileName_last//
 var price = 0//
 
 var STOPLOSS = 1
-var TRAILING = 1
+var TRAILING = 0.1
 
 var sellPrice = 0
 var trailingPrice = 0
@@ -332,7 +332,7 @@ strat.check = function() {
                             //total_trades = total_trades + 1
                             sellPrice = 0
                             //attemptBuyCnt = 0 // обнуляем чтобы не продавал сразу после покупки
-                            log.info('advice long '+price)//
+                            log.info('advice trailing long '+price)//
                             this.currentTrend = 'long'//
                             this.advice('long')//
                         }
