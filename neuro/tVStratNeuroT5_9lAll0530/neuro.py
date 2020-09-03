@@ -8,7 +8,7 @@ config = configparser.ConfigParser()  # создаём объекта парсе
 startTime = time.time()
 elapsed = ""
 fileName = '/home/administrator/test/gekko0419-git/neuro/busy.ini'
-#fileName = '../busy.ini'
+fileName = '../busy.ini'
 
 
 def action():
@@ -121,11 +121,11 @@ def main():
             if config["System"]["busy"] == "False":
                 cnt = 100
 
-        if cnt == 100:
+        if cnt == 100: #дождались
             action()
-
-        elapsed = str(round(time.time()-startTime, 2))
-        print('{"elapsed":"'+elapsed+'","prediction":"0","action":"0"}')
+        else:
+            elapsed = str(round(time.time()-startTime, 2))
+            print('{"elapsed":"'+elapsed+'","prediction":"0","action":"0"}')
 
     else:
         action()
