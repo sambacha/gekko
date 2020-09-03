@@ -25,18 +25,18 @@ def action():
     def create_model():
         model = tf.keras.Sequential([
             keras.layers.Dense(2100, activation='relu', input_shape=(210,)),
-            # keras.layers.Dropout(0.5),
-            keras.layers.Dense(210, activation='relu'),
-            # keras.layers.Dropout(0.5),
+            keras.layers.Dense(1050, activation='relu'),
+            keras.layers.Dense(525, activation='relu'),
+            keras.layers.Dense(262, activation='relu'),
+            keras.layers.Dense(131, activation='relu'),
+            keras.layers.Dense(65, activation='relu'),
+            keras.layers.Dense(32, activation='relu'),
+            keras.layers.Dense(16, activation='relu'),
             keras.layers.Dense(3, activation='softmax')
         ])
         model.compile(optimizer="sgd",
-                      loss="binary_crossentropy",
-                      metrics=[keras.metrics.Precision(), keras.metrics.Recall(), 'accuracy'])
-
-        # model.compile(optimizer='adam',
-        #          loss='sparse_categorical_crossentropy',
-        #          metrics=['accuracy'])
+                    loss="binary_crossentropy",
+                    metrics=[keras.metrics.Precision(), keras.metrics.Recall(), 'accuracy'])
 
         return model
 
