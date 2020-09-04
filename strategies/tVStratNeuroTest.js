@@ -243,7 +243,7 @@ if (fileOk){
                   };
 
                 log.debug("starting magic..."+price)//
-                res = await PythonShell.run('neuro.py', options, function (err, results) {
+                PythonShell.run('neuro.py', options, function (err, results) {
                     if (err) throw err;
                     // results is an array consisting of messages collected during execution
                     predictionResult = null
@@ -253,6 +253,12 @@ if (fileOk){
                     
                   });
 
+                  await sleep(10000)
+                  function sleep(ms) {
+                    return new Promise((resolve) => {
+                      setTimeout(resolve, ms);
+                    });
+                  } 
 
                 /*while (predictionResult == null) {
                   //log.debug("predictionResult "+predictionResult.prediction)//
