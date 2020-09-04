@@ -42,7 +42,7 @@ var price = 0//
 
 var STOPLOSS = 1
 var TRAILING = 0.1
-
+var PREDICT_PERCENT = -0.98
 var sellPrice = 0
 var trailingPrice = 0
 
@@ -312,7 +312,7 @@ strat.check = function() {
   if (!bad_data)  {
     //else {
       //log.debug('new prediction')
-            if (predictionAction < -0.98) {
+            if (predictionAction < PREDICT_PERCENT) {
                 if (sellPrice == 0) {
                     sellPrice = price
                     trailingPrice = price
