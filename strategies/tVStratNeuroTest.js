@@ -243,7 +243,7 @@ if (fileOk){
                   };
 
                 log.debug("starting magic..."+price)//
-                PythonShell.run('neuro.py', options, function (err, results) {
+                res = await PythonShell.run('neuro.py', options, function (err, results) {
                     if (err) throw err;
                     // results is an array consisting of messages collected during execution
                     predictionResult = null
@@ -267,10 +267,7 @@ if (fileOk){
                 predictionResult = null//console.log(predictionResult);
 */
 
-                setTimeout(function () {
-                  console.log('boo')
-                }, 10000)
-
+                
                 if(this.currentTrend === 'long') log.debug('is long')//
                 if(this.currentTrend === 'short') log.debug('is short')//
                     
