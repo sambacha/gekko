@@ -247,7 +247,8 @@ if (fileOk){
                     if (err) throw err;
                     // results is an array consisting of messages collected during execution
                     predictionResult = null
-                    console.log('results: %j', results);
+                    //console.log('results: %j', results);
+                    log.debug('results:'+ results)
                     predictionResult = JSON.parse(results);
                     //console.log(predictionResult);
                     
