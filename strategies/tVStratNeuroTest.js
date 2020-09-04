@@ -274,7 +274,8 @@ if (fileOk){
                 }
                 predictionResult = null//console.log(predictionResult);
 */
-
+                var waitTill = new Date(new Date().getTime() + seconds * 10000);
+                while(waitTill > new Date()){}
                 
                 if(this.currentTrend === 'long') log.debug('is long')//
                 if(this.currentTrend === 'short') log.debug('is short')//
