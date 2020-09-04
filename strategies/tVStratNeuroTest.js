@@ -254,7 +254,7 @@ if (fileOk){
                   });
 
 
-                while (predictionResult == null) {
+                /*while (predictionResult == null) {
                   //log.debug("predictionResult "+predictionResult.prediction)//
                  // log.debug("wait for prediction...")//
                 }
@@ -265,6 +265,11 @@ if (fileOk){
                     bad_data = false//
                 }
                 predictionResult = null//console.log(predictionResult);
+*/
+
+                setTimeout(function () {
+                  console.log('boo')
+                }, 10000)
 
                 if(this.currentTrend === 'long') log.debug('is long')//
                 if(this.currentTrend === 'short') log.debug('is short')//
