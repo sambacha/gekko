@@ -112,8 +112,8 @@ Mailer.prototype.processAdvice = function(advice) {
     ' ',
     this.price
   ].join('');
-
-  var subject = 'New advice: go ' + advice.recommendation;
+  //var subject = 'New advice: go ' + advice.recommendation;
+  var subject = '' + advice.recommendation;
 
   this.mail(subject, text);
 };
