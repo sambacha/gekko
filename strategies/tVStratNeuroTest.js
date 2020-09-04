@@ -15,7 +15,7 @@ scriptName = scriptName.substring(0,scriptName.length -3)
 ////////////////////////neuro////////////////////////////////////
 var {PythonShell} = require('python-shell');
 var neuroData=[210]
-var predictionResult
+var predictionResult = null
 var predictionAction = 0
 //import {PythonShell} from 'python-shell';
 
@@ -254,7 +254,7 @@ if (fileOk){
                   });
 
 
-                while (predictionResult = null) {
+                while (predictionResult == null) {
                   //log.debug("predictionResult "+predictionResult.prediction)//
                   log.debug("wait for prediction...")//
                 }
