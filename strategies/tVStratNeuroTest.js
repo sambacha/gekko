@@ -257,7 +257,7 @@ if (fileOk){
                   function sleep(ms) {
                     return new Promise((resolve) => {
                       setTimeout(resolve, ms);
-                      console.log('sleep(10000)')
+                      log.debug('sleep(10000)')
 
                     });
                   } 
