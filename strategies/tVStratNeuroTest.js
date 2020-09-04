@@ -253,15 +253,6 @@ if (fileOk){
                     
                   });
 
-                  sleep(10000)
-                  function sleep(ms) {
-                    return new Promise((resolve) => {
-                      setTimeout(resolve, ms);
-                      log.debug('sleep(10000)')
-
-                    });
-                  } 
-
                 /*while (predictionResult == null) {
                   //log.debug("predictionResult "+predictionResult.prediction)//
                  // log.debug("wait for prediction...")//
