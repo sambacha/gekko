@@ -254,11 +254,11 @@ if (fileOk){
                   });
 
 
-                while (predictionResult === null) {
+                while (predictionResult = null) {
                   //log.debug("predictionResult "+predictionResult.prediction)//
                   log.debug("wait for prediction...")//
                 }
-                
+
                 predictionAction = 0
                 predictionAction = Number.parseFloat(predictionResult.action)
                 if (predictionAction != 0) {
