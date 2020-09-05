@@ -183,7 +183,7 @@ if (fileOk){
             var indicatorsW1 = W1_string_cut.split(',')
             var indicatorsMON1 = MON1_string_cut.split(',')
             if (indicatorsM5.length == 82 && indicatorsM15.length == 82 && indicatorsH1.length == 82 && indicatorsH4.length == 82 && indicatorsD1.length == 82 && indicatorsW1.length == 82 && indicatorsMON1.length == 82){
-                price = Number.parseFloat(indicatorsH1[31])
+                price = Number.parseFloat(indicatorsH1[32]) //THIS IS WRONG PRICE
                 
                 for (let cnt = 0; cnt <= 29; cnt++) {
                     indicatorsM5[cnt] = (indicatorsM5[cnt] -minMax[cnt][0]) / (minMax[cnt][1] - minMax[cnt][0])
