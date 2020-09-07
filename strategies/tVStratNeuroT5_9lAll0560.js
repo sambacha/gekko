@@ -183,7 +183,7 @@ if (fileOk){
             var indicatorsW1 = W1_string_cut.split(',')
             var indicatorsMON1 = MON1_string_cut.split(',')
             if (indicatorsM5.length == 82 && indicatorsM15.length == 82 && indicatorsH1.length == 82 && indicatorsH4.length == 82 && indicatorsD1.length == 82 && indicatorsW1.length == 82 && indicatorsMON1.length == 82){
-                price = Number.parseFloat(indicatorsH1[32]) //THIS IS WRONG PRICE
+                price = Number.parseFloat(indicatorsH1[32]) //THIS IS WRONG PRICE SMA5
                 
                 for (let cnt = 0; cnt <= 29; cnt++) {
                     indicatorsM5[cnt] = (indicatorsM5[cnt] -minMax[cnt][0]) / (minMax[cnt][1] - minMax[cnt][0])
@@ -326,7 +326,7 @@ strat.check = function() {
                 if (price < trailingPrice){
                     trailingPrice = price                    
                 }
-                if (predictionAction > 0.5)
+                if (predictionAction >= 0)
                     if (price < sellPrice){
                         if (price > trailingPrice + trailingPrice * TRAILING / 100){
                             //total_trades = total_trades + 1
@@ -337,6 +337,8 @@ strat.check = function() {
                             this.advice('long')//
                         }
                     } 
+              }
+              if (sellPrice > 0) {    
                 if (price > sellPrice + sellPrice * STOPLOSS / 100){
                     //total_trades = total_trades + 1
                     //stopLossTotal_trades = stopLossTotal_trades + 1
@@ -346,7 +348,7 @@ strat.check = function() {
                     this.currentTrend = 'long'//
                     this.advice('long')// 
                 }
-            }//if (sellPrice > 0) {
+              }//if (sellPrice > 0) {
 
   }
 }
