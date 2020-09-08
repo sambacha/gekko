@@ -8,7 +8,7 @@ config = configparser.ConfigParser()  # создаём объекта парсе
 startTime = time.time()
 elapsed = ""
 fileName = '/home/administrator/test/gekko0419-git/neuro/busy.ini'
-#fileName = '../busy.ini'
+fileName = '../busy.ini'
 
 
 def action():
@@ -109,16 +109,21 @@ def read_in():
 def main():
     #print("123")
 
-    config.read(fileName)  # читаем конфиг
-
+    #config.read(fileName)  # читаем конфиг
+    isBusy = "True"
     #print(config["System"]["busy"])  # обращаемся как к обычному словарю!
-    if config["System"]["busy"] == "True":
+    if isBusy == "True":
         cnt = 0
         while cnt < 60:
             cnt = cnt+1
+            #print("waiting...")
             time.sleep(1)
-            config.read(fileName)  # читаем конфиг
-            if config["System"]["busy"] == "False":
+            try:
+                config.read(fileName)  # читаем конфиг
+                isBusy = config["System"]["busy"]
+            except Exception as e:
+                isBusy = "True"
+            if isBusy == "False":
                 cnt = 100
 
         if cnt == 100: #дождались
