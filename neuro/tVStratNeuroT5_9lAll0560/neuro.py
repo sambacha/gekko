@@ -8,7 +8,7 @@ config = configparser.ConfigParser()  # создаём объекта парсе
 startTime = time.time()
 elapsed = ""
 fileName = '/home/administrator/test/gekko0419-git/neuro/busy.ini'
-fileName = '../busy.ini'
+#fileName = '../busy.ini'
 
 
 def action():
